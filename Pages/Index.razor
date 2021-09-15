@@ -15,15 +15,7 @@ Welcome to your new app.
         <p></p>
         <a href="Identity/Account/Logout">Log out</a>
         <img src=@avatar>
-        @if (User != null)
-        {
-            @foreach (Claim claim in User.Claims.ToList())
-            {
-                <p>Claim</p>
-                <p>claim.Type</p>
-                <p>claim.Value </p>
-            }
-        }
+  
 
     </Authorized>
     <NotAuthorized>
@@ -34,25 +26,10 @@ Welcome to your new app.
         <p></p>
         <a href="Identity/Account/Logout">Log out</a>
         <img src=@avatar>
-        @if (User != null)
-        {
-            @foreach (Claim claim in User.Claims.ToList())
-            {
-                <p>Claim</p>
-                <p>claim.Type</p>
-                <p>claim.Value </p>
-            }
-        }
+  
     </Authorized>
 </AuthorizeView>
-<AuthorizeView Roles="Admin">
-    <Authorized>
-        <p>You are an admin</p>
-    </Authorized>
-    <NotAuthorized>
-        <p>You are not an admin</p>
-    </NotAuthorized>
-</AuthorizeView>
+
 
 @code {
 
@@ -75,14 +52,6 @@ Welcome to your new app.
 
         avatar = User.FindFirstValue("urn:discord:avatar:url");
 
-        if (User.Identity.IsAuthenticated)
-        {
-            foreach (Claim claim in User.Claims)
-            {
-                Debug.WriteLine("claim + " + claim.Type + " " + claim.Value);
-            }
-        }
 
-        //return;
     }
 }

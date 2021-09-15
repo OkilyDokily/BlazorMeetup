@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazorMeetup.Migrations
 {
     [DbContext(typeof(BlazorMeetupContext))]
-    [Migration("20210914001512_first")]
+    [Migration("20210915215042_first")]
     partial class first
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -17,6 +17,63 @@ namespace BlazorMeetup.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.9");
+
+            modelBuilder.Entity("BlazorMeetup.Data.Attendee", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("IdentityUserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Attendees");
+                });
+
+            modelBuilder.Entity("BlazorMeetup.Data.AttendeeEvent", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AttendeeId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EventId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AttendeeId");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("AttendeeEvents");
+                });
+
+            modelBuilder.Entity("BlazorMeetup.Data.Event", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateAndTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("IdentityUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("MaximumAttendees")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdentityUserId");
+
+                    b.ToTable("Events");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -214,6 +271,30 @@ namespace BlazorMeetup.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("BlazorMeetup.Data.AttendeeEvent", b =>
+                {
+                    b.HasOne("BlazorMeetup.Data.Attendee", "Attendee")
+                        .WithMany("Events")
+                        .HasForeignKey("AttendeeId");
+
+                    b.HasOne("BlazorMeetup.Data.Event", "Event")
+                        .WithMany("Attendees")
+                        .HasForeignKey("EventId");
+
+                    b.Navigation("Attendee");
+
+                    b.Navigation("Event");
+                });
+
+            modelBuilder.Entity("BlazorMeetup.Data.Event", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "EventOwner")
+                        .WithMany()
+                        .HasForeignKey("IdentityUserId");
+
+                    b.Navigation("EventOwner");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -263,6 +344,16 @@ namespace BlazorMeetup.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("BlazorMeetup.Data.Attendee", b =>
+                {
+                    b.Navigation("Events");
+                });
+
+            modelBuilder.Entity("BlazorMeetup.Data.Event", b =>
+                {
+                    b.Navigation("Attendees");
                 });
 #pragma warning restore 612, 618
         }

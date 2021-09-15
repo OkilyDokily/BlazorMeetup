@@ -1,0 +1,50 @@
+﻿@page "/CreateEvent"
+@attribute [Authorize]
+@inject MeetupService MeetupService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UserManager<IdentityUser> UserManager
+@using BlazorMeetup.Data
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+
+<h3>Create Event</h3>
+
+<EditForm Model="@created" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div>
+        <label>Description</label>
+        <InputText @bind-Value="created.Description" />
+    </div>
+
+    <div>
+        <label>Maximum Attendees</label>
+        <InputNumber @bind-Value="created.MaximumAttendees" />
+    </div>
+    <div>
+        <label>Date of Event</label>
+        <InputDate @bind-Value="created.DateAndTime" />
+    </div>
+    <button>Create Event</button>
+</EditForm>
+
+
+@code {
+    private Event created = new();
+    ClaimsPrincipal User { get; set; }
+    IdentityUser DbUser { get; set; }
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        User = authState.User;
+        DbUser = await UserManager.GetUserAsync(User);
+    }
+    private void HandleValidSubmit()
+    {
+        created.IdentityUserId = DbUser.Id;
+        MeetupService.CreateEvent(created);
+    
+    }
+}

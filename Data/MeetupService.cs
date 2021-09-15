@@ -21,17 +21,29 @@ namespace BlazorMeetup.Data
             _dbContextFactory = factory;
         }
 
-        public bool UserExists(string id)
+        public void CreateEvent(Event create)
         {
-            bool exists = false;
+           
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-
-                exists = _appDBContext.Users.Any(x => x.Id == id);
+                create.Id = Guid.NewGuid().ToString();
+                _appDBContext.Events.Add(create);
+                _appDBContext.SaveChanges();
 
             }
 
-            return exists;
+        }
+
+        public List<Event> GetYourEvents(string id)
+        {
+
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+
+                return _appDBContext.Events.Where(x => x.IdentityUserId == id).ToList();
+          
+            }
+
         }
     }
 }

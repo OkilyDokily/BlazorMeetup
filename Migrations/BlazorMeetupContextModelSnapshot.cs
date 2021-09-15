@@ -18,31 +18,29 @@ namespace BlazorMeetup.Migrations
 
             modelBuilder.Entity("BlazorMeetup.Data.Attendee", b =>
                 {
-                    b.Property<int>("AttendeeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("IdentityUserId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("IdentityUserId")
+                        .HasColumnType("TEXT");
 
-                    b.HasKey("AttendeeId");
+                    b.HasKey("Id");
 
                     b.ToTable("Attendees");
                 });
 
             modelBuilder.Entity("BlazorMeetup.Data.AttendeeEvent", b =>
                 {
-                    b.Property<int>("AttendeeEventId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("AttendeeId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("AttendeeId")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("EventId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("EventId")
+                        .HasColumnType("TEXT");
 
-                    b.HasKey("AttendeeEventId");
+                    b.HasKey("Id");
 
                     b.HasIndex("AttendeeId");
 
@@ -53,25 +51,24 @@ namespace BlazorMeetup.Migrations
 
             modelBuilder.Entity("BlazorMeetup.Data.Event", b =>
                 {
-                    b.Property<int>("EventId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DateAndTime")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Descriptions")
+                    b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("EventOwnerId")
+                    b.Property<string>("IdentityUserId")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("MaximumAttendees")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("EventId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("EventOwnerId");
+                    b.HasIndex("IdentityUserId");
 
                     b.ToTable("Events");
                 });
@@ -276,15 +273,11 @@ namespace BlazorMeetup.Migrations
                 {
                     b.HasOne("BlazorMeetup.Data.Attendee", "Attendee")
                         .WithMany("Events")
-                        .HasForeignKey("AttendeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AttendeeId");
 
                     b.HasOne("BlazorMeetup.Data.Event", "Event")
                         .WithMany("Attendees")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EventId");
 
                     b.Navigation("Attendee");
 
@@ -295,7 +288,7 @@ namespace BlazorMeetup.Migrations
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "EventOwner")
                         .WithMany()
-                        .HasForeignKey("EventOwnerId");
+                        .HasForeignKey("IdentityUserId");
 
                     b.Navigation("EventOwner");
                 });

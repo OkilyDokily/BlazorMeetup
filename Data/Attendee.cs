@@ -7,8 +7,8 @@ namespace BlazorMeetup.Data
 {
     public class Attendee
     {
-        public int AttendeeId { get; set; }
-        public int IdentityUserId { get; set; }
+        public string Id { get; set; }
+        public string IdentityUserId { get; set; }
         public ICollection<AttendeeEvent> Events { get; set; }
 
         public Attendee()

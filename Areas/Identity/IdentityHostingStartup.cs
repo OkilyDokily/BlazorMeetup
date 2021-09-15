@@ -15,12 +15,14 @@ namespace BlazorMeetup.Areas.Identity
         public void Configure(IWebHostBuilder builder)
         {
             builder.ConfigureServices((context, services) => {
+                services.AddDbContextFactory<BlazorMeetupContext>(opt => opt.UseSqlite(context.Configuration.GetConnectionString("BlazorMeetupContextConnection")));
                 services.AddDbContext<BlazorMeetupContext>(options =>
                     options.UseSqlite(
                         context.Configuration.GetConnectionString("BlazorMeetupContextConnection")));
-
+               
                 services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false).AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<BlazorMeetupContext>();
+        
             });
         }
     }
