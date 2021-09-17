@@ -1,0 +1,45 @@
+﻿@page "/EventPage/{id}"
+@using BlazorMeetup.Data
+@using Microsoft.AspNetCore.Components.Web
+
+@*@attribute [Authorize]*@
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject MeetupService MeetupService
+@inject UserManager<IdentityUser> UserManager
+
+<h3>Event</h3>
+
+<h3>Attendees</h3>
+@foreach(AttendeeEvent attendee in pageEvent.Attendees)
+{
+    <p>@attendee.Attendee.IdentityUser.UserName</p>
+}
+
+<button @onclick="()=>JoinEvent(DbUser.Id)">Join this event</button>
+
+
+
+
+@code {
+
+    Event pageEvent { get; set; }
+    [Parameter]
+    public string id { get; set; }
+    private Event created = new();
+    ClaimsPrincipal User { get; set; }
+    IdentityUser DbUser { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        pageEvent = MeetupService.GetEventById(id);
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        User = authState.User;
+        DbUser = await UserManager.GetUserAsync(User);
+    }
+
+    void JoinEvent(string userId)
+    {
+        Debug.WriteLine("whats");
+        MeetupService.JoinEvent(userId, id);
+    }
+}

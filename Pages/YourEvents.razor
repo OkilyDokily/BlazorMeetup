@@ -3,17 +3,21 @@
 @inject MeetupService MeetupService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManager<IdentityUser> UserManager
+@inject NavigationManager NavigationManager
 @using BlazorMeetup.Data
 @using Microsoft.AspNetCore.Identity
 @using System.Diagnostics;
 
 <h3>Your Events</h3>
 <ul>
-    @foreach(Event e in events)  
+
+
+    @foreach (Event e in events)
     {
-        <li>@e.Description</li>
+        <li @onclick="() =>GoToPage(e.Id)">@e.Description</li>
     }
 </ul>
+
 
 @code {
     List<Event> events = new();
@@ -25,5 +29,10 @@
         Debug.WriteLine(UserManager.GetUserId(authState.User));
         events  = MeetupService.GetYourEvents(UserManager.GetUserId(authState.User));
 
+    }
+
+    void GoToPage(string id)
+    {
+        NavigationManager.NavigateTo("/EventPage/" + id);
     }
 }

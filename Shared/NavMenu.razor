@@ -12,16 +12,21 @@
                 <span class="oi oi-home" aria-hidden="true"></span> Home
             </NavLink>
         </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="CreateEvent">
-                <span class="oi oi-plus" aria-hidden="true"></span> Create Event
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="YourEvents">
-                <span class="oi oi-spreadsheet" aria-hidden="true"></span> Your Events
-            </NavLink>
-        </li>
+        <AuthorizeView>
+            <Authorized>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="CreateEvent">
+                        <span class="oi oi-plus" aria-hidden="true"></span> Create Event
+                    </NavLink>
+                </li>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="YourEvents">
+                        <span class="oi oi-spreadsheet" aria-hidden="true"></span> Your Events
+                    </NavLink>
+                </li>
+            </Authorized>
+            
+        </AuthorizeView>
     </ul>
 </div>
 

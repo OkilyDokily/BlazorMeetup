@@ -66,8 +66,18 @@ namespace BlazorMeetup
             }
                  
             );
-  
+            
             services.AddScoped<MeetupService>();
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 1;
+                options.Password.RequiredUniqueChars = 1;
+            });
+            //services.AddScoped<CreateUsers>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -84,7 +94,7 @@ namespace BlazorMeetup
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            //cu.InitializeUsers();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
