@@ -10,29 +10,27 @@
 
 <h3>Your Events</h3>
 <ul>
-
-
     @foreach (Event e in events)
     {
-        <li @onclick="() =>GoToPage(e.Id)">@e.Description</li>
+        <li @onclick="() => GoToPage(e.Id)">@e.Description</li>
     }
 </ul>
 
 
-@code {
+@code 
+{
     List<Event> events = new();
-
+    IdentityUser Your { get; set;}
 
     protected async override Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        Debug.WriteLine(UserManager.GetUserId(authState.User));
-        events  = MeetupService.GetYourEvents(UserManager.GetUserId(authState.User));
-
+        Your = await UserManager.GetUserAsync(authState.User);
+        events  = MeetupService.GetYourEvents(Your.Id);
     }
 
     void GoToPage(string id)
     {
-        NavigationManager.NavigateTo("//" + id);
+        NavigationManager.NavigateTo("/EventPage/" +Your.Id + "/" +id);
     }
 }

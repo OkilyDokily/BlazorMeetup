@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using System.Net.Http;
+using System.Diagnostics;
 
 namespace BlazorMeetup.Data
 {
@@ -34,6 +35,33 @@ namespace BlazorMeetup.Data
                 create.Id = Guid.NewGuid().ToString();
                 ctx.Events.Add(create);
                 ctx.SaveChanges();
+            }
+        }
+
+        public void DeleteEvent(Event eventToRemove)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {    
+                ctx.Events.Remove(eventToRemove);
+                ctx.SaveChanges();
+            }
+        }
+
+        public void LeaveEvent(string userId,string eventId)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext()) 
+            {
+                AttendeeEvent ae = ctx.AttendeeEvents.FirstOrDefault(x=> x.EventId == eventId && x.Attendee.IdentityUser.Id == userId);
+                if(ae != null)
+                {
+                    Debug.WriteLine("deleted");
+                    ctx.AttendeeEvents.Remove(ae);
+                    ctx.SaveChanges();
+                }
+                else
+                {
+                    Debug.WriteLine("not deleted");
+                }
             }
         }
 
