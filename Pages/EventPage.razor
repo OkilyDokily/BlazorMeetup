@@ -1,45 +1,76 @@
-﻿@page "/EventPage/{id}"
+﻿@page "/EventPage/{userId}/{id}"
 @using BlazorMeetup.Data
 @using Microsoft.AspNetCore.Components.Web
-
+@inject UserManager<IdentityUser> UserManager
 @*@attribute [Authorize]*@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject MeetupService MeetupService
 @inject UserManager<IdentityUser> UserManager
+@inject NavigationManager NavigationManager
 
 <h3>Event</h3>
 
 <h3>Attendees</h3>
-@foreach(AttendeeEvent attendee in pageEvent.Attendees)
+@foreach (AttendeeEvent attendee in pageEvent.Attendees)
+
 {
-    <p>@attendee.Attendee.IdentityUser.UserName</p>
+    @if (attendee.Attendee.IdentityUser.UserName ==LoggedInUser.UserName)
+    {
+        @if (attendee.CanAttendInitialDate == true)
+        {
+            <p>@attendee.Attendee.IdentityUser.UserName  <input type="checkbox" checked value="@attendee.CanAttendInitialDate" @onchange="() => OnChange(attendee.Id)"></p>
+        }
+        else
+        {
+            <p>@attendee.Attendee.IdentityUser.UserName  <input type="checkbox" value="@attendee.CanAttendInitialDate" @onchange="() => OnChange(attendee.Id)"></p>
+        }
+    }
+    else
+    {
+        @if (attendee.Attendee.IdentityUser.UserName == LoggedInUser.UserName)
+        {
+            <p>@attendee.Attendee.IdentityUser.UserName<i class="bi bi-check"></i></p>
+        }
+
+
+    }
 }
 
-<button @onclick="()=>JoinEvent(DbUser.Id)">Join this event</button>
-
-
+<button @onclick="()=>JoinEvent()">I'm Interested</button>
+<button @onclick="()=>GoBack()">User Event List</button>
 
 
 @code {
 
     Event pageEvent { get; set; }
     [Parameter]
+    public string userId { get; set; }
+    [Parameter]
     public string id { get; set; }
-    private Event created = new();
-    ClaimsPrincipal User { get; set; }
-    IdentityUser DbUser { get; set; }
+    Event created = new();
+    IdentityUser LoggedInUser { get; set; }
+
 
     protected override async Task OnInitializedAsync()
     {
+        var auth = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         pageEvent = MeetupService.GetEventById(id);
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        User = authState.User;
-        DbUser = await UserManager.GetUserAsync(User);
+        LoggedInUser = await UserManager.GetUserAsync(auth.User);
     }
 
-    void JoinEvent(string userId)
+    void GoBack()
     {
-        Debug.WriteLine("whats");
-        MeetupService.JoinEvent(userId, id);
+        NavigationManager.NavigateTo("/UserEvents/" + userId);
+    }
+
+    void JoinEvent()
+    {
+        MeetupService.JoinEvent(LoggedInUser.Id, id);
+        StateHasChanged();
+    }
+
+    void OnChange(string id)
+    {
+        MeetupService.ChangeCanAttendInitialDate(id);
     }
 }

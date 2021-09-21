@@ -1,0 +1,22 @@
+﻿@page "/Users"
+@inject MeetupService MeetupService
+@inject NavigationManager NavigationManager
+<h3>Users</h3>
+<ul>
+    @foreach (IdentityUser iu in AllUsers)
+    {
+        <li @onclick="()=>GoToPage(iu.Id)">@iu.UserName</li>
+    }
+</ul>
+
+@code {
+    List<IdentityUser> AllUsers { get; set; }
+    protected override void OnInitialized()
+    {
+        AllUsers = MeetupService.GetAllUsers();
+    }
+    void GoToPage(string id)
+    {
+        NavigationManager.NavigateTo("/UserEvents/" + id);
+    }
+}

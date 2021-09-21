@@ -11,22 +11,29 @@ namespace BlazorMeetup.Data
     public class MeetupService
     {
 
-        private readonly BlazorMeetupContext _appDBContext;
+       
         private readonly IDbContextFactory<BlazorMeetupContext> _dbContextFactory;
 
-        public MeetupService(BlazorMeetupContext appDBContext, IDbContextFactory<BlazorMeetupContext> factory)
+        public MeetupService(IDbContextFactory<BlazorMeetupContext> factory)
         {
-            _appDBContext = appDBContext;
+           
             _dbContextFactory = factory;
         }
 
+        public List<IdentityUser> GetAllUsers()
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                return ctx.Users.ToList();
+            }
+        }
         public void CreateEvent(Event create)
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
                 create.Id = Guid.NewGuid().ToString();
-                _appDBContext.Events.Add(create);
-                _appDBContext.SaveChanges();
+                ctx.Events.Add(create);
+                ctx.SaveChanges();
             }
         }
 
@@ -35,24 +42,27 @@ namespace BlazorMeetup.Data
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
                 Attendee attendee;
-                if (!(_appDBContext.Attendees.Any(x => x.IdentityUserId == id)))
-                
-                {
-                    
+                if (!(ctx.Attendees.Any(x => x.IdentityUserId == id)))               
+                {  
                     attendee = new Attendee()
                     {
                         Id = Guid.NewGuid().ToString(),
                         IdentityUserId = id
                     };
-                    _appDBContext.Attendees.Add(attendee);
-                    _appDBContext.SaveChanges();
+                    ctx.Attendees.Add(attendee);
+                    ctx.SaveChanges();
                 }
                 else
                 {
-                    attendee = _appDBContext.Attendees.FirstOrDefault(x => x.IdentityUserId == id);
+                    attendee = ctx.Attendees.FirstOrDefault(x => x.IdentityUserId == id);
                 }
-                _appDBContext.AttendeeEvents.Add(new AttendeeEvent {Id= Guid.NewGuid().ToString(), AttendeeId = attendee.Id, EventId = eventId });
-                _appDBContext.SaveChanges();
+
+                AttendeeEvent ae = ctx.AttendeeEvents.FirstOrDefault(x => x.AttendeeId == attendee.Id && x.EventId == eventId);
+                if(ae==null)
+                {
+                    ctx.AttendeeEvents.Add(new AttendeeEvent { Id = Guid.NewGuid().ToString(), AttendeeId = attendee.Id, EventId = eventId });
+                    ctx.SaveChanges();
+                }   
             }
         }
 
@@ -60,7 +70,7 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                return _appDBContext.Events.Where(x => x.IdentityUserId == id).ToList();         
+                return ctx.Events.Where(x => x.IdentityUserId == id).ToList();         
             }
         }
 
@@ -68,7 +78,19 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                return _appDBContext.Events.Include(x => x.Attendees).ThenInclude(x=>x.Attendee).ThenInclude(x=>x.IdentityUser).FirstOrDefault(x => x.Id == id);   
+                return ctx.Events.Include(x => x.Attendees).ThenInclude(x=>x.Attendee).ThenInclude(x=>x.IdentityUser).FirstOrDefault(x => x.Id == id);   
+            }
+        }
+
+        public void ChangeCanAttendInitialDate(string id)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+
+                AttendeeEvent ae = ctx.AttendeeEvents.FirstOrDefault(x => x.Id == id);
+                ae.CanAttendInitialDate = !ae.CanAttendInitialDate;
+                ctx.SaveChanges();
+                
             }
         }
     }

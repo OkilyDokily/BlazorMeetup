@@ -1,4 +1,4 @@
-﻿@page "/YourEvents"
+﻿@page "/UserEvents/{id}"
 @attribute [Authorize]
 @inject MeetupService MeetupService
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -8,31 +8,30 @@
 @using Microsoft.AspNetCore.Identity
 @using System.Diagnostics;
 
-<h3>Your Events</h3>
+<h3>@DbUser.UserName Events</h3>
 <ul>
-
-
     @foreach (Event e in events)
     {
-        <li @onclick="() =>GoToPage(e.Id)">@e.Description</li>
+        <li @onclick="() => GoToPage(e.Id)">@e.Description</li>
     }
 </ul>
 
 
 @code {
     List<Event> events = new();
-
+    [Parameter]
+    public string id { get; set; }
+    IdentityUser DbUser { get; set; }
 
     protected async override Task OnInitializedAsync()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        Debug.WriteLine(UserManager.GetUserId(authState.User));
-        events  = MeetupService.GetYourEvents(UserManager.GetUserId(authState.User));
 
+        DbUser = await UserManager.FindByIdAsync(id);
+        events = MeetupService.GetYourEvents(id);
     }
 
     void GoToPage(string id)
     {
-        NavigationManager.NavigateTo("//" + id);
+        NavigationManager.NavigateTo("/EventPage/" + DbUser.Id  +"/"+ id);
     }
 }
