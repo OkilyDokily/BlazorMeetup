@@ -1,9 +1,9 @@
 ﻿<h3>Suggest Date</h3>
 @inject MeetupService MeetupService
 @inject IJSRuntime IJSRunTime
-
+@inject NavigationManager NavigationManager
 <EditForm Model=@suggested OnValidSubmit="@SuggestADate">
-    <input type="datetime" @bind-value="suggested.DateTime" />
+    <InputDate @bind-Value="suggested.DateTime" />
     <button>Suggest a date and time</button>
 </EditForm>
 
@@ -12,15 +12,14 @@
 {
     @if (CanAttend(sd))
     {
-        <div @key="sd.Id">@sd.DateTime @sd.IdentityUser.UserName  <input type="checkbox" checked  @onchange="() => RemoveSuggestedDateFromAttendeeEvent(sd)"></div>
+        <div @onclick="()=>SeeAvailableUser(sd)" @key="sd.Id">@sd.DateTime @sd.IdentityUser.UserName  <input type="checkbox" @onclick:stopPropagation="true" checked @onchange="() => RemoveSuggestedDateFromAttendee(sd)"></div>
     }
     else
     {
-        <div @key="sd.Id">@sd.DateTime @sd.IdentityUser.UserName  <input type="checkbox"   @onchange="() => AddSuggestedDateToAttendeeEvent(sd)"></div>
+        <div @onclick="()=>SeeAvailableUser(sd)" @key="sd.Id">@sd.DateTime @sd.IdentityUser.UserName  <input type="checkbox" @onclick:stopPropagation="true" @onchange="() => AddSuggestedDateToAttendee(sd)"></div>
     }
 
 }
-
 
 
 @code {
@@ -35,19 +34,24 @@
 
     bool CanAttend(SuggestedDate sd)
     {
-        bool b = MeetupService.CanAttend(sd,LoggedInId);
+        bool b = MeetupService.CanAttend(sd, LoggedInId);
         return b;
     }
 
-
-    public void RemoveSuggestedDateFromAttendeeEvent(SuggestedDate sd)
+    public void SeeAvailableUser(SuggestedDate sd)
     {
-        MeetupService.RemoveSuggestedDateFromAttendeeEvents(sd, LoggedInId);
+        NavigationManager.NavigateTo("/AvailableUsers/" + sd.Id);
     }
 
-    public void AddSuggestedDateToAttendeeEvent(SuggestedDate sd)
+
+    public void RemoveSuggestedDateFromAttendee(SuggestedDate sd)
     {
-        MeetupService.AddSuggestedDateToAttendeeEvents(sd, LoggedInId);
+        MeetupService.RemoveSuggestedDateFromAttendees(sd, LoggedInId);
+    }
+
+    public void AddSuggestedDateToAttendee(SuggestedDate sd)
+    {
+        MeetupService.AddSuggestedDateToAttendees(sd, LoggedInId);
     }
 
     protected override void OnInitialized()

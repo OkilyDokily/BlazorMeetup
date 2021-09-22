@@ -15,11 +15,11 @@ namespace BlazorMeetup.Data
         public DateTime DateTime { get; set; }
         public virtual IdentityUser IdentityUser { get; set; }
         public virtual Event Event { get; set; }
-        public virtual ICollection<SuggestedDateAttendeeEvent> AttendeeEvents { get; set; }
+        public virtual ICollection<SuggestedDateAttendee> Attendees { get; set; }
 
         public SuggestedDate()
         {
-            this.AttendeeEvents = new HashSet<SuggestedDateAttendeeEvent>();
+            this.Attendees = new HashSet<SuggestedDateAttendee>();
         }
 
     }

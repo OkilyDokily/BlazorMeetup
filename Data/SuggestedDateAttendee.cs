@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 
 namespace BlazorMeetup.Data
 {
-    public class SuggestedDateAttendeeEvent
+    public class SuggestedDateAttendee
     {
         public string Id { get; set; }
-        public string AttendeeEventId { get; set; }
+        public string AttendeeId { get; set; }
         public string SuggestedDateId { get; set; }
         public virtual SuggestedDate SuggestedDate {get;set;}
-        public virtual AttendeeEvent AttendeeEvent { get; set; }
+        public virtual Attendee Attendee { get; set; }
         
         
     }

@@ -13,12 +13,12 @@ namespace BlazorMeetup.Data
         public string EventId { get; set; }
         public virtual Attendee Attendee { get; set; }
         public virtual Event Event { get; set; }
-        public virtual ICollection<SuggestedDateAttendeeEvent> SuggestedDates {get;set;}
+        public virtual ICollection<SuggestedDateAttendee> SuggestedDates {get;set;}
         public bool CanAttendProposedDate { get; set; }
 
         public AttendeeEvent()
         {
-            this.SuggestedDates = new HashSet<SuggestedDateAttendeeEvent>();
+            this.SuggestedDates = new HashSet<SuggestedDateAttendee>();
         }
     }
 }

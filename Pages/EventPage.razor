@@ -9,7 +9,6 @@
 @inject NavigationManager NavigationManager
 
 <TabControl>
-
     <TabPage Text="Main">
         <h3>Event</h3>
         @pageEvent.DateAndTime
@@ -38,7 +37,6 @@
                 {
                     <div @key="attendee.Id">@attendee.Attendee.IdentityUser.UserName</div>
                 }
-
             }
         }
 

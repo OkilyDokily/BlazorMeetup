@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazorMeetup.Migrations
 {
     [DbContext(typeof(BlazorMeetupContext))]
-    [Migration("20210916224536_another1")]
-    partial class another1
+    [Migration("20210922211754_first")]
+    partial class first
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -41,6 +41,9 @@ namespace BlazorMeetup.Migrations
                     b.Property<string>("AttendeeId")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("CanAttendProposedDate")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("EventId")
                         .HasColumnType("TEXT");
 
@@ -70,11 +73,62 @@ namespace BlazorMeetup.Migrations
                     b.Property<int>("MaximumAttendees")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("MinimumAttendees")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IdentityUserId");
 
                     b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("BlazorMeetup.Data.SuggestedDate", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EventId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("IdentityUserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("IdentityUserId");
+
+                    b.ToTable("SuggestedDates");
+                });
+
+            modelBuilder.Entity("BlazorMeetup.Data.SuggestedDateAttendee", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AttendeeEventId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AttendeeId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SuggestedDateId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AttendeeEventId");
+
+                    b.HasIndex("AttendeeId");
+
+                    b.HasIndex("SuggestedDateId");
+
+                    b.ToTable("SuggestedDateAttendees");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -299,11 +353,45 @@ namespace BlazorMeetup.Migrations
 
             modelBuilder.Entity("BlazorMeetup.Data.Event", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "EventOwner")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
                         .WithMany()
                         .HasForeignKey("IdentityUserId");
 
-                    b.Navigation("EventOwner");
+                    b.Navigation("IdentityUser");
+                });
+
+            modelBuilder.Entity("BlazorMeetup.Data.SuggestedDate", b =>
+                {
+                    b.HasOne("BlazorMeetup.Data.Event", "Event")
+                        .WithMany("SuggestedDates")
+                        .HasForeignKey("EventId");
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
+                        .WithMany()
+                        .HasForeignKey("IdentityUserId");
+
+                    b.Navigation("Event");
+
+                    b.Navigation("IdentityUser");
+                });
+
+            modelBuilder.Entity("BlazorMeetup.Data.SuggestedDateAttendee", b =>
+                {
+                    b.HasOne("BlazorMeetup.Data.AttendeeEvent", null)
+                        .WithMany("SuggestedDates")
+                        .HasForeignKey("AttendeeEventId");
+
+                    b.HasOne("BlazorMeetup.Data.Attendee", "Attendee")
+                        .WithMany()
+                        .HasForeignKey("AttendeeId");
+
+                    b.HasOne("BlazorMeetup.Data.SuggestedDate", "SuggestedDate")
+                        .WithMany("Attendees")
+                        .HasForeignKey("SuggestedDateId");
+
+                    b.Navigation("Attendee");
+
+                    b.Navigation("SuggestedDate");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -362,7 +450,19 @@ namespace BlazorMeetup.Migrations
                     b.Navigation("Events");
                 });
 
+            modelBuilder.Entity("BlazorMeetup.Data.AttendeeEvent", b =>
+                {
+                    b.Navigation("SuggestedDates");
+                });
+
             modelBuilder.Entity("BlazorMeetup.Data.Event", b =>
+                {
+                    b.Navigation("Attendees");
+
+                    b.Navigation("SuggestedDates");
+                });
+
+            modelBuilder.Entity("BlazorMeetup.Data.SuggestedDate", b =>
                 {
                     b.Navigation("Attendees");
                 });

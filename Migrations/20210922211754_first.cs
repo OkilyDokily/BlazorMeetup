@@ -47,18 +47,6 @@ namespace BlazorMeetup.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Attendees",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "TEXT", nullable: false),
-                    IdentityUserId = table.Column<string>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Attendees", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -165,6 +153,24 @@ namespace BlazorMeetup.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Attendees",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    IdentityUserId = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Attendees", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Attendees_AspNetUsers_IdentityUserId",
+                        column: x => x.IdentityUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Events",
                 columns: table => new
                 {
@@ -172,6 +178,7 @@ namespace BlazorMeetup.Migrations
                     IdentityUserId = table.Column<string>(type: "TEXT", nullable: true),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
                     MaximumAttendees = table.Column<int>(type: "INTEGER", nullable: false),
+                    MinimumAttendees = table.Column<int>(type: "INTEGER", nullable: false),
                     DateAndTime = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -191,7 +198,8 @@ namespace BlazorMeetup.Migrations
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
                     AttendeeId = table.Column<string>(type: "TEXT", nullable: true),
-                    EventId = table.Column<string>(type: "TEXT", nullable: true)
+                    EventId = table.Column<string>(type: "TEXT", nullable: true),
+                    CanAttendProposedDate = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -206,6 +214,64 @@ namespace BlazorMeetup.Migrations
                         name: "FK_AttendeeEvents_Events_EventId",
                         column: x => x.EventId,
                         principalTable: "Events",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SuggestedDates",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    IdentityUserId = table.Column<string>(type: "TEXT", nullable: true),
+                    EventId = table.Column<string>(type: "TEXT", nullable: true),
+                    DateTime = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SuggestedDates", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SuggestedDates_AspNetUsers_IdentityUserId",
+                        column: x => x.IdentityUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_SuggestedDates_Events_EventId",
+                        column: x => x.EventId,
+                        principalTable: "Events",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SuggestedDateAttendees",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    AttendeeId = table.Column<string>(type: "TEXT", nullable: true),
+                    SuggestedDateId = table.Column<string>(type: "TEXT", nullable: true),
+                    AttendeeEventId = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SuggestedDateAttendees", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SuggestedDateAttendees_AttendeeEvents_AttendeeEventId",
+                        column: x => x.AttendeeEventId,
+                        principalTable: "AttendeeEvents",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_SuggestedDateAttendees_Attendees_AttendeeId",
+                        column: x => x.AttendeeId,
+                        principalTable: "Attendees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_SuggestedDateAttendees_SuggestedDates_SuggestedDateId",
+                        column: x => x.SuggestedDateId,
+                        principalTable: "SuggestedDates",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -258,8 +324,38 @@ namespace BlazorMeetup.Migrations
                 column: "EventId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Attendees_IdentityUserId",
+                table: "Attendees",
+                column: "IdentityUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Events_IdentityUserId",
                 table: "Events",
+                column: "IdentityUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SuggestedDateAttendees_AttendeeEventId",
+                table: "SuggestedDateAttendees",
+                column: "AttendeeEventId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SuggestedDateAttendees_AttendeeId",
+                table: "SuggestedDateAttendees",
+                column: "AttendeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SuggestedDateAttendees_SuggestedDateId",
+                table: "SuggestedDateAttendees",
+                column: "SuggestedDateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SuggestedDates_EventId",
+                table: "SuggestedDates",
+                column: "EventId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SuggestedDates_IdentityUserId",
+                table: "SuggestedDates",
                 column: "IdentityUserId");
         }
 
@@ -281,10 +377,16 @@ namespace BlazorMeetup.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "AttendeeEvents");
+                name: "SuggestedDateAttendees");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "AttendeeEvents");
+
+            migrationBuilder.DropTable(
+                name: "SuggestedDates");
 
             migrationBuilder.DropTable(
                 name: "Attendees");

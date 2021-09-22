@@ -17,7 +17,7 @@ namespace BlazorMeetup.Data
         {
             for(var i = 1;i<11;i++)
             {
-                await _userManager.CreateAsync(new IdentityUser { Email = "test" + i.ToString() + "gmail.com", UserName = "test" + i.ToString() + "gmail.com" }, "test" + i.ToString());
+                await _userManager.CreateAsync(new IdentityUser { Email = "test" + i.ToString() + "@gmail.com", UserName = "test" + i.ToString() + "@gmail.com" }, "test");
             }
         }
     }

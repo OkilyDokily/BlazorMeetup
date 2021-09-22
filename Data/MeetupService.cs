@@ -38,7 +38,7 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                SuggestedDateAttendeeEvent sdae = GetSuggestedDateAttendeeEvent(sd, loggedInId);
+                SuggestedDateAttendee sdae = GetSuggestedDateAttendee(sd, loggedInId);
                 if(sdae == null)
                 {
                     return false;
@@ -50,46 +50,44 @@ namespace BlazorMeetup.Data
             }
         }
 
-        public void AddSuggestedDateToAttendeeEvents(SuggestedDate sd, string loggedInId)
+        public void AddSuggestedDateToAttendees(SuggestedDate sd, string loggedInId)
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                if (GetSuggestedDateAttendeeEvent(sd, loggedInId) == null)
+                if (GetSuggestedDateAttendee(sd, loggedInId) == null)
                 {
                     Attendee a = ctx.Attendees.FirstOrDefault(x => x.IdentityUserId == loggedInId);
-                    AttendeeEvent ae = ctx.AttendeeEvents.FirstOrDefault(x => x.AttendeeId == a.Id && x.EventId == sd.EventId);
-                    SuggestedDateAttendeeEvent sdae = new SuggestedDateAttendeeEvent()
+                    SuggestedDateAttendee sdae = new SuggestedDateAttendee()
                     {
                         Id = Guid.NewGuid().ToString(),
                         SuggestedDateId = sd.Id,
-                        AttendeeEventId = ae.Id
+                        AttendeeId = a.Id
                     };
-                    ctx.SuggestedDateAttendeeEvents.Add(sdae);
+                    ctx.SuggestedDateAttendees.Add(sdae);
                     ctx.SaveChanges();
                 }
             }
              
         }
 
-        SuggestedDateAttendeeEvent GetSuggestedDateAttendeeEvent(SuggestedDate sd, string loggedInId)
+        SuggestedDateAttendee GetSuggestedDateAttendee(SuggestedDate sd, string loggedInId)
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
                 Attendee a = ctx.Attendees.FirstOrDefault(x => x.IdentityUserId == loggedInId);
-                AttendeeEvent ae = ctx.AttendeeEvents.FirstOrDefault(x => x.AttendeeId == a.Id && x.EventId == sd.EventId);
-                SuggestedDateAttendeeEvent sdae = ctx.SuggestedDateAttendeeEvents.FirstOrDefault(x => x.AttendeeEventId == ae.Id && x.SuggestedDateId == sd.Id);
+                SuggestedDateAttendee sdae = ctx.SuggestedDateAttendees.FirstOrDefault(x => x.AttendeeId == a.Id && x.SuggestedDateId == sd.Id);
                 return sdae;
             }
                 
         }
 
-        public void RemoveSuggestedDateFromAttendeeEvents(SuggestedDate sd,string loggedInId)
+        public void RemoveSuggestedDateFromAttendees(SuggestedDate sd,string loggedInId)
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
 
-                SuggestedDateAttendeeEvent sdae = GetSuggestedDateAttendeeEvent(sd,loggedInId);
-                ctx.SuggestedDateAttendeeEvents.Remove(sdae);
+                SuggestedDateAttendee sdae = GetSuggestedDateAttendee(sd,loggedInId);
+                ctx.SuggestedDateAttendees.Remove(sdae);
                 ctx.SaveChanges();
             }
              
@@ -197,6 +195,24 @@ namespace BlazorMeetup.Data
                 ae.CanAttendProposedDate = !ae.CanAttendProposedDate;
                 ctx.SaveChanges();
                 
+            }
+        }
+
+        public List<IdentityUser> GetAvailableUsers(string id)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                SuggestedDate sd = ctx.SuggestedDates.Include(x => x.Attendees).ThenInclude(x=>x.Attendee).ThenInclude(x=>x.IdentityUser).FirstOrDefault(x=> x.Id == id);
+                return sd.Attendees.Select(x => x.Attendee.IdentityUser).ToList();
+            }
+        }
+
+        public SuggestedDate GetSuggestedDateById(string id)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                SuggestedDate sd = ctx.SuggestedDates.FirstOrDefault(x=>x.Id == id);
+                return sd;
             }
         }
     }
