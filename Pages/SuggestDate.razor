@@ -7,15 +7,21 @@
     <button>Suggest a date and time</button>
 </EditForm>
 
-<ul>
-    @foreach (SuggestedDate sd in PageEvent.SuggestedDates)
+
+@foreach (SuggestedDate sd in PageEvent.SuggestedDates)
+{
+    @if (CanAttend(sd))
     {
-        <li>
-            @sd.DateTime @sd.IdentityUser.UserName
-        </li>
+        <div @key="sd.Id">@sd.DateTime @sd.IdentityUser.UserName  <input type="checkbox" checked  @onchange="() => RemoveSuggestedDateFromAttendeeEvent(sd)"></div>
+    }
+    else
+    {
+        <div @key="sd.Id">@sd.DateTime @sd.IdentityUser.UserName  <input type="checkbox"   @onchange="() => AddSuggestedDateToAttendeeEvent(sd)"></div>
     }
 
-</ul>
+}
+
+
 
 @code {
     [Parameter]
@@ -26,6 +32,23 @@
     [Parameter]
     public string Id { get; set; }
 
+
+    bool CanAttend(SuggestedDate sd)
+    {
+        bool b = MeetupService.CanAttend(sd,LoggedInId);
+        return b;
+    }
+
+
+    public void RemoveSuggestedDateFromAttendeeEvent(SuggestedDate sd)
+    {
+        MeetupService.RemoveSuggestedDateFromAttendeeEvents(sd, LoggedInId);
+    }
+
+    public void AddSuggestedDateToAttendeeEvent(SuggestedDate sd)
+    {
+        MeetupService.AddSuggestedDateToAttendeeEvents(sd, LoggedInId);
+    }
 
     protected override void OnInitialized()
     {

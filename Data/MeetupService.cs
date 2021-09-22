@@ -10,9 +10,7 @@ using System.Diagnostics;
 namespace BlazorMeetup.Data
 {
     public class MeetupService
-    {
-
-       
+    { 
         private readonly IDbContextFactory<BlazorMeetupContext> _dbContextFactory;
 
         public MeetupService(IDbContextFactory<BlazorMeetupContext> factory)
@@ -34,6 +32,67 @@ namespace BlazorMeetup.Data
                     ctx.SaveChanges();
                 }
             }
+        }
+
+        public bool CanAttend(SuggestedDate sd,string loggedInId)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                SuggestedDateAttendeeEvent sdae = GetSuggestedDateAttendeeEvent(sd, loggedInId);
+                if(sdae == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
+
+        public void AddSuggestedDateToAttendeeEvents(SuggestedDate sd, string loggedInId)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                if (GetSuggestedDateAttendeeEvent(sd, loggedInId) == null)
+                {
+                    Attendee a = ctx.Attendees.FirstOrDefault(x => x.IdentityUserId == loggedInId);
+                    AttendeeEvent ae = ctx.AttendeeEvents.FirstOrDefault(x => x.AttendeeId == a.Id && x.EventId == sd.EventId);
+                    SuggestedDateAttendeeEvent sdae = new SuggestedDateAttendeeEvent()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        SuggestedDateId = sd.Id,
+                        AttendeeEventId = ae.Id
+                    };
+                    ctx.SuggestedDateAttendeeEvents.Add(sdae);
+                    ctx.SaveChanges();
+                }
+            }
+             
+        }
+
+        SuggestedDateAttendeeEvent GetSuggestedDateAttendeeEvent(SuggestedDate sd, string loggedInId)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                Attendee a = ctx.Attendees.FirstOrDefault(x => x.IdentityUserId == loggedInId);
+                AttendeeEvent ae = ctx.AttendeeEvents.FirstOrDefault(x => x.AttendeeId == a.Id && x.EventId == sd.EventId);
+                SuggestedDateAttendeeEvent sdae = ctx.SuggestedDateAttendeeEvents.FirstOrDefault(x => x.AttendeeEventId == ae.Id && x.SuggestedDateId == sd.Id);
+                return sdae;
+            }
+                
+        }
+
+        public void RemoveSuggestedDateFromAttendeeEvents(SuggestedDate sd,string loggedInId)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+
+                SuggestedDateAttendeeEvent sdae = GetSuggestedDateAttendeeEvent(sd,loggedInId);
+                ctx.SuggestedDateAttendeeEvents.Remove(sdae);
+                ctx.SaveChanges();
+            }
+             
         }
 
         public void SuggestDate(SuggestedDate s)
@@ -81,8 +140,7 @@ namespace BlazorMeetup.Data
                 {
                     ctx.AttendeeEvents.Remove(ae);
                     ctx.SaveChanges();
-                }
-              
+                }   
             }
         }
 
@@ -135,7 +193,6 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-
                 AttendeeEvent ae = ctx.AttendeeEvents.FirstOrDefault(x => x.Id == id);
                 ae.CanAttendProposedDate = !ae.CanAttendProposedDate;
                 ctx.SaveChanges();

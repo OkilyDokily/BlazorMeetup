@@ -21,22 +21,22 @@
             {
                 @if (attendee.CanAttendProposedDate == true)
                 {
-                    <div>@attendee.Attendee.IdentityUser.UserName  <input type="checkbox" checked value="@attendee.CanAttendProposedDate" @onchange="() => OnChange(attendee.Id)"><div style="display:inline" @onclick="Leave">leave</div></div>
+                    <div @key="attendee.Id">@attendee.Attendee.IdentityUser.UserName  <input type="checkbox" checked value="@attendee.CanAttendProposedDate" @onchange="() => OnChange(attendee.Id)"><div style="display:inline" @onclick="Leave">leave</div></div>
                 }
                 else
                 {
-                    <div>@attendee.Attendee.IdentityUser.UserName  <input type="checkbox" value="@attendee.CanAttendProposedDate" @onchange="() => OnChange(attendee.Id)"><div style="display:inline" @onclick="Leave">leave</div></div>
+                    <div @key="attendee.Id">@attendee.Attendee.IdentityUser.UserName  <input type="checkbox" value="@attendee.CanAttendProposedDate" @onchange="() => OnChange(attendee.Id)"><div style="display:inline" @onclick="Leave">leave</div></div>
                 }
             }
             else
             {
                 @if (attendee.CanAttendProposedDate)
                 {
-                    <div>@attendee.Attendee.IdentityUser.UserName<i class="oi oi-check"></i></div>
+                    <div @key="attendee.Id">@attendee.Attendee.IdentityUser.UserName<i class="oi oi-check"></i></div>
                 }
                 else
                 {
-                    <div>@attendee.Attendee.IdentityUser.UserName</div>
+                    <div @key="attendee.Id">@attendee.Attendee.IdentityUser.UserName</div>
                 }
 
             }

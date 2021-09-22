@@ -5,7 +5,7 @@
 <ul>
     @foreach (IdentityUser iu in AllUsers)
     {
-        <li @onclick="()=>GoToPage(iu.Id)">@iu.UserName</li>
+        <li @key="iu.Id" @onclick="()=>GoToPage(iu.Id)">@iu.UserName</li>
     }
 </ul>
 
