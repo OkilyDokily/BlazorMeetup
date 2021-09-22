@@ -8,89 +8,103 @@
 @inject UserManager<IdentityUser> UserManager
 @inject NavigationManager NavigationManager
 
-<h3>Event</h3>
+<TabControl>
 
-<h3>Attendees</h3>
-@foreach (AttendeeEvent attendee in pageEvent.Attendees)
+    <TabPage Text="Main">
+        <h3>Event</h3>
+        @pageEvent.DateAndTime
+        <h3>Attendees</h3>
+        @foreach (AttendeeEvent attendee in pageEvent.Attendees)
 
-{
-    @if (attendee.Attendee.IdentityUser.UserName == LoggedInUser.UserName)
-    {
-        @if (attendee.CanAttendInitialDate == true)
         {
-            <div>@attendee.Attendee.IdentityUser.UserName  <input type="checkbox" checked value="@attendee.CanAttendInitialDate" @onchange="() => OnChange(attendee.Id)" ><div style="display:inline" @onclick="Leave">leave</div></div>
+            @if (attendee.Attendee.IdentityUser.UserName == LoggedInUser.UserName)
+            {
+                @if (attendee.CanAttendProposedDate == true)
+                {
+                    <div>@attendee.Attendee.IdentityUser.UserName  <input type="checkbox" checked value="@attendee.CanAttendProposedDate" @onchange="() => OnChange(attendee.Id)"><div style="display:inline" @onclick="Leave">leave</div></div>
+                }
+                else
+                {
+                    <div>@attendee.Attendee.IdentityUser.UserName  <input type="checkbox" value="@attendee.CanAttendProposedDate" @onchange="() => OnChange(attendee.Id)"><div style="display:inline" @onclick="Leave">leave</div></div>
+                }
+            }
+            else
+            {
+                @if (attendee.CanAttendProposedDate)
+                {
+                    <div>@attendee.Attendee.IdentityUser.UserName<i class="oi oi-check"></i></div>
+                }
+                else
+                {
+                    <div>@attendee.Attendee.IdentityUser.UserName</div>
+                }
+
+            }
         }
-        else
+
+        <button @onclick="()=>JoinEvent()">I'm Interested</button>
+        <button @onclick="()=>GoBack()">User Event List</button>
+        @if (userId == LoggedInUser.Id)
         {
-    <div>@attendee.Attendee.IdentityUser.UserName  <input type="checkbox" value="@attendee.CanAttendInitialDate" @onchange="() => OnChange(attendee.Id)"><div style="display:inline" @onclick="Leave">leave</div></div>
+            <button @onclick="DeleteEvent">Delete Event</button>
         }
-    }
-    else
+    </TabPage>
+    @if (pageEvent.IdentityUser.UserName == LoggedInUser.UserName)
     {
-        @if (attendee.CanAttendInitialDate)
+        <TabPage Text="Change Proposed Date">
+            <DifferentDate PageEvent=@pageEvent />
+        </TabPage>
+    }
+    @if (pageEvent.Attendees.Any(a => a.Attendee.IdentityUserId == LoggedInUser.Id))
+    {
+        <TabPage Text="Suggest Another Date">
+            <SuggestDate PageEvent=@pageEvent LoggedInId="@LoggedInUser.Id" />
+        </TabPage>
+    }
+
+</TabControl>
+    @code {
+
+        Event pageEvent { get; set; }
+        [Parameter]
+        public string userId { get; set; }
+        [Parameter]
+        public string id { get; set; }
+        Event created = new();
+        IdentityUser LoggedInUser { get; set; }
+
+
+        protected override async Task OnInitializedAsync()
         {
-            <div>@attendee.Attendee.IdentityUser.UserName<i class="oi oi-check"></i></div>
+            var auth = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            pageEvent = MeetupService.GetEventById(id);
+            LoggedInUser = await UserManager.GetUserAsync(auth.User);
         }
-        else
+
+        void GoBack()
         {
-            <div>@attendee.Attendee.IdentityUser.UserName</div>
+            NavigationManager.NavigateTo("/UserEvents/" + userId);
         }
 
+        void JoinEvent()
+        {
+            MeetupService.JoinEvent(LoggedInUser.Id, id);
+            StateHasChanged();
+        }
+
+        void Leave()
+        {
+            MeetupService.LeaveEvent(LoggedInUser.Id, id);
+        }
+
+        void DeleteEvent()
+        {
+            MeetupService.DeleteEvent(pageEvent);
+            GoBack();
+        }
+
+        void OnChange(string id)
+        {
+            MeetupService.ChangeCanAttendInitialDate(id);
+        }
     }
-}
-
-<button @onclick="()=>JoinEvent()">I'm Interested</button>
-<button @onclick="()=>GoBack()">User Event List</button>
-@if (userId == LoggedInUser.Id) 
-{
-<button @onclick="DeleteEvent">Delete Event</button>
-}
-
-
-
-
-@code {
-
-    Event pageEvent { get; set; }
-    [Parameter]
-    public string userId { get; set; }
-    [Parameter]
-    public string id { get; set; }
-    Event created = new();
-    IdentityUser LoggedInUser { get; set; }
-
-
-    protected override async Task OnInitializedAsync()
-    {
-        var auth = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        pageEvent = MeetupService.GetEventById(id);
-        LoggedInUser = await UserManager.GetUserAsync(auth.User);
-    }
-
-    void GoBack()
-    {
-        NavigationManager.NavigateTo("/UserEvents/" + userId);
-    }
-
-    void JoinEvent()
-    {
-        MeetupService.JoinEvent(LoggedInUser.Id, id);
-        StateHasChanged();
-    }
-
-    void Leave()
-    {
-        MeetupService.LeaveEvent(LoggedInUser.Id,id);
-    }
-
-    void DeleteEvent()
-    {
-        MeetupService.DeleteEvent(pageEvent);
-        GoBack();
-    }
-
-    void OnChange(string id)
-    {
-        MeetupService.ChangeCanAttendInitialDate(id);
-    }
-}

@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Identity;
 
 namespace BlazorMeetup.Data
 {
-
-
         public class AttendeeEvent
         {
             public string Id { get; set; }
@@ -16,7 +14,6 @@ namespace BlazorMeetup.Data
             public virtual Attendee Attendee { get; set; }
             public virtual Event Event { get; set; }
 
-            public bool CanAttendInitialDate { get; set; }
+            public bool CanAttendProposedDate { get; set; }
         }
- 
 }

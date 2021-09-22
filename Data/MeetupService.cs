@@ -17,8 +17,33 @@ namespace BlazorMeetup.Data
 
         public MeetupService(IDbContextFactory<BlazorMeetupContext> factory)
         {
-           
             _dbContextFactory = factory;
+        }
+
+        public void ChangeProposedDate(Event eventerino)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                ctx.Update(eventerino);
+                ctx.SaveChanges();
+                List<AttendeeEvent> aes = eventerino.Attendees.ToList();
+                foreach(AttendeeEvent a in aes)
+                {
+                    a.CanAttendProposedDate = false;
+                    ctx.Update(a);
+                    ctx.SaveChanges();
+                }
+            }
+        }
+
+        public void SuggestDate(SuggestedDate s)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                s.Id = Guid.NewGuid().ToString();
+                ctx.SuggestedDates.Add(s);
+                ctx.SaveChanges();
+            }
         }
 
         public List<IdentityUser> GetAllUsers()
@@ -54,14 +79,10 @@ namespace BlazorMeetup.Data
                 AttendeeEvent ae = ctx.AttendeeEvents.FirstOrDefault(x=> x.EventId == eventId && x.Attendee.IdentityUser.Id == userId);
                 if(ae != null)
                 {
-                    Debug.WriteLine("deleted");
                     ctx.AttendeeEvents.Remove(ae);
                     ctx.SaveChanges();
                 }
-                else
-                {
-                    Debug.WriteLine("not deleted");
-                }
+              
             }
         }
 
@@ -106,7 +127,7 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                return ctx.Events.Include(x => x.Attendees).ThenInclude(x=>x.Attendee).ThenInclude(x=>x.IdentityUser).FirstOrDefault(x => x.Id == id);   
+                return ctx.Events.Include(x=>x.SuggestedDates).ThenInclude(x=>x.IdentityUser).Include(x => x.IdentityUser).Include(x => x.Attendees).ThenInclude(x=>x.Attendee).ThenInclude(x=>x.IdentityUser).FirstOrDefault(x => x.Id == id);   
             }
         }
 
@@ -116,7 +137,7 @@ namespace BlazorMeetup.Data
             {
 
                 AttendeeEvent ae = ctx.AttendeeEvents.FirstOrDefault(x => x.Id == id);
-                ae.CanAttendInitialDate = !ae.CanAttendInitialDate;
+                ae.CanAttendProposedDate = !ae.CanAttendProposedDate;
                 ctx.SaveChanges();
                 
             }

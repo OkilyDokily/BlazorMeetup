@@ -1,0 +1,20 @@
+﻿<h3>Different Date</h3>
+@inject MeetupService MeetupService
+@inject IJSRuntime IJSRunTime
+
+<EditForm Model=@PageEvent OnValidSubmit="@changeDate">
+    <input type="datetime" @bind-value="PageEvent.DateAndTime" />
+    <button>Create new proposal</button>
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public Event PageEvent { get; set; }
+
+    void changeDate()
+    {
+        MeetupService.ChangeProposedDate(PageEvent);
+        IJSRunTime.CreateMessage("You've successfully updated the date.");
+    }
+}

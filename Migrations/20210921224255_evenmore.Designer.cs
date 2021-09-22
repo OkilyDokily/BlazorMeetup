@@ -3,14 +3,16 @@ using System;
 using BlazorMeetup.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BlazorMeetup.Migrations
 {
     [DbContext(typeof(BlazorMeetupContext))]
-    partial class BlazorMeetupContextModelSnapshot : ModelSnapshot
+    [Migration("20210921224255_evenmore")]
+    partial class evenmore
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,29 +81,6 @@ namespace BlazorMeetup.Migrations
                     b.HasIndex("IdentityUserId");
 
                     b.ToTable("Events");
-                });
-
-            modelBuilder.Entity("BlazorMeetup.Data.SuggestedDate", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("EventId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("IdentityUserId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EventId");
-
-                    b.HasIndex("IdentityUserId");
-
-                    b.ToTable("SuggestedDates");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -333,21 +312,6 @@ namespace BlazorMeetup.Migrations
                     b.Navigation("IdentityUser");
                 });
 
-            modelBuilder.Entity("BlazorMeetup.Data.SuggestedDate", b =>
-                {
-                    b.HasOne("BlazorMeetup.Data.Event", "Event")
-                        .WithMany("SuggestedDates")
-                        .HasForeignKey("EventId");
-
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
-                        .WithMany()
-                        .HasForeignKey("IdentityUserId");
-
-                    b.Navigation("Event");
-
-                    b.Navigation("IdentityUser");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -407,8 +371,6 @@ namespace BlazorMeetup.Migrations
             modelBuilder.Entity("BlazorMeetup.Data.Event", b =>
                 {
                     b.Navigation("Attendees");
-
-                    b.Navigation("SuggestedDates");
                 });
 #pragma warning restore 612, 618
         }

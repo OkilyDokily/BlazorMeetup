@@ -1,0 +1,41 @@
+﻿<h3>Suggest Date</h3>
+@inject MeetupService MeetupService
+@inject IJSRuntime IJSRunTime
+
+<EditForm Model=@suggested OnValidSubmit="@SuggestADate">
+    <input type="datetime" @bind-value="suggested.DateTime" />
+    <button>Suggest a date and time</button>
+</EditForm>
+
+<ul>
+    @foreach (SuggestedDate sd in PageEvent.SuggestedDates)
+    {
+        <li>
+            @sd.DateTime @sd.IdentityUser.UserName
+        </li>
+    }
+
+</ul>
+
+@code {
+    [Parameter]
+    public Event PageEvent { get; set; }
+    [Parameter]
+    public string LoggedInId { get; set; }
+    SuggestedDate suggested = new SuggestedDate();
+    [Parameter]
+    public string Id { get; set; }
+
+
+    protected override void OnInitialized()
+    {
+        suggested.EventId = PageEvent.Id;
+        suggested.IdentityUserId = LoggedInId;
+    }
+
+    void SuggestADate()
+    {
+        MeetupService.SuggestDate(suggested);
+        IJSRunTime.CreateMessage("You've successfully suggested a new date.");
+    }
+}
