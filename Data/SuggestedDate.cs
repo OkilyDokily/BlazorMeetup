@@ -9,11 +9,11 @@ namespace BlazorMeetup.Data
     public class SuggestedDate
     {
         public string Id { get; set; }
-        public string IdentityUserId { get; set; }
+        public string AttendeeId { get; set; }
         public string EventId { get; set; }
      
         public DateTime DateTime { get; set; }
-        public virtual IdentityUser IdentityUser { get; set; }
+        public virtual Attendee Attendee { get; set; }
         public virtual Event Event { get; set; }
         public virtual ICollection<SuggestedDateAttendee> Attendees { get; set; }
 

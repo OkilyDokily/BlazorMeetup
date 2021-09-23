@@ -12,11 +12,11 @@
 {
     @if (CanAttend(sd))
     {
-        <div @onclick="()=>SeeAvailableUser(sd)" @key="sd.Id">@sd.DateTime @sd.IdentityUser.UserName  <input type="checkbox" @onclick:stopPropagation="true" checked @onchange="() => RemoveSuggestedDateFromAttendee(sd)"></div>
+        <div @onclick="()=>SeeAvailableUser(sd)" @key="sd.Id">@sd.DateTime @sd.Attendee.UserName  <input type="checkbox" @onclick:stopPropagation="true" checked @onchange="() => RemoveSuggestedDateFromAttendee(sd)"></div>
     }
     else
     {
-        <div @onclick="()=>SeeAvailableUser(sd)" @key="sd.Id">@sd.DateTime @sd.IdentityUser.UserName  <input type="checkbox" @onclick:stopPropagation="true" @onchange="() => AddSuggestedDateToAttendee(sd)"></div>
+        <div @onclick="()=>SeeAvailableUser(sd)" @key="sd.Id">@sd.DateTime @sd.Attendee.UserName  <input type="checkbox" @onclick:stopPropagation="true" @onchange="() => AddSuggestedDateToAttendee(sd)"></div>
     }
 
 }
@@ -57,7 +57,7 @@
     protected override void OnInitialized()
     {
         suggested.EventId = PageEvent.Id;
-        suggested.IdentityUserId = LoggedInId;
+        suggested.AttendeeId = LoggedInId;
     }
 
     void SuggestADate()

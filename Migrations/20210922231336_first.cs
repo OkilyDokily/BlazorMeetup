@@ -26,6 +26,7 @@ namespace BlazorMeetup.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
+                    Discriminator = table.Column<string>(type: "TEXT", nullable: false),
                     UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
@@ -153,29 +154,11 @@ namespace BlazorMeetup.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Attendees",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "TEXT", nullable: false),
-                    IdentityUserId = table.Column<string>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Attendees", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Attendees_AspNetUsers_IdentityUserId",
-                        column: x => x.IdentityUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Events",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
-                    IdentityUserId = table.Column<string>(type: "TEXT", nullable: true),
+                    AttendeeId = table.Column<string>(type: "TEXT", nullable: true),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
                     MaximumAttendees = table.Column<int>(type: "INTEGER", nullable: false),
                     MinimumAttendees = table.Column<int>(type: "INTEGER", nullable: false),
@@ -185,8 +168,8 @@ namespace BlazorMeetup.Migrations
                 {
                     table.PrimaryKey("PK_Events", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Events_AspNetUsers_IdentityUserId",
-                        column: x => x.IdentityUserId,
+                        name: "FK_Events_AspNetUsers_AttendeeId",
+                        column: x => x.AttendeeId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -205,9 +188,9 @@ namespace BlazorMeetup.Migrations
                 {
                     table.PrimaryKey("PK_AttendeeEvents", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AttendeeEvents_Attendees_AttendeeId",
+                        name: "FK_AttendeeEvents_AspNetUsers_AttendeeId",
                         column: x => x.AttendeeId,
-                        principalTable: "Attendees",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -223,7 +206,7 @@ namespace BlazorMeetup.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
-                    IdentityUserId = table.Column<string>(type: "TEXT", nullable: true),
+                    AttendeeId = table.Column<string>(type: "TEXT", nullable: true),
                     EventId = table.Column<string>(type: "TEXT", nullable: true),
                     DateTime = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
@@ -231,8 +214,8 @@ namespace BlazorMeetup.Migrations
                 {
                     table.PrimaryKey("PK_SuggestedDates", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SuggestedDates_AspNetUsers_IdentityUserId",
-                        column: x => x.IdentityUserId,
+                        name: "FK_SuggestedDates_AspNetUsers_AttendeeId",
+                        column: x => x.AttendeeId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -257,15 +240,15 @@ namespace BlazorMeetup.Migrations
                 {
                     table.PrimaryKey("PK_SuggestedDateAttendees", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SuggestedDateAttendees_AttendeeEvents_AttendeeEventId",
-                        column: x => x.AttendeeEventId,
-                        principalTable: "AttendeeEvents",
+                        name: "FK_SuggestedDateAttendees_AspNetUsers_AttendeeId",
+                        column: x => x.AttendeeId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_SuggestedDateAttendees_Attendees_AttendeeId",
-                        column: x => x.AttendeeId,
-                        principalTable: "Attendees",
+                        name: "FK_SuggestedDateAttendees_AttendeeEvents_AttendeeEventId",
+                        column: x => x.AttendeeEventId,
+                        principalTable: "AttendeeEvents",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -324,14 +307,9 @@ namespace BlazorMeetup.Migrations
                 column: "EventId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Attendees_IdentityUserId",
-                table: "Attendees",
-                column: "IdentityUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Events_IdentityUserId",
+                name: "IX_Events_AttendeeId",
                 table: "Events",
-                column: "IdentityUserId");
+                column: "AttendeeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SuggestedDateAttendees_AttendeeEventId",
@@ -349,14 +327,14 @@ namespace BlazorMeetup.Migrations
                 column: "SuggestedDateId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SuggestedDates_AttendeeId",
+                table: "SuggestedDates",
+                column: "AttendeeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SuggestedDates_EventId",
                 table: "SuggestedDates",
                 column: "EventId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SuggestedDates_IdentityUserId",
-                table: "SuggestedDates",
-                column: "IdentityUserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -387,9 +365,6 @@ namespace BlazorMeetup.Migrations
 
             migrationBuilder.DropTable(
                 name: "SuggestedDates");
-
-            migrationBuilder.DropTable(
-                name: "Attendees");
 
             migrationBuilder.DropTable(
                 name: "Events");

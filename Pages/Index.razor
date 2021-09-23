@@ -3,7 +3,7 @@
 @using System.Diagnostics
 @using Microsoft.AspNetCore.Identity;
 @inject AuthenticationStateProvider AuthenticationStateProvider
-@inject UserManager<IdentityUser> UserManager
+@inject UserManager<Attendee> UserManager
 @inject RoleManager<IdentityRole> RoleManager
 
 <h1>Hello, world!</h1>
@@ -36,7 +36,7 @@ Welcome to your new app.
     string avatar;
     ClaimsPrincipal User { get; set; }
     List<Claim> Claims { get; set; }
-    IdentityUser DbUser { get; set; }
+    Attendee DbUser { get; set; }
     protected async override Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();

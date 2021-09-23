@@ -20,7 +20,7 @@ namespace BlazorMeetup.Areas.Identity
                     options.UseSqlite(
                         context.Configuration.GetConnectionString("BlazorMeetupContextConnection")));
                
-                services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false).AddRoles<IdentityRole>()
+                services.AddDefaultIdentity<Attendee>(options => options.SignIn.RequireConfirmedAccount = false).AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<BlazorMeetupContext>();
         
             });

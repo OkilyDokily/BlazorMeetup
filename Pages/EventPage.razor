@@ -1,11 +1,11 @@
 ﻿@page "/EventPage/{userId}/{id}"
 @using BlazorMeetup.Data
 @using Microsoft.AspNetCore.Components.Web
-@inject UserManager<IdentityUser> UserManager
+@inject UserManager<Attendee> UserManager
 @*@attribute [Authorize]*@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject MeetupService MeetupService
-@inject UserManager<IdentityUser> UserManager
+@inject UserManager<Attendee> UserManager
 @inject NavigationManager NavigationManager
 
 <TabControl>
@@ -16,44 +16,47 @@
         @foreach (AttendeeEvent attendee in pageEvent.Attendees)
 
         {
-            @if (attendee.Attendee.IdentityUser.UserName == LoggedInUser.UserName)
+            @if (attendee.Attendee.UserName == LoggedInUser.UserName)
             {
                 @if (attendee.CanAttendProposedDate == true)
                 {
-                    <div @key="attendee.Id">@attendee.Attendee.IdentityUser.UserName  <input type="checkbox" checked value="@attendee.CanAttendProposedDate" @onchange="() => OnChange(attendee.Id)"><div style="display:inline" @onclick="Leave">leave</div></div>
+                    <div @key="attendee.Id">@attendee.Attendee.UserName  <input type="checkbox" checked value="@attendee.CanAttendProposedDate" @onchange="() => OnChange(attendee.Id)"><div style="display:inline" @onclick="Leave">leave</div></div>
                 }
                 else
                 {
-                    <div @key="attendee.Id">@attendee.Attendee.IdentityUser.UserName  <input type="checkbox" value="@attendee.CanAttendProposedDate" @onchange="() => OnChange(attendee.Id)"><div style="display:inline" @onclick="Leave">leave</div></div>
+                    <div @key="attendee.Id">@attendee.Attendee.UserName  <input type="checkbox" value="@attendee.CanAttendProposedDate" @onchange="() => OnChange(attendee.Id)"><div style="display:inline" @onclick="Leave">leave</div></div>
                 }
             }
             else
             {
                 @if (attendee.CanAttendProposedDate)
                 {
-                    <div @key="attendee.Id">@attendee.Attendee.IdentityUser.UserName<i class="oi oi-check"></i></div>
+                    <div @key="attendee.Id">@attendee.Attendee.UserName<i class="oi oi-check"></i></div>
                 }
                 else
                 {
-                    <div @key="attendee.Id">@attendee.Attendee.IdentityUser.UserName</div>
+                    <div @key="attendee.Id">@attendee.Attendee.UserName</div>
                 }
             }
         }
-
+        @if (!MeetupService.AttendeeEventExists(LoggedInUser.Id, id))
+        {
         <button @onclick="()=>JoinEvent()">I'm Interested</button>
+        }
+
         <button @onclick="()=>GoBack()">User Event List</button>
         @if (userId == LoggedInUser.Id)
         {
             <button @onclick="DeleteEvent">Delete Event</button>
         }
     </TabPage>
-    @if (pageEvent.IdentityUser.UserName == LoggedInUser.UserName)
+    @if (pageEvent.Attendee.UserName == LoggedInUser.UserName)
     {
         <TabPage Text="Change Proposed Date">
             <DifferentDate PageEvent=@pageEvent />
         </TabPage>
     }
-    @if (pageEvent.Attendees.Any(a => a.Attendee.IdentityUserId == LoggedInUser.Id))
+    @if (pageEvent.Attendees.Any(a => a.Attendee.Id == LoggedInUser.Id))
     {
         <TabPage Text="Suggest Another Date">
             <SuggestDate PageEvent=@pageEvent LoggedInId="@LoggedInUser.Id" />
@@ -69,7 +72,7 @@
         [Parameter]
         public string id { get; set; }
         Event created = new();
-        IdentityUser LoggedInUser { get; set; }
+        Attendee LoggedInUser { get; set; }
 
 
         protected override async Task OnInitializedAsync()

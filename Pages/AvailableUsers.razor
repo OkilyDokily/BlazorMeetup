@@ -17,7 +17,7 @@
 {
     [Parameter]
     public string id { get; set; }
-    public List<IdentityUser> iul = null;
+    public List<Attendee> iul = null;
     SuggestedDate sd { get; set; }
     protected override void OnInitialized()
     {
@@ -28,6 +28,6 @@
     public void GoBack()
     {
         string EventId = MeetupService.GetSuggestedDateById(id).EventId;
-        NavigationManager.NavigateTo("/EventPage/" + sd.IdentityUserId +"/" + EventId);
+        NavigationManager.NavigateTo("/EventPage/" + sd.AttendeeId +"/" + EventId);
     }
 }

@@ -3,7 +3,7 @@
 @inject IJSRuntime IJSRunTime
 
 <EditForm Model=@PageEvent OnValidSubmit="@changeDate">
-    <input type="datetime" @bind-value="PageEvent.DateAndTime" />
+    <InputDate  @bind-Value="PageEvent.DateAndTime" />
     <button>Create new proposal</button>
 </EditForm>
 

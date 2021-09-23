@@ -2,7 +2,7 @@
 @attribute [Authorize]
 @inject MeetupService MeetupService
 @inject AuthenticationStateProvider AuthenticationStateProvider
-@inject UserManager<IdentityUser> UserManager
+@inject UserManager<Attendee> UserManager
 @inject IJSRuntime IJSRunTime
 @using BlazorMeetup.Data
 @using Microsoft.AspNetCore.Identity
@@ -48,7 +48,7 @@
     }
     private void HandleValidSubmit()
     {
-        created.IdentityUserId = DbUser.Id;
+        created.AttendeeId = DbUser.Id;
         MeetupService.CreateEvent(created);
         IJSRunTime.CreateMessage("You've successfully created a new event.");
     }

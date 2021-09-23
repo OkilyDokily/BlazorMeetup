@@ -18,6 +18,23 @@ namespace BlazorMeetup.Data
             _dbContextFactory = factory;
         }
 
+
+        public bool AttendeeEventExists(string attendeeId, string eventId)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                AttendeeEvent ae = ctx.AttendeeEvents.FirstOrDefault(x=>x.AttendeeId == attendeeId && x.EventId == eventId);
+                if (ae == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
+
         public void ChangeProposedDate(Event eventerino)
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
@@ -56,12 +73,12 @@ namespace BlazorMeetup.Data
             {
                 if (GetSuggestedDateAttendee(sd, loggedInId) == null)
                 {
-                    Attendee a = ctx.Attendees.FirstOrDefault(x => x.IdentityUserId == loggedInId);
+                   
                     SuggestedDateAttendee sdae = new SuggestedDateAttendee()
                     {
                         Id = Guid.NewGuid().ToString(),
                         SuggestedDateId = sd.Id,
-                        AttendeeId = a.Id
+                        AttendeeId = loggedInId
                     };
                     ctx.SuggestedDateAttendees.Add(sdae);
                     ctx.SaveChanges();
@@ -74,7 +91,7 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                Attendee a = ctx.Attendees.FirstOrDefault(x => x.IdentityUserId == loggedInId);
+                Attendee a = ctx.Attendees.FirstOrDefault(x => x.Id == loggedInId);
                 SuggestedDateAttendee sdae = ctx.SuggestedDateAttendees.FirstOrDefault(x => x.AttendeeId == a.Id && x.SuggestedDateId == sd.Id);
                 return sdae;
             }
@@ -103,11 +120,11 @@ namespace BlazorMeetup.Data
             }
         }
 
-        public List<IdentityUser> GetAllUsers()
+        public List<Attendee> GetAllUsers()
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                return ctx.Users.ToList();
+                return ctx.Attendees.ToList();
             }
         }
         public void CreateEvent(Event create)
@@ -133,7 +150,7 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext()) 
             {
-                AttendeeEvent ae = ctx.AttendeeEvents.FirstOrDefault(x=> x.EventId == eventId && x.Attendee.IdentityUser.Id == userId);
+                AttendeeEvent ae = ctx.AttendeeEvents.FirstOrDefault(x=> x.EventId == eventId && x.Attendee.Id == userId);
                 if(ae != null)
                 {
                     ctx.AttendeeEvents.Remove(ae);
@@ -145,27 +162,11 @@ namespace BlazorMeetup.Data
         public void JoinEvent(string id,string eventId)
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
-            {
-                Attendee attendee;
-                if (!(ctx.Attendees.Any(x => x.IdentityUserId == id)))               
-                {  
-                    attendee = new Attendee()
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        IdentityUserId = id
-                    };
-                    ctx.Attendees.Add(attendee);
-                    ctx.SaveChanges();
-                }
-                else
-                {
-                    attendee = ctx.Attendees.FirstOrDefault(x => x.IdentityUserId == id);
-                }
-
-                AttendeeEvent ae = ctx.AttendeeEvents.FirstOrDefault(x => x.AttendeeId == attendee.Id && x.EventId == eventId);
+            {         
+                AttendeeEvent ae = ctx.AttendeeEvents.FirstOrDefault(x => x.Id == id && x.EventId == eventId);
                 if(ae==null)
                 {
-                    ctx.AttendeeEvents.Add(new AttendeeEvent { Id = Guid.NewGuid().ToString(), AttendeeId = attendee.Id, EventId = eventId });
+                    ctx.AttendeeEvents.Add(new AttendeeEvent { Id = Guid.NewGuid().ToString(), AttendeeId = id, EventId = eventId });
                     ctx.SaveChanges();
                 }   
             }
@@ -175,7 +176,7 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                return ctx.Events.Where(x => x.IdentityUserId == id).ToList();         
+                return ctx.Events.Where(x => x.AttendeeId == id).ToList();         
             }
         }
 
@@ -183,7 +184,7 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                return ctx.Events.Include(x=>x.SuggestedDates).ThenInclude(x=>x.IdentityUser).Include(x => x.IdentityUser).Include(x => x.Attendees).ThenInclude(x=>x.Attendee).ThenInclude(x=>x.IdentityUser).FirstOrDefault(x => x.Id == id);   
+                return ctx.Events.Include(x=>x.SuggestedDates).Include(x=>x.Attendee).Include(x=>x.Attendees).FirstOrDefault(x => x.Id == id);   
             }
         }
 
@@ -198,12 +199,12 @@ namespace BlazorMeetup.Data
             }
         }
 
-        public List<IdentityUser> GetAvailableUsers(string id)
+        public List<Attendee> GetAvailableUsers(string id)
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                SuggestedDate sd = ctx.SuggestedDates.Include(x => x.Attendees).ThenInclude(x=>x.Attendee).ThenInclude(x=>x.IdentityUser).FirstOrDefault(x=> x.Id == id);
-                return sd.Attendees.Select(x => x.Attendee.IdentityUser).ToList();
+                SuggestedDate sd = ctx.SuggestedDates.Include(x => x.Attendees).ThenInclude(x=>x.Attendee).FirstOrDefault(x=> x.Id == id);
+                return sd.Attendees.Select(x => x.Attendee).ToList();
             }
         }
 

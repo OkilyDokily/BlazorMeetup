@@ -10,7 +10,7 @@
 </ul>
 
 @code {
-    List<IdentityUser> AllUsers { get; set; }
+    List<Attendee> AllUsers { get; set; }
     protected override void OnInitialized()
     {
         AllUsers = MeetupService.GetAllUsers();

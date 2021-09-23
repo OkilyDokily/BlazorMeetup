@@ -8,8 +8,8 @@ namespace BlazorMeetup.Data
 {
     public class CreateUsers
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        public CreateUsers(UserManager<IdentityUser> userManager)
+        private readonly UserManager<Attendee> _userManager;
+        public CreateUsers(UserManager<Attendee> userManager)
         {
             _userManager = userManager;
         }
@@ -17,7 +17,7 @@ namespace BlazorMeetup.Data
         {
             for(var i = 1;i<11;i++)
             {
-                await _userManager.CreateAsync(new IdentityUser { Email = "test" + i.ToString() + "@gmail.com", UserName = "test" + i.ToString() + "@gmail.com" }, "test");
+                await _userManager.CreateAsync(new Attendee { Email = "test" + i.ToString() + "@gmail.com", UserName = "test" + i.ToString() + "@gmail.com" }, "test");
             }
         }
     }

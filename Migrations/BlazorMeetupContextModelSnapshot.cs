@@ -16,21 +16,6 @@ namespace BlazorMeetup.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.9");
 
-            modelBuilder.Entity("BlazorMeetup.Data.Attendee", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("IdentityUserId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdentityUserId");
-
-                    b.ToTable("Attendees");
-                });
-
             modelBuilder.Entity("BlazorMeetup.Data.AttendeeEvent", b =>
                 {
                     b.Property<string>("Id")
@@ -59,13 +44,13 @@ namespace BlazorMeetup.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("AttendeeId")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("DateAndTime")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("IdentityUserId")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("MaximumAttendees")
@@ -76,7 +61,7 @@ namespace BlazorMeetup.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdentityUserId");
+                    b.HasIndex("AttendeeId");
 
                     b.ToTable("Events");
                 });
@@ -86,20 +71,20 @@ namespace BlazorMeetup.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("AttendeeId")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("EventId")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("IdentityUserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("EventId");
+                    b.HasIndex("AttendeeId");
 
-                    b.HasIndex("IdentityUserId");
+                    b.HasIndex("EventId");
 
                     b.ToTable("SuggestedDates");
                 });
@@ -190,6 +175,10 @@ namespace BlazorMeetup.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
@@ -240,6 +229,8 @@ namespace BlazorMeetup.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -327,11 +318,9 @@ namespace BlazorMeetup.Migrations
 
             modelBuilder.Entity("BlazorMeetup.Data.Attendee", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
-                        .WithMany()
-                        .HasForeignKey("IdentityUserId");
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
-                    b.Navigation("IdentityUser");
+                    b.HasDiscriminator().HasValue("Attendee");
                 });
 
             modelBuilder.Entity("BlazorMeetup.Data.AttendeeEvent", b =>
@@ -351,26 +340,26 @@ namespace BlazorMeetup.Migrations
 
             modelBuilder.Entity("BlazorMeetup.Data.Event", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
+                    b.HasOne("BlazorMeetup.Data.Attendee", "Attendee")
                         .WithMany()
-                        .HasForeignKey("IdentityUserId");
+                        .HasForeignKey("AttendeeId");
 
-                    b.Navigation("IdentityUser");
+                    b.Navigation("Attendee");
                 });
 
             modelBuilder.Entity("BlazorMeetup.Data.SuggestedDate", b =>
                 {
+                    b.HasOne("BlazorMeetup.Data.Attendee", "Attendee")
+                        .WithMany()
+                        .HasForeignKey("AttendeeId");
+
                     b.HasOne("BlazorMeetup.Data.Event", "Event")
                         .WithMany("SuggestedDates")
                         .HasForeignKey("EventId");
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
-                        .WithMany()
-                        .HasForeignKey("IdentityUserId");
+                    b.Navigation("Attendee");
 
                     b.Navigation("Event");
-
-                    b.Navigation("IdentityUser");
                 });
 
             modelBuilder.Entity("BlazorMeetup.Data.SuggestedDateAttendee", b =>
@@ -443,11 +432,6 @@ namespace BlazorMeetup.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("BlazorMeetup.Data.Attendee", b =>
-                {
-                    b.Navigation("Events");
-                });
-
             modelBuilder.Entity("BlazorMeetup.Data.AttendeeEvent", b =>
                 {
                     b.Navigation("SuggestedDates");
@@ -463,6 +447,11 @@ namespace BlazorMeetup.Migrations
             modelBuilder.Entity("BlazorMeetup.Data.SuggestedDate", b =>
                 {
                     b.Navigation("Attendees");
+                });
+
+            modelBuilder.Entity("BlazorMeetup.Data.Attendee", b =>
+                {
+                    b.Navigation("Events");
                 });
 #pragma warning restore 612, 618
         }

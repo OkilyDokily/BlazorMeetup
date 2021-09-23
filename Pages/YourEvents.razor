@@ -2,7 +2,7 @@
 @attribute [Authorize]
 @inject MeetupService MeetupService
 @inject AuthenticationStateProvider AuthenticationStateProvider
-@inject UserManager<IdentityUser> UserManager
+@inject UserManager<Attendee> UserManager
 @inject NavigationManager NavigationManager
 @using BlazorMeetup.Data
 @using Microsoft.AspNetCore.Identity
@@ -20,7 +20,7 @@
 @code 
 {
     List<Event> events = new();
-    IdentityUser Your { get; set;}
+    Attendee Your { get; set;}
 
     protected async override Task OnInitializedAsync()
     {

@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace BlazorMeetup.Data
 {
-    public class Attendee
+    public class Attendee : IdentityUser
     {
-        public string Id { get; set; }
-        public string IdentityUserId { get; set; }
-        public virtual IdentityUser IdentityUser {get;set;}
         public ICollection<AttendeeEvent> Events { get; set; }
 
         public Attendee()

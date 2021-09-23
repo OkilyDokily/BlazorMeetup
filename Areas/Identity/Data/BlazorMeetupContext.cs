@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BlazorMeetup.Data
 {
-    public class BlazorMeetupContext : IdentityDbContext<IdentityUser>
+    public class BlazorMeetupContext : IdentityDbContext
     {
         public BlazorMeetupContext(DbContextOptions<BlazorMeetupContext> options)
             : base(options)
