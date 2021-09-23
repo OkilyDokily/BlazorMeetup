@@ -94,9 +94,6 @@ namespace BlazorMeetup.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("AttendeeEventId")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("AttendeeId")
                         .HasColumnType("TEXT");
 
@@ -104,8 +101,6 @@ namespace BlazorMeetup.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AttendeeEventId");
 
                     b.HasIndex("AttendeeId");
 
@@ -364,12 +359,8 @@ namespace BlazorMeetup.Migrations
 
             modelBuilder.Entity("BlazorMeetup.Data.SuggestedDateAttendee", b =>
                 {
-                    b.HasOne("BlazorMeetup.Data.AttendeeEvent", null)
-                        .WithMany("SuggestedDates")
-                        .HasForeignKey("AttendeeEventId");
-
                     b.HasOne("BlazorMeetup.Data.Attendee", "Attendee")
-                        .WithMany()
+                        .WithMany("SuggestedDates")
                         .HasForeignKey("AttendeeId");
 
                     b.HasOne("BlazorMeetup.Data.SuggestedDate", "SuggestedDate")
@@ -432,11 +423,6 @@ namespace BlazorMeetup.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("BlazorMeetup.Data.AttendeeEvent", b =>
-                {
-                    b.Navigation("SuggestedDates");
-                });
-
             modelBuilder.Entity("BlazorMeetup.Data.Event", b =>
                 {
                     b.Navigation("Attendees");
@@ -452,6 +438,8 @@ namespace BlazorMeetup.Migrations
             modelBuilder.Entity("BlazorMeetup.Data.Attendee", b =>
                 {
                     b.Navigation("Events");
+
+                    b.Navigation("SuggestedDates");
                 });
 #pragma warning restore 612, 618
         }

@@ -8,7 +8,7 @@
 </EditForm>
 
 
-@foreach (SuggestedDate sd in PageEvent.SuggestedDates)
+@foreach (SuggestedDate sd in SafePage.SuggestedDates)
 {
     @if (CanAttend(sd))
     {
@@ -30,6 +30,7 @@
     SuggestedDate suggested = new SuggestedDate();
     [Parameter]
     public string Id { get; set; }
+    public Event SafePage;
 
 
     bool CanAttend(SuggestedDate sd)
@@ -56,6 +57,7 @@
 
     protected override void OnInitialized()
     {
+        SafePage = PageEvent;
         suggested.EventId = PageEvent.Id;
         suggested.AttendeeId = LoggedInId;
     }
@@ -64,5 +66,7 @@
     {
         MeetupService.SuggestDate(suggested);
         IJSRunTime.CreateMessage("You've successfully suggested a new date.");
+        SafePage = MeetupService.GetEventById(PageEvent.Id);
+        StateHasChanged();
     }
 }

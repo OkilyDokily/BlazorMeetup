@@ -184,7 +184,7 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                return ctx.Events.Include(x=>x.SuggestedDates).Include(x=>x.Attendee).Include(x=>x.Attendees).FirstOrDefault(x => x.Id == id);   
+                return ctx.Events.Include(x=>x.SuggestedDates).Include(x=>x.Attendee).Include(x=>x.Attendees).ThenInclude(x=>x.Attendee).FirstOrDefault(x => x.Id == id);   
             }
         }
 

@@ -233,8 +233,7 @@ namespace BlazorMeetup.Migrations
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
                     AttendeeId = table.Column<string>(type: "TEXT", nullable: true),
-                    SuggestedDateId = table.Column<string>(type: "TEXT", nullable: true),
-                    AttendeeEventId = table.Column<string>(type: "TEXT", nullable: true)
+                    SuggestedDateId = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -243,12 +242,6 @@ namespace BlazorMeetup.Migrations
                         name: "FK_SuggestedDateAttendees_AspNetUsers_AttendeeId",
                         column: x => x.AttendeeId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_SuggestedDateAttendees_AttendeeEvents_AttendeeEventId",
-                        column: x => x.AttendeeEventId,
-                        principalTable: "AttendeeEvents",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -312,11 +305,6 @@ namespace BlazorMeetup.Migrations
                 column: "AttendeeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SuggestedDateAttendees_AttendeeEventId",
-                table: "SuggestedDateAttendees",
-                column: "AttendeeEventId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_SuggestedDateAttendees_AttendeeId",
                 table: "SuggestedDateAttendees",
                 column: "AttendeeId");
@@ -355,13 +343,13 @@ namespace BlazorMeetup.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "AttendeeEvents");
+
+            migrationBuilder.DropTable(
                 name: "SuggestedDateAttendees");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "AttendeeEvents");
 
             migrationBuilder.DropTable(
                 name: "SuggestedDates");
