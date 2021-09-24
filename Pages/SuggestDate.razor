@@ -2,8 +2,25 @@
 @inject MeetupService MeetupService
 @inject IJSRuntime IJSRunTime
 @inject NavigationManager NavigationManager
-<EditForm Model=@suggested OnValidSubmit="@SuggestADate">
-    <InputDate @bind-Value="suggested.DateTime" />
+<EditForm Model=@tm OnValidSubmit="@SuggestADate">
+    <select @bind="@tm.Hours">
+        @foreach (int num in tm.GetHours())
+        {
+            <option value="@num">@num</option>
+        }
+    </select>
+    <select @bind="@tm.Minutes">
+        @foreach (int num in tm.GetMinutes())
+        {
+            <option value="@num">@num</option>
+        }
+    </select>
+    <select @bind="@tm.Date">
+        @foreach (RestrictDate rd in SafePage.RestrictDates)
+        {
+            <option value="@rd.Date">@rd.Date.ToString()</option>
+        }
+    </select>
     <button>Suggest a date and time</button>
 </EditForm>
 
@@ -18,7 +35,6 @@
     {
         <div @onclick="()=>SeeAvailableUser(sd)" @key="sd.Id">@sd.DateTime @sd.Attendee.UserName  <input type="checkbox" @onclick:stopPropagation="true" @onchange="() => AddSuggestedDateToAttendee(sd)"></div>
     }
-
 }
 
 
@@ -31,6 +47,7 @@
     [Parameter]
     public string Id { get; set; }
     public Event SafePage;
+    TimeMaker tm = new TimeMaker();
 
 
     bool CanAttend(SuggestedDate sd)
@@ -64,9 +81,12 @@
 
     void SuggestADate()
     {
+        DateTime d = tm.MakeTime();
+        suggested.DateTime = d;
         MeetupService.SuggestDate(suggested);
         IJSRunTime.CreateMessage("You've successfully suggested a new date.");
         SafePage = MeetupService.GetEventById(PageEvent.Id);
+        tm = new TimeMaker();
         StateHasChanged();
     }
 }

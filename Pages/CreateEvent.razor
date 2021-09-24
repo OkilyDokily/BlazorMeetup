@@ -9,29 +9,46 @@
 @using System.Security.Claims
 
 <h3>Create Event</h3>
+<TabControl>
+    <TabPage Text="Main">
+        <EditForm Model="@created" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div>
+                <label>Description</label>
+                <InputText @bind-Value="created.Description" />
+            </div>
 
-<EditForm Model="@created" OnValidSubmit="@HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-    <div>
-        <label>Description</label>
-        <InputText @bind-Value="created.Description" />
-    </div>
+            <div>
+                <label>Maximum Attendees</label>
+                <InputNumber @bind-Value="created.MaximumAttendees" />
+            </div>
+            <div>
+                <label>Minimum Attendees</label>
+                <InputNumber @bind-Value="created.MinimumAttendees" />
+            </div>
+            <div>
+                <label>Date of Event</label>
+                <InputDate @bind-Value="created.DateAndTime" />
+            </div>
 
-    <div>
-        <label>Maximum Attendees</label>
-        <InputNumber @bind-Value="created.MaximumAttendees" />
-    </div>
-    <div>
-        <label>Minimum Attendees</label>
-        <InputNumber @bind-Value="created.MinimumAttendees" />
-    </div>
-    <div>
-        <label>Date of Event</label>
-        <InputDate @bind-Value="created.DateAndTime" />
-    </div>
-    <button>Create Event</button>
-</EditForm>
+            <button>Create Event</button>
+        </EditForm>
+    </TabPage>
+    @if (created.Id != null)
+    {
+        <TabPage Text="Date Range">
+            <DateRange ParentEvent="created" />
+        </TabPage>
+    }
+    @if (created.RestrictDates.Count > 0)
+    {
+        <TabPage Text="Date Range">
+            <TimeRange ParentEvent="created" />
+        </TabPage>
+    }
+
+</TabControl>
 
 
 @code {

@@ -18,6 +18,7 @@ namespace BlazorMeetup.Data
         public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<AttendeeEvent> AttendeeEvents { get; set; }
         public virtual DbSet<SuggestedDate> SuggestedDates { get; set; }
+        public virtual DbSet<RestrictDate> RestrictDates { get; set; }
         public virtual DbSet<SuggestedDateAttendee> SuggestedDateAttendees { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -19,6 +19,16 @@ namespace BlazorMeetup.Data
         }
 
 
+        public void AddRestrictDate(RestrictDate rd)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                rd.Id = Guid.NewGuid().ToString();
+                ctx.RestrictDates.Add(rd);
+                ctx.SaveChanges();
+            }
+        }
+
         public bool AttendeeEventExists(string attendeeId, string eventId)
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
@@ -184,7 +194,7 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                return ctx.Events.Include(x=>x.SuggestedDates).Include(x=>x.Attendee).Include(x=>x.Attendees).ThenInclude(x=>x.Attendee).FirstOrDefault(x => x.Id == id);   
+                return ctx.Events.Include(x=>x.SuggestedDates).Include(x=>x.RestrictDates).Include(x=>x.Attendee).Include(x=>x.Attendees).ThenInclude(x=>x.Attendee).FirstOrDefault(x => x.Id == id);   
             }
         }
 
