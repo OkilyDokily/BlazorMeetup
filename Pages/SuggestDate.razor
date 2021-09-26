@@ -16,16 +16,16 @@
         }
     </select>
     <select @bind="@tm.Date">
-        @foreach (RestrictDate rd in SafePage.RestrictDates)
+        @foreach (RestrictDate rd in PageEvent.RestrictDates)
         {
             <option value="@rd.Date">@rd.Date.ToString()</option>
         }
     </select>
-    <button>Suggest a date and time</button>
+    <button>Suggest a time for this date</button>
 </EditForm>
 
 
-@foreach (SuggestedDate sd in SafePage.SuggestedDates)
+@foreach (SuggestedDate sd in PageEvent.SuggestedDates)
 {
     @if (CanAttend(sd))
     {
@@ -43,10 +43,12 @@
     public Event PageEvent { get; set; }
     [Parameter]
     public string LoggedInId { get; set; }
+    [Parameter]
+    public EventCallback UpdateEvent { get; set; }
     SuggestedDate suggested = new SuggestedDate();
     [Parameter]
     public string Id { get; set; }
-    public Event SafePage;
+
     TimeMaker tm = new TimeMaker();
 
 
@@ -74,18 +76,17 @@
 
     protected override void OnInitialized()
     {
-        SafePage = PageEvent;
         suggested.EventId = PageEvent.Id;
         suggested.AttendeeId = LoggedInId;
     }
 
-    void SuggestADate()
+    async void SuggestADate()
     {
         DateTime d = tm.MakeTime();
         suggested.DateTime = d;
         MeetupService.SuggestDate(suggested);
         IJSRunTime.CreateMessage("You've successfully suggested a new date.");
-        SafePage = MeetupService.GetEventById(PageEvent.Id);
+        await UpdateEvent.InvokeAsync();
         tm = new TimeMaker();
         StateHasChanged();
     }

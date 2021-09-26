@@ -1,0 +1,79 @@
+﻿@inject MeetupService MeetupService
+
+<h3>TimeRange</h3>
+
+<EditForm Model="@ta" OnValidSubmit="@AddTimeAllowedToRestrictDate">
+   
+    <p>@rd.Date</p> 
+    
+    Start
+    <select @bind="@ta.BeginningHour">
+        @foreach (int i in tm.GetHours())
+        {
+            <option value="@i">@i</option>
+        }
+    </select>
+    <select @bind="@ta.BeginningMinute">
+        @foreach (int i in tm.GetMinutes())
+        {
+            <option value="@i">@i</option>
+        }
+    </select>
+    End
+    <select @bind="@ta.EndingHour">
+        @foreach (int i in tm.GetHours())
+        {
+            <option value="@i">@i</option>
+        }
+
+    </select>
+    <select @bind="@ta.EndingMinute">
+        @foreach (int i in tm.GetMinutes())
+        {
+            <option value="@i">@i</option>
+        }
+    </select>
+    <button>Add Time Range</button>
+</EditForm>
+
+<button @onclick="GoBackToDateRange">Go Back</button>
+
+@foreach(TimesAllowed t in rd.TimesAlloweds)
+{
+    <div>Beginning @t.BeginningHour @t.BeginningMinute End @t.EndingHour @t.EndingMinute</div>
+}
+
+@code {
+    [Parameter]
+    public EventCallback UpdateEvent { get; set; }
+
+    [Parameter]
+    public EventCallback GoBackToDateRange { get; set; }
+
+    [Parameter]
+    public Event ParentEvent { get; set; }
+
+    [Parameter]
+    public string RestrictDateId { get; set; }
+
+    public RestrictDate rd;
+
+    public TimesAllowed ta = new TimesAllowed();
+
+    public TimeMaker tm = new TimeMaker();
+
+
+    protected override void OnInitialized()
+    {
+        ta.RestrictDateId = RestrictDateId;
+        rd = MeetupService.GetRestrictDateById(RestrictDateId);
+    }
+
+    public async void AddTimeAllowedToRestrictDate()
+    {
+        MeetupService.AddTimeAllowedToRestrictDate(ta);
+        await UpdateEvent.InvokeAsync();
+        rd = MeetupService.GetRestrictDateById(RestrictDateId);
+        StateHasChanged();
+    }
+}

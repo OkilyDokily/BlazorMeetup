@@ -18,6 +18,16 @@ namespace BlazorMeetup.Data
             _dbContextFactory = factory;
         }
 
+        public void AddTimeAllowedToRestrictDate(TimesAllowed ta)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                ta.Id = Guid.NewGuid().ToString();
+                ctx.TimesAlloweds.Add(ta);
+                ctx.SaveChanges();
+            }
+        }
+
 
         public void AddRestrictDate(RestrictDate rd)
         {
@@ -224,6 +234,15 @@ namespace BlazorMeetup.Data
             {
                 SuggestedDate sd = ctx.SuggestedDates.FirstOrDefault(x=>x.Id == id);
                 return sd;
+            }
+        }
+
+        public RestrictDate GetRestrictDateById(string id)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                RestrictDate rd = ctx.RestrictDates.FirstOrDefault(x => x.Id == id);
+                return rd;
             }
         }
     }

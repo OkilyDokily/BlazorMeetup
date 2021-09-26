@@ -1,8 +1,8 @@
-<CascadingValue Value="this">
+<CascadingValue Value="this" >
     <div class="btn-group" role="group">
         @foreach (TabPage tabPage in Pages)
         {
-            <button type="button" class="btn @GetButtonClass(tabPage)" @onclick=@( () => ActivatePage(tabPage) )>
+            <button type="button" class="@IsBtn(tabPage) @GetButtonClass(tabPage)" @onclick=@Clickable(tabPage)>
                 @tabPage.Text
             </button>
         }
@@ -10,10 +10,13 @@
     @ChildContent
 </CascadingValue>
 @code {
-    // Next line is needed so we are able to add <TabPage> components inside
+
     [Parameter]
     public RenderFragment ChildContent { get; set; }
+    [Parameter]
+    public bool ButtonsWork { get; set; } = true;
     public TabPage ActivePage { get; set; }
+
     List<TabPage> Pages = new List<TabPage>();
     internal void AddPage(TabPage tabPage)
     {
@@ -22,13 +25,33 @@
             ActivePage = tabPage;
         StateHasChanged();
     }
+    string IsBtn(TabPage page)
+    {
+        return ButtonsWork ? "btn" : "";
+    }
+
     string GetButtonClass(TabPage page)
     {
+        if (!ButtonsWork) return "";
         return page == ActivePage ? "btn-primary" : "btn-secondary";
     }
-    void ActivatePage(TabPage page)
+    public void ActivatePage(TabPage page)
     {
         ActivePage = page;
+        Debug.WriteLine(page.Text + " page Text adsfasdfasdfas");
+        StateHasChanged();
+    }
+
+    public Action Clickable(TabPage tabPage)
+    {
+        if (ButtonsWork)
+        {
+            return () => ActivatePage(tabPage);
+        }
+        else
+        {
+            return ()=> { } ;
+        }
     }
 }
 @*https://blazor-university.com/templating-components-with-renderfragements/creating-a-tabcontrol/*@

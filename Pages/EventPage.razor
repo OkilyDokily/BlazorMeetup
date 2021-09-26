@@ -41,10 +41,10 @@
         }
         @if (!MeetupService.AttendeeEventExists(LoggedInUser.Id, id))
         {
-        <button @onclick="()=>JoinEvent()">I'm Interested</button>
+        <button @onclick="() => JoinEvent()">I'm Interested</button>
         }
 
-        <button @onclick="()=>GoBack()">User Event List</button>
+        <button @onclick="() => GoBack()">User Event List</button>
         @if (userId == LoggedInUser.Id)
         {
             <button @onclick="DeleteEvent">Delete Event</button>
@@ -58,21 +58,21 @@
     }
     @if (pageEvent.Attendees.Any(a => a.AttendeeId == LoggedInUser.Id))
     {
-        <TabPage Text="Suggest Another Date">
-            <SuggestDate PageEvent=@pageEvent LoggedInId="@LoggedInUser.Id" />
+        <TabPage Text="Suggest a time for available dates">
+            <SuggestDate UpdateEvent="@UpdateEvent" PageEvent=@pageEvent LoggedInId="@LoggedInUser.Id" />
         </TabPage>
     }
 
 </TabControl>
     @code {
 
-        Event pageEvent { get; set; }
-        [Parameter]
-        public string userId { get; set; }
-        [Parameter]
-        public string id { get; set; }
-        Event created = new();
-        Attendee LoggedInUser { get; set; }
+            Event pageEvent { get; set; }
+            [Parameter]
+            public string userId { get; set; }
+            [Parameter]
+            public string id { get; set; }
+            Event created = new();
+            Attendee LoggedInUser { get; set; }
 
 
         protected override async Task OnInitializedAsync()
@@ -112,4 +112,12 @@
             MeetupService.ChangeCanAttendInitialDate(id);
 
         }
+
+        public void UpdateEvent()
+        {
+            pageEvent = MeetupService.GetEventById(pageEvent.Id);
+            StateHasChanged();
+        }
+
+
     }

@@ -10,30 +10,37 @@
     <button>On Submit</button>
 </EditForm>
 
-@foreach(RestrictDate rd in SafeDate.RestrictDates)
+@foreach(RestrictDate rd in ParentEvent.RestrictDates)
 {
     <div>@rd.Date</div>
+    <button @onclick="()=>AddTimesToDate(rd.Id)">Add Times to this date</button>
 }
 
 @code {
     [Parameter]
+    public EventCallback UpdateEvent { get; set; }
+    [Parameter]
+    public EventCallback<string> OpenTime { get; set; }
+    [Parameter]
     public Event ParentEvent { get; set; }
-    public Event SafeDate { get; set; }
     RestrictDate rd { get; set; }
 
     protected override void OnInitialized()
     {
-        SafeDate = ParentEvent;
         rd = new RestrictDate();
-        rd.EventId = SafeDate.Id;
+        rd.EventId = ParentEvent.Id;
     }
 
-    void OnSubmit()
+    async void AddTimesToDate(string id)
+    {
+        await OpenTime.InvokeAsync(id);
+    }
+
+    async void OnSubmit()
     {
         MeetupService.AddRestrictDate(rd);
         rd = new RestrictDate();
-        SafeDate = MeetupService.GetEventById(SafeDate.Id);
-        StateHasChanged();
+        await UpdateEvent.InvokeAsync();
     }
 
 }

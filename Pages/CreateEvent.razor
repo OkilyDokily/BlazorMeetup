@@ -9,53 +9,78 @@
 @using System.Security.Claims
 
 <h3>Create Event</h3>
-<TabControl>
-    <TabPage Text="Main">
-        <EditForm Model="@created" OnValidSubmit="@HandleValidSubmit">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-            <div>
-                <label>Description</label>
-                <InputText @bind-Value="created.Description" />
-            </div>
 
-            <div>
-                <label>Maximum Attendees</label>
-                <InputNumber @bind-Value="created.MaximumAttendees" />
-            </div>
-            <div>
-                <label>Minimum Attendees</label>
-                <InputNumber @bind-Value="created.MinimumAttendees" />
-            </div>
-            <div>
-                <label>Date of Event</label>
-                <InputDate @bind-Value="created.DateAndTime" />
-            </div>
+    <TabControl @ref="TabControlRef" ButtonsWork="false">
+        <TabPage Text="Main >>">
+            <EditForm Model="@created" OnValidSubmit="@HandleValidSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div>
+                    <label>Description</label>
+                    <InputText @bind-Value="created.Description" />
+                </div>
 
-            <button>Create Event</button>
-        </EditForm>
-    </TabPage>
-    @if (created.Id != null)
-    {
-        <TabPage Text="Date Range">
-            <DateRange ParentEvent="created" />
+                <div>
+                    <label>Maximum Attendees</label>
+                    <InputNumber @bind-Value="created.MaximumAttendees" />
+                </div>
+                <div>
+                    <label>Minimum Attendees</label>
+                    <InputNumber @bind-Value="created.MinimumAttendees" />
+                </div>
+                <div>
+                    <label>Date of Event</label>
+                    <InputDate @bind-Value="created.DateAndTime" />
+                </div>
+
+                <button>Create Event</button>
+            </EditForm>
         </TabPage>
-    }
-    @if (created.RestrictDates.Count > 0)
-    {
-        <TabPage Text="Date Range">
-            <TimeRange ParentEvent="created" />
+    
+        <TabPage Text="Date Range >>" @ref="DateRangeRef">
+            <DateRange ParentEvent="@created" UpdateEvent="@UpdateCreated" OpenTime="@OpenTime"/>
         </TabPage>
-    }
+        
+         <TabPage Text="Time Range" @ref="TimeRangeRef">
+                <TimeRange RestrictDateId="@RestrictDateId" ParentEvent="@created" UpdateEvent="@UpdateCreated" GoBackToDateRange="@GoBackToDateRange" />
+         </TabPage>
+        
 
-</TabControl>
+    </TabControl>
+
 
 
 @code {
+
     private Event created = new();
     ClaimsPrincipal User { get; set; }
     IdentityUser DbUser { get; set; }
+    TabControl TabControlRef;
+    TabPage TimeRangeRef;
+    TabPage DateRangeRef;
 
+    string RestrictDateId {get;set;}
+
+
+    public void OpenTime(string rdid)
+    {
+        RestrictDateId = rdid;
+        StateHasChanged();
+        TabControlRef.ActivatePage(TimeRangeRef);
+        StateHasChanged();
+    }
+
+    public void GoBackToDateRange()
+    {
+        TabControlRef.ActivatePage(DateRangeRef);
+        StateHasChanged();
+    }
+
+    public void UpdateCreated()
+    {
+        created = MeetupService.GetEventById(created.Id);
+        StateHasChanged();
+    }
 
     protected async override Task OnInitializedAsync()
     {
@@ -67,6 +92,10 @@
     {
         created.AttendeeId = DbUser.Id;
         MeetupService.CreateEvent(created);
+        created = MeetupService.GetEventById(created.Id);
+        TabControlRef.ActivatePage(DateRangeRef);
+        StateHasChanged();
         IJSRunTime.CreateMessage("You've successfully created a new event.");
     }
 }
+ 

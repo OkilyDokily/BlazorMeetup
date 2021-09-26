@@ -10,5 +10,13 @@ namespace BlazorMeetup.Data
         public string Id { get; set; }
         public string EventId { get; set; }
         public DateTime Date { get; set; }
+
+        public virtual ICollection<TimesAllowed> TimesAlloweds {get;set;}
+
+        public RestrictDate()
+        {
+            this.TimesAlloweds = new HashSet<TimesAllowed>();
+        }
+        
     }
 }

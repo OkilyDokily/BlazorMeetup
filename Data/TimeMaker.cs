@@ -19,9 +19,16 @@ namespace BlazorMeetup.Data
            return ah;
         }
 
-        public List<int> GetHours()
+        public List<int> GetHours(List<TimesAllowed> ta = null)
         {
+            if(ta != null)
             return Enumerable.Range(1, 24).ToList();
+
+            List<int> er = Enumerable.Range(1, 24).ToList();
+            foreach(TimesAllowed t in ta)
+            {
+
+            }
         }
 
         public List<int> GetMinutes()
