@@ -23,7 +23,7 @@ namespace BlazorMeetup.Data
         public List<int> GetHours(List<TimesAllowed> ta = null)
         {
             if(ta == null)
-            return Enumerable.Range(1, 24).ToList();
+            return Enumerable.Range(0, 24).ToList();
 
             List<int> er = new ();
           
@@ -42,9 +42,7 @@ namespace BlazorMeetup.Data
                 }
                
             }
-            return er;
-            
-           
+            return er;      
         }
          
         public List<int> GetMinutes(int hour = -1,List<TimesAllowed> ta = null)
@@ -75,11 +73,8 @@ namespace BlazorMeetup.Data
                         return mr.Where(x => x < t.EndingMinute).ToList();
                     }
                 }
-
             }
             return mr;
-          
-
         }
     }
 }

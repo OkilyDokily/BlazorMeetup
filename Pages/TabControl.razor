@@ -2,7 +2,7 @@
     <div class="btn-group" role="group">
         @foreach (TabPage tabPage in Pages)
         {
-            <button type="button" class="@IsBtn(tabPage) @GetButtonClass(tabPage)" @onclick=@Clickable(tabPage)>
+            <button type="button" class="btn @GetButtonClass(tabPage)" @onclick=@Clickable(tabPage)>
                 @tabPage.Text
             </button>
         }
@@ -25,26 +25,32 @@
             ActivePage = tabPage;
         StateHasChanged();
     }
-    string IsBtn(TabPage page)
-    {
-        return ButtonsWork ? "btn" : "";
-    }
+ 
 
     string GetButtonClass(TabPage page)
     {
         if (!ButtonsWork) return "";
         return page == ActivePage ? "btn-primary" : "btn-secondary";
     }
+
     public void ActivatePage(TabPage page)
     {
         ActivePage = page;
         StateHasChanged();
     }
 
-    public void ToggleClickable(string text)
+
+    public void EnableClickByString(string text)
     {
         TabPage page = Pages.FirstOrDefault(x => x.Text == text);
-        page.IsClickable = !page.IsClickable;
+        page.IsClickable = true;
+        StateHasChanged();
+    }
+
+    public void DisableClickByString(string text)
+    {
+        TabPage page = Pages.FirstOrDefault(x => x.Text == text);
+        page.IsClickable = false;
         StateHasChanged();
     }
 

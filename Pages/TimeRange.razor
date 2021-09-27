@@ -3,9 +3,9 @@
 <h3>TimeRange</h3>
 
 <EditForm Model="@ta" OnValidSubmit="@AddTimeAllowedToRestrictDate">
-   
-    <p>@rd.Date</p> 
-    
+
+    <p>@rd.Date</p>
+
     Start
     <select @bind="@ta.BeginningHour">
         @foreach (int i in tm.GetHours())
@@ -51,19 +51,15 @@
     <button>Add Time Range</button>
 </EditForm>
 
-<button @onclick="GoBackToDateRange">Go Back</button>
+<button @onclick="@clickBackButton">Go Back</button>
 
-@foreach(TimesAllowed t in rd.TimesAlloweds)
+@foreach (TimesAllowed t in rd.TimesAlloweds)
 {
-    <div>Beginning @t.BeginningHour @t.BeginningMinute End @t.EndingHour @t.EndingMinute</div>
+    <div>Beginning @t.BeginningHour @t.BeginningMinute End @t.EndingHour @t.EndingMinute </div>
+    <p @onclick="() => delete(t.Id)">delete</p>
 }
 
 @code {
-    [Parameter]
-    public EventCallback UpdateEvent { get; set; }
-
-    [Parameter]
-    public EventCallback GoBackToDateRange { get; set; }
 
     [Parameter]
     public Event ParentEvent { get; set; }
@@ -71,12 +67,29 @@
     [Parameter]
     public string RestrictDateId { get; set; }
 
+    [CascadingParameter]
+    public CreateEvent CreateEventAcc { get; set; }
+    [CascadingParameter]
+    private TabControl TabControlAcc { get; set; }
+
+
     public RestrictDate rd;
 
     public TimesAllowed ta = new TimesAllowed();
 
     public TimeMaker tm = new TimeMaker();
 
+    public void clickBackButton()
+    {
+        TabControlAcc.ActivatePageByText("Date Range >>");
+    }
+
+    public void delete(string id)
+    {
+        MeetupService.DeleteTimeAllowed(id);
+        rd = MeetupService.GetRestrictDateById(RestrictDateId);
+        StateHasChanged();
+    }
 
     protected override void OnInitialized()
     {
@@ -84,10 +97,10 @@
         rd = MeetupService.GetRestrictDateById(RestrictDateId);
     }
 
-    public async void AddTimeAllowedToRestrictDate()
+    public void AddTimeAllowedToRestrictDate()
     {
         MeetupService.AddTimeAllowedToRestrictDate(ta);
-        await UpdateEvent.InvokeAsync();
+        CreateEventAcc.UpdateCreated();
         rd = MeetupService.GetRestrictDateById(RestrictDateId);
         StateHasChanged();
     }

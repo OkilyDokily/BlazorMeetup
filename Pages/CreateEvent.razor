@@ -1,4 +1,5 @@
-﻿@page "/CreateEvent"
+﻿@page "/CreateEvent/"
+@page "/CreateEvent/{Id}"
 @attribute [Authorize]
 @inject MeetupService MeetupService
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -7,23 +8,24 @@
 @using BlazorMeetup.Data
 @using Microsoft.AspNetCore.Identity
 @using System.Security.Claims
-<CascadingValue Value="this" >
+<CascadingValue Value="this">
     <h3>Create Event</h3>
 
-    <TabControl ButtonsWork="false">
-        <TabPage Text="Main >>" >
+    <TabControl @ref="@TabControlRef">
+        <TabPage Text="Main >>">
             <Main DbUser=@DbUser ParentEvent="@created" />
         </TabPage>
 
-        <TabPage Text="Date Range >>" >
+        <TabPage Text="Date Range >>">
             <DateRange ParentEvent="@created" />
         </TabPage>
 
-        <TabPage Text="Time Range" >
-            <TimeRange RestrictDateId="@RestrictDateId"  />
+        <TabPage Text="Time Range">
+            <TimeRange RestrictDateId="@RestrictDateId" />
         </TabPage>
     </TabControl>
 </CascadingValue>
+
 
 
 @code {
@@ -32,27 +34,50 @@
     private Event created = new();
     ClaimsPrincipal User { get; set; }
     IdentityUser DbUser { get; set; }
-  
 
-    string RestrictDateId {get;set;}
+    public TabControl TabControlRef;
+    public string RestrictDateId { get; set; }
+    [Parameter]
+    public string Id { get; set; }
 
-
-
+    
     public void UpdateCreated()
     {
         created = MeetupService.GetEventById(created.Id);
         StateHasChanged();
     }
 
+    protected override void OnAfterRender(bool firstRender)
+    {
+
+        if (firstRender)
+        {
+            TabControlRef.Pages.ForEach(x => x.IsClickable = false);
+            if (Id != null)
+            {
+                Event e = MeetupService.GetEventById(Id);
+                if (e != null)
+                {
+                    created = e;
+                    TabControlRef.EnableClickByString("Date Range >>");
+                    TabControlRef.EnableClickByString("Main >>");
+                }
+            }
+            StateHasChanged();
+        }
+
+    }
+
     protected async override Task OnInitializedAsync()
     {
+
         created.DateAndTime = DateTime.Today;
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         User = authState.User;
         DbUser = await UserManager.GetUserAsync(User);
-    }
-  
 
-  
+    }
+
+
+
 }
- 

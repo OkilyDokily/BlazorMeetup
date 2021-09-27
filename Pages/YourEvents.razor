@@ -12,9 +12,11 @@
 <ul>
     @foreach (Event e in events)
     {
-        <li @key="e.Id" @onclick="() => GoToPage(e.Id)">@e.Description</li>
+        <li @key="e.Id" @onclick="() => GoToPage(e.Id)">@e.Description <span style="color:blue;" @onclick="()=>GoToEdit(e.Id)"  @onclick:stopPropagation="true">Edit</span> </li>
     }
 </ul>
+
+
 
 
 @code 
@@ -32,5 +34,10 @@
     void GoToPage(string id)
     {
         NavigationManager.NavigateTo("/EventPage/" +Your.Id + "/" +id);
+    }
+
+    void GoToEdit(string id)
+    {
+        NavigationManager.NavigateTo("/CreateEvent/" + id);
     }
 }

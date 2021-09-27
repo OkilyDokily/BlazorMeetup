@@ -151,9 +151,18 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                create.Id = Guid.NewGuid().ToString();
-                ctx.Events.Add(create);
-                ctx.SaveChanges();
+                if(create.Id != null)
+                {
+                    ctx.Events.Update(create);
+                    ctx.SaveChanges();
+                }
+                else
+                {
+                    create.Id = Guid.NewGuid().ToString();
+                    ctx.Events.Add(create);
+                    ctx.SaveChanges();
+                }
+                
             }
         }
 
@@ -201,7 +210,6 @@ namespace BlazorMeetup.Data
         }
 
       
-
         public void ChangeCanAttendInitialDate(string id)
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
@@ -210,6 +218,34 @@ namespace BlazorMeetup.Data
                 ae.CanAttendProposedDate = !ae.CanAttendProposedDate;
                 ctx.SaveChanges();
                 
+            }
+        }
+
+        public void DeleteRestrictDate(string id)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                RestrictDate rd = ctx.RestrictDates.Include(x=> x.TimesAlloweds).FirstOrDefault(x => x.Id == id);
+                if(rd != null)
+                {
+                    ctx.RestrictDates.Remove(rd);
+                    ctx.SaveChanges();
+                }
+             
+            }
+        }
+
+        public void DeleteTimeAllowed(string id)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {       
+                TimesAllowed t = ctx.TimesAlloweds.FirstOrDefault(x => x.Id == id);
+                if(t != null)
+                {
+                    ctx.TimesAlloweds.Remove(t);
+                    ctx.SaveChanges();
+                }
+              
             }
         }
 

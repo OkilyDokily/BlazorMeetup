@@ -44,8 +44,10 @@
         CreateEventAcc.UpdateCreated();
 
         TabControlAcc.ActivatePageByText("Date Range >>");
-        TabControlAcc.ToggleClickable("Main >>");
+        TabControlAcc.EnableClickByString("Main >>");
+        TabControlAcc.EnableClickByString("Date Range >>");
         StateHasChanged();
         IJSRunTime.CreateMessage("You've successfully created a new event.");
     }
 }
+

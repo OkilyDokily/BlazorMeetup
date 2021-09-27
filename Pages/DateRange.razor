@@ -5,25 +5,27 @@
 <EditForm Model="@rd" OnValidSubmit="@OnSubmit">
     <div>
         <label>Add Restricted Date</label>
-        <InputDate type="Date" @bind-Value="rd.Date"/>
+        <InputDate type="Date" @bind-Value="rd.Date" />
     </div>
-    <button>Add</button>
+    <button>Add Date</button>
 </EditForm>
 
-@foreach(RestrictDate rd in ParentEvent.RestrictDates)
+@foreach (RestrictDate rd in ParentEvent.RestrictDates)
 {
     <div>@rd.Date</div>
     <button @onclick="()=>AddTimesToDate(rd.Id)">Add Times to this date</button>
+    <button @onclick="()=>DeleteThisRestrictDate(rd.Id)">Delete this date</button>
 }
 
 @code {
     [Parameter]
-    public EventCallback UpdateEvent { get; set; }
-    [Parameter]
-    public EventCallback<string> OpenTime { get; set; }
-    [Parameter]
     public Event ParentEvent { get; set; }
     RestrictDate rd { get; set; }
+    [CascadingParameter]
+    public CreateEvent CreateEventAcc { get; set; }
+
+    [CascadingParameter]
+    private TabControl TabControlAcc { get; set; }
 
     protected override void OnInitialized()
     {
@@ -32,18 +34,29 @@
         rd.EventId = ParentEvent.Id;
     }
 
-    async void AddTimesToDate(string id)
+    public void DeleteThisRestrictDate(string id)
     {
-        await OpenTime.InvokeAsync(id);
+        MeetupService.DeleteRestrictDate(id);
+        CreateEventAcc.UpdateCreated();
+        StateHasChanged();
     }
 
-    async void OnSubmit()
+    public void AddTimesToDate(string id)
+    {
+        CreateEventAcc.RestrictDateId = id;
+        TabControlAcc.ActivatePageByText("Time Range");
+        TabControlAcc.EnableClickByString("Date Range >>");
+        StateHasChanged();
+
+    }
+
+    public void OnSubmit()
     {
         MeetupService.AddRestrictDate(rd);
         rd = new RestrictDate();
         rd.Date = DateTime.Today;
         rd.EventId = ParentEvent.Id;
-        await UpdateEvent.InvokeAsync();
+        CreateEventAcc.UpdateCreated();
         StateHasChanged();
     }
 
