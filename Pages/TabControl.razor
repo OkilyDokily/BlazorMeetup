@@ -17,7 +17,7 @@
     public bool ButtonsWork { get; set; } = true;
     public TabPage ActivePage { get; set; }
 
-    List<TabPage> Pages = new List<TabPage>();
+    public List<TabPage> Pages = new List<TabPage>();
     internal void AddPage(TabPage tabPage)
     {
         Pages.Add(tabPage);
@@ -38,13 +38,26 @@
     public void ActivatePage(TabPage page)
     {
         ActivePage = page;
-        Debug.WriteLine(page.Text + " page Text adsfasdfasdfas");
+        StateHasChanged();
+    }
+
+    public void ToggleClickable(string text)
+    {
+        TabPage page = Pages.FirstOrDefault(x => x.Text == text);
+        page.IsClickable = !page.IsClickable;
+        StateHasChanged();
+    }
+
+    public void ActivatePageByText(string text)
+    {
+        TabPage page = Pages.FirstOrDefault(x => x.Text == text);
+        ActivePage = page;
         StateHasChanged();
     }
 
     public Action Clickable(TabPage tabPage)
     {
-        if (ButtonsWork)
+        if (tabPage.IsClickable)
         {
             return () => ActivatePage(tabPage);
         }

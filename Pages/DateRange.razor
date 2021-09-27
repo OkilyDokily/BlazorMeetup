@@ -7,7 +7,7 @@
         <label>Add Restricted Date</label>
         <InputDate type="Date" @bind-Value="rd.Date"/>
     </div>
-    <button>On Submit</button>
+    <button>Add</button>
 </EditForm>
 
 @foreach(RestrictDate rd in ParentEvent.RestrictDates)
@@ -28,6 +28,7 @@
     protected override void OnInitialized()
     {
         rd = new RestrictDate();
+        rd.Date = DateTime.Today;
         rd.EventId = ParentEvent.Id;
     }
 
@@ -40,7 +41,10 @@
     {
         MeetupService.AddRestrictDate(rd);
         rd = new RestrictDate();
+        rd.Date = DateTime.Today;
+        rd.EventId = ParentEvent.Id;
         await UpdateEvent.InvokeAsync();
+        StateHasChanged();
     }
 
 }

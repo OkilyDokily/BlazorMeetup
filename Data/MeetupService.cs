@@ -200,13 +200,7 @@ namespace BlazorMeetup.Data
             }
         }
 
-        public Event GetEventById(string id)
-        {
-            using (var ctx = _dbContextFactory.CreateDbContext())
-            {
-                return ctx.Events.Include(x=>x.SuggestedDates).Include(x=>x.RestrictDates).Include(x=>x.Attendee).Include(x=>x.Attendees).ThenInclude(x=>x.Attendee).FirstOrDefault(x => x.Id == id);   
-            }
-        }
+      
 
         public void ChangeCanAttendInitialDate(string id)
         {
@@ -228,6 +222,14 @@ namespace BlazorMeetup.Data
             }
         }
 
+        public Event GetEventById(string id)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                return ctx.Events.Include(x => x.SuggestedDates).Include(x => x.RestrictDates).Include(x => x.Attendee).Include(x => x.Attendees).ThenInclude(x => x.Attendee).FirstOrDefault(x => x.Id == id);
+            }
+        }
+
         public SuggestedDate GetSuggestedDateById(string id)
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
@@ -241,7 +243,7 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                RestrictDate rd = ctx.RestrictDates.FirstOrDefault(x => x.Id == id);
+                RestrictDate rd = ctx.RestrictDates.Include(x=>x.TimesAlloweds).FirstOrDefault(x => x.Id == id);
                 return rd;
             }
         }

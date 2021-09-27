@@ -3,24 +3,35 @@
 @inject IJSRuntime IJSRunTime
 @inject NavigationManager NavigationManager
 <EditForm Model=@tm OnValidSubmit="@SuggestADate">
+    <select @bind="@RestrictDateId">
+        @foreach (RestrictDate rd in PageEvent.RestrictDates)
+        {
+            <option value="@rd.Id">@rd.Date.ToString()</option>
+        }
+    </select>
     <select @bind="@tm.Hours">
-        @foreach (int num in tm.GetHours())
+        @foreach (int num in tm.GetHours(MeetupService.GetRestrictDateById(RestrictDateId).TimesAlloweds.ToList()))
         {
             <option value="@num">@num</option>
         }
     </select>
     <select @bind="@tm.Minutes">
-        @foreach (int num in tm.GetMinutes())
+        @foreach (int i in tm.GetMinutes(tm.Hours, MeetupService.GetRestrictDateById(RestrictDateId).TimesAlloweds.ToList()))
         {
-            <option value="@num">@num</option>
+           
+                if (i == 0)
+                {
+                    <option value="@i">00</option>
+                }
+                else
+                {
+                    <option value="@i">@i</option>
+                }
+            }
+            
         }
     </select>
-    <select @bind="@tm.Date">
-        @foreach (RestrictDate rd in PageEvent.RestrictDates)
-        {
-            <option value="@rd.Date">@rd.Date.ToString()</option>
-        }
-    </select>
+
     <button>Suggest a time for this date</button>
 </EditForm>
 
@@ -51,6 +62,8 @@
 
     TimeMaker tm = new TimeMaker();
 
+    string RestrictDateId;
+
 
     bool CanAttend(SuggestedDate sd)
     {
@@ -62,7 +75,6 @@
     {
         NavigationManager.NavigateTo("/AvailableUsers/" + sd.Id);
     }
-
 
     public void RemoveSuggestedDateFromAttendee(SuggestedDate sd)
     {
@@ -78,6 +90,7 @@
     {
         suggested.EventId = PageEvent.Id;
         suggested.AttendeeId = LoggedInId;
+        RestrictDateId = PageEvent.RestrictDates.First().Id;
     }
 
     async void SuggestADate()
@@ -90,4 +103,8 @@
         tm = new TimeMaker();
         StateHasChanged();
     }
+
+    
+       
+    
 }

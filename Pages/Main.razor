@@ -1,0 +1,51 @@
+﻿@inject MeetupService MeetupService;
+@inject IJSRuntime IJSRunTime
+<h3>Main</h3>
+<EditForm Model="@ParentEvent" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div>
+        <label>Description</label>
+        <InputText @bind-Value="ParentEvent.Description" />
+    </div>
+    <div>
+        <label>Maximum Attendees</label>
+        <InputNumber @bind-Value="ParentEvent.MaximumAttendees" />
+    </div>
+    <div>
+        <label>Minimum Attendees</label>
+        <InputNumber @bind-Value="ParentEvent.MinimumAttendees" />
+    </div>
+    <div>
+        <label>Date of Event</label>
+        <InputDate @bind-Value="ParentEvent.DateAndTime" />
+    </div>
+    @*<div>
+            <label>Length of Event</label>
+            <InputText @bind-Value="created.LengthOfEvent" />
+        </div>*@
+
+    <button>Create Event</button>
+</EditForm>
+@code {
+    [Parameter]
+    public Event ParentEvent { get; set; }
+    [Parameter]
+    public IdentityUser DbUser { get; set; }
+    [CascadingParameter]
+    public CreateEvent CreateEventAcc { get; set; }
+    [CascadingParameter]
+    private TabControl TabControlAcc { get; set; }
+
+    private void HandleValidSubmit()
+    {
+        ParentEvent.AttendeeId = DbUser.Id;
+        MeetupService.CreateEvent(ParentEvent);
+        CreateEventAcc.UpdateCreated();
+
+        TabControlAcc.ActivatePageByText("Date Range >>");
+        TabControlAcc.ToggleClickable("Main >>");
+        StateHasChanged();
+        IJSRunTime.CreateMessage("You've successfully created a new event.");
+    }
+}

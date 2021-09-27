@@ -16,7 +16,15 @@
     <select @bind="@ta.BeginningMinute">
         @foreach (int i in tm.GetMinutes())
         {
-            <option value="@i">@i</option>
+            if (i == 0)
+            {
+                <option value="@i">00</option>
+            }
+            else
+            {
+                <option value="@i">@i</option>
+            }
+
         }
     </select>
     End
@@ -30,7 +38,14 @@
     <select @bind="@ta.EndingMinute">
         @foreach (int i in tm.GetMinutes())
         {
-            <option value="@i">@i</option>
+            if (i == 0)
+            {
+                <option value="@i">00</option>
+            }
+            else
+            {
+                <option value="@i">@i</option>
+            }
         }
     </select>
     <button>Add Time Range</button>
