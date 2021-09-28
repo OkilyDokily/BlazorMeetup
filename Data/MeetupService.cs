@@ -166,10 +166,11 @@ namespace BlazorMeetup.Data
             }
         }
 
-        public void DeleteEvent(Event eventToRemove)
+        public void DeleteEventById(string id)
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
-            {    
+            {
+                Event eventToRemove = ctx.Events.Include(x => x.Attendees).Include(x => x.RestrictDates).Include(x => x.SuggestedDates).Include(x => x.Attendee).ToList().FirstOrDefault(x => x.Id == id);
                 ctx.Events.Remove(eventToRemove);
                 ctx.SaveChanges();
             }

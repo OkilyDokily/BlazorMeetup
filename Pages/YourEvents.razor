@@ -12,10 +12,9 @@
 <ul>
     @foreach (Event e in events)
     {
-        <li @key="e.Id" @onclick="() => GoToPage(e.Id)">@e.Description <span style="color:blue;" @onclick="()=>GoToEdit(e.Id)"  @onclick:stopPropagation="true">Edit</span> </li>
+        <li @key="e.Id" @onclick="() => GoToPage(e.Id)">@e.Description <span style="color:blue;" @onclick="()=>GoToEdit(e.Id)"  @onclick:stopPropagation="true">Edit</span> <span style="color:blue;"  @onclick:stopPropagation="true"  @onclick="()=>GoToDelete(e.Id)">Delete</span></li>
     }
 </ul>
-
 
 
 
@@ -39,5 +38,12 @@
     void GoToEdit(string id)
     {
         NavigationManager.NavigateTo("/CreateEvent/" + id);
+    }
+
+    void GoToDelete(string id)
+    {
+        MeetupService.DeleteEventById(id);
+        events = MeetupService.GetYourEvents(Your.Id);
+        StateHasChanged();
     }
 }

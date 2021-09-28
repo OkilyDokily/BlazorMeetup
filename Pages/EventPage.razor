@@ -45,23 +45,14 @@
         }
 
         <button @onclick="() => GoBack()">User Event List</button>
-        @if (userId == LoggedInUser.Id)
-        {
-            <button @onclick="DeleteEvent">Delete Event</button>
-        }
+      
     </TabPage>
-    @if (pageEvent.AttendeeId == LoggedInUser.UserName)
-    {
-        <TabPage Text="Change Proposed Date">
-            <DifferentDate PageEvent=@pageEvent />
-        </TabPage>
-    }
-    @if (pageEvent.Attendees.Any(a => a.AttendeeId == LoggedInUser.Id))
-    {
-        <TabPage Text="Suggest a time for available dates">
-            <SuggestDate UpdateEvent="@UpdateEvent" PageEvent=@pageEvent LoggedInId="@LoggedInUser.Id" />
-        </TabPage>
-    }
+
+   
+    <TabPage Text="Suggest a time for available dates">
+        <SuggestDate UpdateEvent="@UpdateEvent" PageEvent=@pageEvent LoggedInId="@LoggedInUser.Id" />
+    </TabPage>
+    
 
 </TabControl>
     @code {
@@ -101,11 +92,6 @@
             StateHasChanged();
         }
 
-        void DeleteEvent()
-        {
-            MeetupService.DeleteEvent(pageEvent);
-            GoBack();
-        }
 
         void OnChange(string id)
         {

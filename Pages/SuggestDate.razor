@@ -27,11 +27,9 @@
                 {
                     <option value="@i">@i</option>
                 }
-            }
-            
+            }          
         }
     </select>
-
     <button>Suggest a time for this date</button>
 </EditForm>
 
@@ -47,7 +45,6 @@
         <div @onclick="()=>SeeAvailableUser(sd)" @key="sd.Id">@sd.DateTime @sd.Attendee.UserName  <input type="checkbox" @onclick:stopPropagation="true" @onchange="() => AddSuggestedDateToAttendee(sd)"></div>
     }
 }
-
 
 @code {
     [Parameter]
@@ -88,9 +85,12 @@
 
     protected override void OnInitialized()
     {
+
         suggested.EventId = PageEvent.Id;
         suggested.AttendeeId = LoggedInId;
         RestrictDateId = PageEvent.RestrictDates.First().Id;
+        tm.Hours = tm.GetHours(MeetupService.GetRestrictDateById(RestrictDateId).TimesAlloweds.ToList()).FirstOrDefault();
+        tm.Minutes = tm.GetMinutes(tm.Hours, MeetupService.GetRestrictDateById(RestrictDateId).TimesAlloweds.ToList()).FirstOrDefault();
     }
 
     async void SuggestADate()
@@ -104,7 +104,4 @@
         StateHasChanged();
     }
 
-    
-       
-    
 }

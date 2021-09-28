@@ -30,7 +30,6 @@
 
 @code {
 
-
     private Event created = new();
     ClaimsPrincipal User { get; set; }
     IdentityUser DbUser { get; set; }
@@ -49,7 +48,6 @@
 
     protected override void OnAfterRender(bool firstRender)
     {
-
         if (firstRender)
         {
             TabControlRef.Pages.ForEach(x => x.IsClickable = false);
@@ -77,7 +75,4 @@
         DbUser = await UserManager.GetUserAsync(User);
 
     }
-
-
-
 }
