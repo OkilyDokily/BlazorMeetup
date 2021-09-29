@@ -41,11 +41,11 @@
         }
         @if (!MeetupService.AttendeeEventExists(LoggedInUser.Id, id))
         {
-        <button @onclick="() => JoinEvent()">I'm Interested</button>
+            <button @onclick="() => JoinEvent()">I'm Interested</button>
         }
 
         <button @onclick="() => GoBack()">User Event List</button>
-      
+        <button @onclick='() => NavigationManager.NavigateTo("/AssignTeams/" + id)'>Assign Users To Teams</button>
     </TabPage>
 
    

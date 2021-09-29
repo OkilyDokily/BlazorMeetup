@@ -1,5 +1,6 @@
 ﻿@page "/UpcomingEvents" 
 @inject MeetupService MeetupService
+@inject NavigationManager NavigationManager
 
 <h3>UpcomingEvents</h3>
 <table class="table" style="width:100%;">
@@ -16,7 +17,7 @@
     <tbody>
     @foreach (Event evt in UpcomingEventsList)
     {
-        <tr>
+        <tr @onclick='()=>NavigationManager.NavigateTo("/EventPage/" + evt.Attendee.Id + "/" + evt.Id)' >
             <td>@evt.Attendee.UserName</td>
             <td>@evt.Description</td>
             <td>@evt.DateAndTime</td>
@@ -33,4 +34,5 @@
     {
         UpcomingEventsList = MeetupService.GetUpComingEvents();
     }
+
 }
