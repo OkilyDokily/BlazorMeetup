@@ -1,0 +1,36 @@
+﻿@page "/UpcomingEvents" 
+@inject MeetupService MeetupService
+
+<h3>UpcomingEvents</h3>
+<table class="table" style="width:100%;">
+    <thead>
+        <tr>
+            <th>UserName</th>
+            <th>Description</th>
+            <th>Date And Time</th>
+            <th>Maximum Attendees</th>
+            <th>Minimum Attendees</th>
+            <th>Current Number of Attendees</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (Event evt in UpcomingEventsList)
+    {
+        <tr>
+            <td>@evt.Attendee.UserName</td>
+            <td>@evt.Description</td>
+            <td>@evt.DateAndTime</td>
+            <td>@evt.MaximumAttendees</td>
+            <td>@evt.MinimumAttendees</td>
+            <td>@evt.Attendees.Count</td>
+        </tr>
+    }
+    </tbody>   
+</table>
+@code {
+    List<Event> UpcomingEventsList { get; set; }
+    protected override void OnInitialized()
+    {
+        UpcomingEventsList = MeetupService.GetUpComingEvents();
+    }
+}

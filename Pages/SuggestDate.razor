@@ -3,32 +3,31 @@
 @inject IJSRuntime IJSRunTime
 @inject NavigationManager NavigationManager
 <EditForm Model=@tm OnValidSubmit="@SuggestADate">
-    <select @bind="@RestrictDateId">
-        @foreach (RestrictDate rd in PageEvent.RestrictDates)
-        {
-            <option value="@rd.Id">@rd.Date.ToString()</option>
-        }
-    </select>
+    @if (PageEvent.RestrictDates == null || PageEvent.RestrictDates.Count == 0)
+    {
+        <InputDate @bind-Value="@tm.Date"/>
+    }
+    else
+    {
+        <select @bind="@RestrictDateId">
+            @foreach (RestrictDate rd in PageEvent.RestrictDates)
+            {
+                <option value="@rd.Id">@rd.Date.ToString()</option>
+            }
+        </select>
+    }
+
     <select @bind="@tm.Hours">
-        @foreach (int num in tm.GetHours(MeetupService.GetRestrictDateById(RestrictDateId).TimesAlloweds.ToList()))
-        {
-            <option value="@num">@num</option>
+        @foreach (int num in tm.GetHours(MeetupService.GetRestrictDateById(RestrictDateId)?.TimesAlloweds?.ToList()))
+        {           
+            <option value="@num">@(num == 0 ? "12AM" : (num == 12) ? "12PM" : (num - 12) < 0  ? num + "AM" : (num -12) + "PM")</option>
         }
     </select>
     <select @bind="@tm.Minutes">
-        @foreach (int i in tm.GetMinutes(tm.Hours, MeetupService.GetRestrictDateById(RestrictDateId).TimesAlloweds.ToList()))
+        @foreach (int i in tm.GetMinutes(tm.Hours, MeetupService.GetRestrictDateById(RestrictDateId)?.TimesAlloweds?.ToList()))
         {
-           
-                if (i == 0)
-                {
-                    <option value="@i">00</option>
-                }
-                else
-                {
-                    <option value="@i">@i</option>
-                }
-            }          
-        }
+          <option value="@i">@(i == 0 ? "00" : i)</option>
+        }     
     </select>
     <button>Suggest a time for this date</button>
 </EditForm>
@@ -88,9 +87,16 @@
 
         suggested.EventId = PageEvent.Id;
         suggested.AttendeeId = LoggedInId;
-        RestrictDateId = PageEvent.RestrictDates.First().Id;
-        tm.Hours = tm.GetHours(MeetupService.GetRestrictDateById(RestrictDateId).TimesAlloweds.ToList()).FirstOrDefault();
-        tm.Minutes = tm.GetMinutes(tm.Hours, MeetupService.GetRestrictDateById(RestrictDateId).TimesAlloweds.ToList()).FirstOrDefault();
+        if(PageEvent.RestrictDates.Count != 0 && PageEvent.RestrictDates != null)
+        {
+            RestrictDateId = PageEvent.RestrictDates.First().Id;
+            tm.Hours = tm.GetHours(MeetupService.GetRestrictDateById(RestrictDateId).TimesAlloweds.ToList()).FirstOrDefault();
+            tm.Minutes = tm.GetMinutes(tm.Hours, MeetupService.GetRestrictDateById(RestrictDateId).TimesAlloweds.ToList()).FirstOrDefault();
+        }
+        else
+        {
+            tm.Hours = 0;
+        }
     }
 
     async void SuggestADate()

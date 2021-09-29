@@ -28,7 +28,6 @@ namespace BlazorMeetup.Data
             }
         }
 
-
         public void AddRestrictDate(RestrictDate rd)
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
@@ -210,7 +209,14 @@ namespace BlazorMeetup.Data
             }
         }
 
-      
+        public List<Event> GetUpComingEvents()
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                return ctx.Events.Include(x=>x.Attendee).Include(x=>x.Attendees).Where(x => x.DateAndTime >= DateTime.Today).ToList();
+            }
+        }
+
         public void ChangeCanAttendInitialDate(string id)
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
@@ -280,8 +286,15 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                RestrictDate rd = ctx.RestrictDates.Include(x=>x.TimesAlloweds).FirstOrDefault(x => x.Id == id);
-                return rd;
+                try
+                {
+                    RestrictDate rd = ctx.RestrictDates.Include(x => x.TimesAlloweds).FirstOrDefault(x => x.Id == id);
+                    return rd;
+                }
+                catch
+                {
+                    return null;
+                }
             }
         }
     }

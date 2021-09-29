@@ -9,8 +9,7 @@ namespace BlazorMeetup.Data
     public class TimeMaker
     {
         public int Hours { get; set; }
-        public DateTime Date { get; set; }
-
+        public DateTime Date { get; set; } = DateTime.Today;
         public int Minutes { get; set; }
 
         public DateTime MakeTime()
@@ -32,22 +31,20 @@ namespace BlazorMeetup.Data
                 List<int> rfer = Enumerable.Range(t.BeginningHour, (t.EndingHour - t.BeginningHour) + 1).ToList();
             
                 foreach(int r in rfer)
-                {
-                   
+                {                 
                     if (er.Any(x => x == r))
                     {
                         continue;
                     }
                     er.Add(r);
-                }
-               
+                }         
             }
             return er;      
         }
          
         public List<int> GetMinutes(int hour = -1,List<TimesAllowed> ta = null)
         {
-            if(ta == null || hour == -1)
+            if(ta == null || hour == -1 || ta.Count == 0)
             return new List<int>(){0, 15,30,45};
             List<int> mr = new List<int>() {0, 15, 30, 45 };
             foreach (TimesAllowed t in ta)
