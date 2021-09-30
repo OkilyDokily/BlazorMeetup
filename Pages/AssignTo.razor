@@ -1,4 +1,21 @@
-﻿<h3>AssignTo</h3>
+﻿@inject MeetupService MeetupService
+
+
+<h3>AssignTo</h3>
+
+
+    <div class="card" style="width: 18rem;" >
+        <div class="card-header">
+            Users
+        </div>
+        <ul class="list-group list-group-flush" @ondrop="() => HandleDropOnUser()">
+            @foreach (Attendee a in GetAttendeesWithoutTeams())
+            {
+                <li @ondragstart="() => DragStartUser(a)" draggable="true" class="list-group-item">@a.UserName</li>
+            }
+        </ul>
+    </div>
+}
 
 @foreach (Team t in at.Teams)
 {
@@ -6,10 +23,10 @@
         <div class="card-header">
             @t.Name
         </div>
-        <ul class="list-group list-group-flush">
+        <ul @ondrop="() => HandleDropOnTeam(t)" class="list-group list-group-flush">
             @foreach (TeamAttendee ta in t.Attendees)
             {
-                <li class="list-group-item">An item</li>
+                <li @ondragstart="() => DragStartUser(ta.Attendee)" draggable="true" class="list-group-item">An item</li>
             }
         </ul>
     </div>
@@ -20,5 +37,20 @@
     [CascadingParameter]
     AssignTeams at { get; set; }
 
-   
+    Attendee DragStartAtt { get; set;}
+
+    public void DragStartUser(Attendee a)
+    {
+        DragStartAtt = a;
+    }
+
+    public void HandleDropOnTeam(Team t)
+    {
+        MeetupService.
+    }
+
+    List<Attendee> GetAttendeesWithoutTeams()
+    {
+        return MeetupService.GetAttendeesWithoutTeams(at.EventId);
+    }
 }

@@ -215,7 +215,35 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                return ctx.Teams.Include(x=>x.Attendees).ThenInclude(x=>x.Att).Where(x => x.EventId == id).ToList();
+                return ctx.Teams.Include(x=>x.Attendees).ThenInclude(x=>x.Attendee).Where(x => x.EventId == id).ToList();
+            }
+        }
+
+
+        public List<Attendee> GetAttendeesWithoutTeams(string eventId)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+              return ctx.Attendees.Where(x => !(ctx.TeamAttendees.Any(y => y.EventId == eventId && x.Id == y.AttendeeId))).ToList();
+            }
+        }
+
+        public void AddAttendeeToTeam(string eventId,string teamId,string attendeeId)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                ctx.TeamAttendees.Add(new TeamAttendee { Id = Guid.NewGuid().ToString(), EventId = eventId, TeamId = teamId, AttendeeId = attendeeId });
+                ctx.SaveChanges();
+            }
+        }
+
+        public void RemoveAttendeeFromTeam(string eventId, string teamId, string attendeeId)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                TeamAttendee ta = ctx.TeamAttendees.FirstOrDefault(x => x.EventId == eventId && x.TeamId == teamId && x.AttendeeId == attendeeId);
+                ctx.TeamAttendees.Remove(ta);
+                ctx.SaveChanges();
             }
         }
 

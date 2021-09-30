@@ -32,11 +32,13 @@
     public string EventId { get; set; }
     public List<Team> Teams { get; set; }
     public Team team;
+    public Event e { get; set; }
 
     protected override void OnInitialized()
     {
         Teams = MeetupService.GetTeamsByEventId(EventId);
         team = new Team();
+        e = MeetupService.GetEventById(EventId);
     }
 
     public void OnSubmit()
