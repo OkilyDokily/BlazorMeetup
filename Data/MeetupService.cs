@@ -201,6 +201,24 @@ namespace BlazorMeetup.Data
             }
         }
 
+        public void CreateTeam(Team team)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                team.Id = Guid.NewGuid().ToString();
+                ctx.Teams.Add(team);
+                ctx.SaveChanges();
+            }
+        }
+
+        public List<Team> GetTeamsByEventId(string id)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                return ctx.Teams.Include(x=>x.Attendees).ThenInclude(x=>x.Att).Where(x => x.EventId == id).ToList();
+            }
+        }
+
         public List<Event> GetYourEvents(string id)
         {
             using (var ctx = _dbContextFactory.CreateDbContext())

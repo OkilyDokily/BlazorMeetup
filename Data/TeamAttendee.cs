@@ -10,5 +10,7 @@ namespace BlazorMeetup.Data
         public string Id { get; set; }
         public string TeamId { get; set; }
         public string AttendeeId { get; set; }
+        public virtual Team Team { get; set; }
+        public virtual Attendee Attendee { get; set; }
     }
 }

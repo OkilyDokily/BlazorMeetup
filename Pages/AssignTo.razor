@@ -1,0 +1,24 @@
+﻿<h3>AssignTo</h3>
+
+@foreach (Team t in at.Teams)
+{
+    <div class="card" style="width: 18rem;">
+        <div class="card-header">
+            @t.Name
+        </div>
+        <ul class="list-group list-group-flush">
+            @foreach (TeamAttendee ta in t.Attendees)
+            {
+                <li class="list-group-item">An item</li>
+            }
+        </ul>
+    </div>
+}
+
+@code {
+
+    [CascadingParameter]
+    AssignTeams at { get; set; }
+
+   
+}

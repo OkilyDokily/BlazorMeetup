@@ -8,7 +8,8 @@ namespace BlazorMeetup.Data
     public class Team
     {
         public string Id { get; set; }
-        Event EventId { get; set; }
+        public string EventId { get; set; }
+        public string Name { get; set; }
         public ICollection<TeamAttendee> Attendees  { get; set; } 
 
         public Team()

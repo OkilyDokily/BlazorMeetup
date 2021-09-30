@@ -1,0 +1,50 @@
+﻿@page "/AssignTeams/{EventId}"
+@inject MeetupService MeetupService
+
+<h3>AssignTeams</h3>
+
+<CascadingValue Value="this">
+    <h3>Create Event</h3>
+
+    <TabControl >
+        <TabPage Text="Create Teams">
+            <EditForm Model="team" OnInvalidSubmit="@OnSubmit">
+                <InputText @bind="@team.Name" placeholder="Name of Team" />
+                <InputText @bind="@team.EventId" Value="@EventId" type="hidden" />
+                <button>Create Team</button>
+            </EditForm>
+            @foreach(Team t in Teams)
+            {
+                <div></div>
+            }
+        </TabPage>
+
+        <TabPage Text="Assign Users">
+           <AssignTo />
+        </TabPage>
+    </TabControl>
+</CascadingValue>
+
+
+
+@code {
+    [Parameter]
+    public string EventId { get; set; }
+    public List<Team> Teams { get; set; }
+    public Team team;
+
+    protected override void OnInitialized()
+    {
+        Teams = MeetupService.GetTeamsByEventId(EventId);
+        team = new Team();
+    }
+
+    public void OnSubmit()
+    {
+        MeetupService.CreateTeam(team);
+        team = new Team();
+        Teams = MeetupService.GetTeamsByEventId(EventId);
+        StateHasChanged();
+    }
+
+}
