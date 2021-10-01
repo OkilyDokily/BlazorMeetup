@@ -7,63 +7,67 @@
 @inject MeetupService MeetupService
 @inject UserManager<Attendee> UserManager
 @inject NavigationManager NavigationManager
+    <CascadingValue Value="this">
+        <TabControl>
+            <TabPage Text="Main">
+                <h3>Event</h3>
+                @pageEvent.DateAndTime
+                <h3>Attendees</h3>
+                @foreach (AttendeeEvent ae in pageEvent.Attendees)
 
-<TabControl>
-    <TabPage Text="Main">
-        <h3>Event</h3>
-        @pageEvent.DateAndTime
-        <h3>Attendees</h3>
-        @foreach (AttendeeEvent ae in pageEvent.Attendees)
-
-        {
-            @if (ae.AttendeeId == LoggedInUser.Id)
-            {
-                @if (ae.CanAttendProposedDate == true)
                 {
-                    <div @key="ae.Id">@ae.Attendee.UserName  <input type="checkbox" checked value="@ae.CanAttendProposedDate" @onchange="() => OnChange(ae.Id)"><div style="display:inline" @onclick="Leave">leave</div></div>
+                    @if (ae.AttendeeId == LoggedInUser.Id)
+                    {
+                        @if (ae.CanAttendProposedDate == true)
+                        {
+                            <div @key="ae.Id">@ae.Attendee.UserName  <input type="checkbox" checked value="@ae.CanAttendProposedDate" @onchange="() => OnChange(ae.Id)"><div style="display:inline" @onclick="Leave">leave</div></div>
+                        }
+                        else
+                        {
+                            <div @key="ae.Id">@ae.Attendee.UserName  <input type="checkbox" value="@ae.CanAttendProposedDate" @onchange="() => OnChange(ae.Id)"><div style="display:inline" @onclick="Leave">leave</div></div>
+                        }
+                    }
+                    else
+                    {
+                        @if (ae.CanAttendProposedDate)
+                        {
+                            <div @key="ae.Id">@ae.Attendee.UserName<i class="oi oi-check"></i></div>
+                        }
+                        else
+                        {
+                            <div @key="ae.Id">@ae.Attendee.UserName</div>
+                        }
+                    }
                 }
-                else
+                @if (!MeetupService.AttendeeEventExists(LoggedInUser.Id, id))
                 {
-                    <div @key="ae.Id">@ae.Attendee.UserName  <input type="checkbox" value="@ae.CanAttendProposedDate" @onchange="() => OnChange(ae.Id)"><div style="display:inline" @onclick="Leave">leave</div></div>
+                    <button @onclick="() => JoinEvent()">I'm Interested</button>
                 }
-            }
-            else
-            {
-                @if (ae.CanAttendProposedDate)
-                {
-                    <div @key="ae.Id">@ae.Attendee.UserName<i class="oi oi-check"></i></div>
-                }
-                else
-                {
-                    <div @key="ae.Id">@ae.Attendee.UserName</div>
-                }
-            }
-        }
-        @if (!MeetupService.AttendeeEventExists(LoggedInUser.Id, id))
-        {
-            <button @onclick="() => JoinEvent()">I'm Interested</button>
-        }
 
-        <button @onclick="() => GoBack()">User Event List</button>
-        <button @onclick='() => NavigationManager.NavigateTo("/AssignTeams/" + id)'>Assign Users To Teams</button>
-    </TabPage>
+                <button @onclick="() => GoBack()">User Event List</button>
+                <button @onclick='() => NavigationManager.NavigateTo("/AssignTeams/" + id)'>Assign Users To Teams</button>
+            </TabPage>
 
-   
-    <TabPage Text="Suggest a time for available dates">
-        <SuggestDate UpdateEvent="@UpdateEvent" PageEvent=@pageEvent LoggedInId="@LoggedInUser.Id" />
-    </TabPage>
-    
 
-</TabControl>
+            <TabPage Text="Suggest a time for available dates">
+                <SuggestDate  LoggedInId="@LoggedInUser.Id" />
+            </TabPage>
+
+            <TabPage Text="See who is on which team">
+                <ShowTeams />
+            </TabPage>
+
+        </TabControl>
+    </CascadingValue>
     @code {
 
-            Event pageEvent { get; set; }
-            [Parameter]
-            public string userId { get; set; }
-            [Parameter]
-            public string id { get; set; }
-            Event created = new();
-            Attendee LoggedInUser { get; set; }
+        public Event pageEvent { get; set; }
+        [Parameter]
+        public string userId { get; set; }
+        [Parameter]
+        public string id { get; set; }
+        Event created = new();
+        Attendee LoggedInUser { get; set; }
 
 
         protected override async Task OnInitializedAsync()
@@ -99,11 +103,7 @@
 
         }
 
-        public void UpdateEvent()
-        {
-            pageEvent = MeetupService.GetEventById(pageEvent.Id);
-            StateHasChanged();
-        }
+        
 
 
     }

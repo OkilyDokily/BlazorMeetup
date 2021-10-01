@@ -1,0 +1,51 @@
+﻿@inject MeetupService MeetupService
+
+<h3>ShowTeams</h3>
+<div class="card" style="width: 18rem; min-height: 140px;">
+ 
+    <div class=" card-header">
+        Users
+    </div>
+    <ul class="list-group list-group-flush">
+        @foreach (Attendee a in AttendeesWithoutTeams)
+        {
+            <li  draggable="true" class="list-group-item">@a.UserName</li>
+        }
+    </ul>
+</div>
+
+
+@foreach (Team t in Teams)
+{
+
+    <div class="card" style=" width: 18rem; min-height: 140px; ">
+        
+      
+        <div class="card-header">
+            @t.Name
+        </div>
+        <ul class="list-group list-group-flush">
+            @foreach (TeamAttendee ta in t.Attendees)
+            {
+                <li draggable="true" class="list-group-item">@ta.Attendee.UserName</li>
+            }
+        </ul>
+    </div>
+
+}
+@code {
+    [CascadingParameter]
+    EventPage eventPage { get; set; }
+    List<Team> Teams { get; set; }
+    List<Attendee> AttendeesWithoutTeams { get; set; }
+
+   
+  
+
+    protected override void OnInitialized()
+    {
+        Teams = MeetupService.GetTeamsByEventId(eventPage.pageEvent.Id);
+        AttendeesWithoutTeams = MeetupService.GetAttendeesWithoutTeams(eventPage.pageEvent.Id);
+        base.OnInitialized();
+    }
+}

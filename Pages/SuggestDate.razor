@@ -3,14 +3,14 @@
 @inject IJSRuntime IJSRunTime
 @inject NavigationManager NavigationManager
 <EditForm Model=@tm OnValidSubmit="@SuggestADate">
-    @if (PageEvent.RestrictDates == null || PageEvent.RestrictDates.Count == 0)
+    @if (eventPage.pageEvent.RestrictDates == null || eventPage.pageEvent.RestrictDates.Count == 0)
     {
         <InputDate @bind-Value="@tm.Date"/>
     }
     else
     {
         <select @bind="@RestrictDateId">
-            @foreach (RestrictDate rd in PageEvent.RestrictDates)
+            @foreach (RestrictDate rd in eventPage.pageEvent.RestrictDates)
             {
                 <option value="@rd.Id">@rd.Date.ToString()</option>
             }
@@ -33,7 +33,7 @@
 </EditForm>
 
 
-@foreach (SuggestedDate sd in PageEvent.SuggestedDates)
+@foreach (SuggestedDate sd in eventPage.pageEvent.SuggestedDates)
 {
     @if (CanAttend(sd))
     {
@@ -46,12 +46,12 @@
 }
 
 @code {
-    [Parameter]
-    public Event PageEvent { get; set; }
+    [CascadingParameter]
+    EventPage eventPage { get; set; }
+    
     [Parameter]
     public string LoggedInId { get; set; }
-    [Parameter]
-    public EventCallback UpdateEvent { get; set; }
+ 
     SuggestedDate suggested = new SuggestedDate();
     [Parameter]
     public string Id { get; set; }
@@ -84,12 +84,11 @@
 
     protected override void OnInitialized()
     {
-
-        suggested.EventId = PageEvent.Id;
+        suggested.EventId = eventPage.pageEvent.Id;
         suggested.AttendeeId = LoggedInId;
-        if(PageEvent.RestrictDates.Count != 0 && PageEvent.RestrictDates != null)
+        if(eventPage.pageEvent.RestrictDates.Count != 0 && eventPage.pageEvent.RestrictDates != null)
         {
-            RestrictDateId = PageEvent.RestrictDates.First().Id;
+            RestrictDateId = eventPage.pageEvent.RestrictDates.First().Id;
             tm.Hours = tm.GetHours(MeetupService.GetRestrictDateById(RestrictDateId).TimesAlloweds.ToList()).FirstOrDefault();
             tm.Minutes = tm.GetMinutes(tm.Hours, MeetupService.GetRestrictDateById(RestrictDateId).TimesAlloweds.ToList()).FirstOrDefault();
         }
@@ -99,13 +98,13 @@
         }
     }
 
-    async void SuggestADate()
+    public void SuggestADate()
     {
         DateTime d = tm.MakeTime();
         suggested.DateTime = d;
         MeetupService.SuggestDate(suggested);
         IJSRunTime.CreateMessage("You've successfully suggested a new date.");
-        await UpdateEvent.InvokeAsync();
+        eventPage.pageEvent = MeetupService.GetEventById(eventPage.pageEvent.Id);
         tm = new TimeMaker();
         StateHasChanged();
     }
