@@ -4,49 +4,73 @@
 <h3>AssignTo</h3>
 
 
-    <div class="card" style="width: 18rem;" >
-        <div class="card-header">
-            Users
-        </div>
-        <ul class="list-group list-group-flush" @ondrop="() => HandleDropOnUser()">
-            @foreach (Attendee a in GetAttendeesWithoutTeams())
-            {
-                <li @ondragstart="() => DragStartUser(a)" draggable="true" class="list-group-item">@a.UserName</li>
-            }
-        </ul>
+<div class="card" style="width: 18rem; min-height: 140px;" @ondrop="() => HandleDropOnUsersWithoutATeam()" ondragover="event.preventDefault();">
+    <div class="card-header">
+        Users
     </div>
-}
+    <ul class="list-group list-group-flush" >
+        @foreach (Attendee a in GetAttendeesWithoutTeams())
+        {
+            <li @ondragstart="() => DragStartUser(a)" draggable="true" class="list-group-item">@a.UserName</li>
+        }
+    </ul>
+</div>
+
 
 @foreach (Team t in at.Teams)
 {
-    <div class="card" style="width: 18rem;">
-        <div class="card-header">
-            @t.Name
-        </div>
-        <ul @ondrop="() => HandleDropOnTeam(t)" class="list-group list-group-flush">
-            @foreach (TeamAttendee ta in t.Attendees)
-            {
-                <li @ondragstart="() => DragStartUser(ta.Attendee)" draggable="true" class="list-group-item">An item</li>
-            }
-        </ul>
+<div class="card" style=" width: 18rem; min-height: 140px;" @ondrop="() => HandleDropOnTeam(t)" ondragover="event.preventDefault();">
+    <div class="card-header">
+        @t.Name
     </div>
+    <ul class="list-group list-group-flush">
+        @foreach (TeamAttendee ta in t.Attendees)
+        {
+            <li @ondragstart="() => DragStartUser(ta.Attendee,t)" draggable="true" class="list-group-item">@ta.Attendee.UserName</li>
+        }
+    </ul>
+</div>
 }
 
 @code {
 
     [CascadingParameter]
     AssignTeams at { get; set; }
+    Team team { get; set; }
 
     Attendee DragStartAtt { get; set;}
 
-    public void DragStartUser(Attendee a)
+    public void DragStartUser(Attendee a,Team t = null)
     {
+        team = t;
         DragStartAtt = a;
+        
+  
+        Debug.WriteLine(DragStartAtt.UserName + " uSER NAME");
     }
+
+
+    public void HandleDropOnUsersWithoutATeam()
+    {
+        if (team == null) return;
+        MeetupService.RemoveAttendeeFromTeam(at.EventId, team.Id, DragStartAtt.Id);
+        at.Teams = MeetupService.GetTeamsByEventId(at.EventId);
+        StateHasChanged();
+    }
+
 
     public void HandleDropOnTeam(Team t)
     {
-        MeetupService.
+        if (t.Id == team?.Id) return;
+        Debug.WriteLine(t.Name + " team name dropped on");
+        MeetupService.AddAttendeeToTeam(at.EventId, t.Id, DragStartAtt.Id);
+        if(team != null)
+        {
+            MeetupService.RemoveAttendeeFromTeam(at.EventId, t.Id, DragStartAtt.Id);
+        }
+        at.Teams = MeetupService.GetTeamsByEventId(at.EventId);
+        StateHasChanged();
+
     }
 
     List<Attendee> GetAttendeesWithoutTeams()

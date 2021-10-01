@@ -8,14 +8,14 @@
 
     <TabControl >
         <TabPage Text="Create Teams">
-            <EditForm Model="team" OnInvalidSubmit="@OnSubmit">
-                <InputText @bind="@team.Name" placeholder="Name of Team" />
-                <InputText @bind="@team.EventId" Value="@EventId" type="hidden" />
+            <EditForm Model="team" OnValidSubmit="@OnSubmit">
+                <InputText @bind-Value="@team.Name" placeholder="Name of Team" />
+       
                 <button>Create Team</button>
             </EditForm>
             @foreach(Team t in Teams)
             {
-                <div></div>
+                <div>@t.Name</div>
             }
         </TabPage>
 
@@ -43,6 +43,7 @@
 
     public void OnSubmit()
     {
+        team.EventId = EventId;
         MeetupService.CreateTeam(team);
         team = new Team();
         Teams = MeetupService.GetTeamsByEventId(EventId);
