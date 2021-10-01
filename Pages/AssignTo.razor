@@ -4,14 +4,14 @@
 <h3>AssignTo</h3>
 
 
-<div  class="card" style="width: 18rem; min-height: 140px;" 
+<div class="card" style="width: 18rem; min-height: 140px;border-color:@ChangeColor(new Team { Id="none"});"
      @ondrop="() => HandleDropOnUsersWithoutATeam()"
      ondragover="event.preventDefault();"
-    
+     @ondragenter='() => OnEnterTeam(new Team { Id = "none"})'
  >
-    <div class="card-header">
-        Users
-    </div>
+    <div class=" card-header">
+    Users
+</div>
     <ul class="list-group list-group-flush">
         @foreach (Attendee a in GetAttendeesWithoutTeams())
         {
@@ -20,14 +20,14 @@
     </ul>
 </div>
 
- @{int i = 0;}
+
 @foreach (Team t in at.Teams)
 {
    
-<div class="card" style=" width: 18rem; min-height: 140px;"
+<div class="card" style=" width: 18rem; min-height: 140px; border-color:@ChangeColor(t);"
      @ondrop="() => HandleDropOnTeam(t)"
      ondragover="event.preventDefault();"
-  
+     @ondragenter="() =>OnEnterTeam(t)" 
    >
     <div class="card-header">
         @t.Name
@@ -39,7 +39,7 @@
         }
     </ul>
 </div>
-    i++;
+   
 }
 
 @code {
@@ -50,6 +50,7 @@
 
     Attendee DragStartAtt { get; set; }
 
+    Team OnEnterTeamAcc { get; set; }
 
     public void DragStartUser(Attendee a, Team t = null)
     {
@@ -70,15 +71,23 @@
     public void HandleDropOnTeam(Team t)
     {
         if (t.Id == team?.Id) return;
-        Debug.WriteLine(t.Name + " team name dropped on");
+
         MeetupService.AddAttendeeToTeam(at.EventId, t.Id, DragStartAtt.Id);
         if (team != null)
         {
             MeetupService.RemoveAttendeeFromTeam(team.EventId, team.Id, DragStartAtt.Id);
         }
         at.Teams = MeetupService.GetTeamsByEventId(at.EventId);
+        team = null;
+        DragStartAtt = null;
+        OnEnterTeamAcc = null;
         StateHasChanged();
 
+    }
+
+    public void OnEnterTeam(Team t)
+    {
+        OnEnterTeamAcc = t;
     }
 
     List<Attendee> GetAttendeesWithoutTeams()
@@ -86,7 +95,13 @@
         return MeetupService.GetAttendeesWithoutTeams(at.EventId);
     }
 
+    public string ChangeColor(Team t)
+    {
+        if (team != null && team.Id == t.Id) return "";
+        if (OnEnterTeamAcc != null && t.Id == OnEnterTeamAcc.Id) return "green";
+        return "";
+    }
 
-  
+
 
 }
