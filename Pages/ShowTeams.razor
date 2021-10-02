@@ -45,12 +45,9 @@
 
     protected override void OnInitialized()
     {
-        if(!TeamsUpdateService.UpdateEvents.ContainsKey(eventPage.pageEvent.Id))
-        {
-            TeamsUpdateService.AddEvent(eventPage.pageEvent.Id, async () => await InvokeAsync(() => { this.UpdateTeamsWithMeetupService(); this.StateHasChanged(); Debug.WriteLine("Invookkked"); })) ;
-        }
+        TeamsUpdateService.AddEvent(eventPage.pageEvent.Id, async () => await InvokeAsync(() => { this.UpdateTeamsWithMeetupService(); this.StateHasChanged(); Debug.WriteLine("Invookkked"); })) ;
 
-        Teams = MeetupService.GetTeamsByEventId(eventPage.pageEvent.Id);
+        UpdateTeamsWithMeetupService();
         AttendeesWithoutTeams = MeetupService.GetAttendeesWithoutTeams(eventPage.pageEvent.Id);
         base.OnInitialized();
     }

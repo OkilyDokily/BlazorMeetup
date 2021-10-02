@@ -14,7 +14,23 @@ namespace BlazorMeetup.Data
 
         public void AddEvent(string eventId,Func<Task> newDelegate)
         {
-            UpdateEvents.Add(eventId, newDelegate);
+            try
+            {
+                if (UpdateEvents.ContainsKey(eventId))
+                {
+                    UpdateEvents[eventId] += newDelegate;
+                }
+                else
+                {
+                    UpdateEvents.Add(eventId, newDelegate);
+                }
+            }
+            catch
+            {
+
+            }
+            
+           
         }
 
         public Dictionary<string, Func<Task>> UpdateEvents = new(); 
