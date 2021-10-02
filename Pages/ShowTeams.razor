@@ -1,4 +1,5 @@
 ﻿@inject MeetupService MeetupService
+@inject TeamsUpdateService TeamsUpdateService 
 
 <h3>ShowTeams</h3>
 <div class="card" style="width: 18rem; min-height: 140px;">
@@ -9,7 +10,7 @@
     <ul class="list-group list-group-flush">
         @foreach (Attendee a in AttendeesWithoutTeams)
         {
-            <li  draggable="true" class="list-group-item">@a.UserName</li>
+            <li  class="list-group-item">@a.UserName</li>
         }
     </ul>
 </div>
@@ -27,7 +28,7 @@
         <ul class="list-group list-group-flush">
             @foreach (TeamAttendee ta in t.Attendees)
             {
-                <li draggable="true" class="list-group-item">@ta.Attendee.UserName</li>
+                <li  class="list-group-item">@ta.Attendee.UserName</li>
             }
         </ul>
     </div>
@@ -39,13 +40,23 @@
     List<Team> Teams { get; set; }
     List<Attendee> AttendeesWithoutTeams { get; set; }
 
-   
-  
+
+
 
     protected override void OnInitialized()
     {
+        if(!TeamsUpdateService.UpdateEvents.ContainsKey(eventPage.pageEvent.Id))
+        {
+            TeamsUpdateService.AddEvent(eventPage.pageEvent.Id, async () => await InvokeAsync(() => { this.UpdateTeamsWithMeetupService(); this.StateHasChanged(); Debug.WriteLine("Invookkked"); })) ;
+        }
+
         Teams = MeetupService.GetTeamsByEventId(eventPage.pageEvent.Id);
         AttendeesWithoutTeams = MeetupService.GetAttendeesWithoutTeams(eventPage.pageEvent.Id);
         base.OnInitialized();
+    }
+
+    void UpdateTeamsWithMeetupService()
+    {
+        Teams = MeetupService.GetTeamsByEventId(eventPage.pageEvent.Id);
     }
 }

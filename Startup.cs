@@ -79,6 +79,7 @@ namespace BlazorMeetup
                 options.Password.RequiredUniqueChars = 1;
             });
             //services.AddScoped<CreateUsers>();
+            services.AddSingleton<TeamsUpdateService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
