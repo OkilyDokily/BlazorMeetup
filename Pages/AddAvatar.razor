@@ -1,0 +1,66 @@
+﻿@page "/avatars"
+@using System.IO
+@using Microsoft.AspNetCore.Hosting;
+@using Microsoft.Extensions.Hosting;
+@inject IWebHostEnvironment env
+
+    <style>
+        #addavatarimg {
+            width: 50px;
+            border: 1px black solid;
+            border-radius: 50%;
+        }
+    </style>
+
+<h1>Blazor Server File Upload</h1>
+
+<h3>@Message</h3>
+
+<form @onsubmit="OnSubmit">
+    <InputFile OnChange="OnInputFileChange" multiple />
+    <br /><br />
+    <button type="submit">Upload Selected File(s)</button>
+</form>
+
+
+   <img id="addavatarimg" src="/avatars/nerd.jpg" />
+
+
+
+
+
+@code {
+
+    bool Uploaded { get; set; }
+    string AvatarName { get; set; }
+
+    //http://www.binaryintellect.net/articles/06473cc7-a391-409e-948d-3752ba3b4a6c.aspx
+    //https://www.youtube.com/watch?v=GcrFdvi79lU
+    string Message = "No file(s) selected";
+    IBrowserFile selectedFile;
+
+
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        selectedFile = e.File;
+        Message = $"a file is selected";
+        this.StateHasChanged();
+    }
+
+
+    private async void OnSubmit()
+    {
+        if (selectedFile == null) return;
+        Stream stream = selectedFile.OpenReadStream();
+        var path = $"{env.WebRootPath}\\avatars\\{selectedFile.Name}";
+        FileStream fs = File.Create(path);
+        await stream.CopyToAsync(fs);
+        stream.Close();
+        fs.Close();
+
+        Message = $"a file has been uploaded on server";
+        Uploaded = true;
+        AvatarName = selectedFile.Name;
+        this.StateHasChanged();
+    }
+}
