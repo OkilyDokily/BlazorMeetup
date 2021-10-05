@@ -46,9 +46,13 @@
     <button type="submit">Upload Selected File(s)</button>
 </form>
 
-<div id="divimg" style="background-image: url('/avatars/@AvatarName');">
-  
-</div>
+@if (FileName != null)
+{
+    <div id="divimg" style="background-image: url('/avatars/@FileName');">
+
+    </div>
+}
+
 
 
 <div>
@@ -57,10 +61,10 @@
     <input type="number" value=@width @oninput="(e) => width = heightAndWidthAdjustment(Int32.Parse(e.Value.ToString()))" />
 </div>
 
-<EditForm Model="avatarSettings" @onsubmit="SubmitAvatarSettings">
 
-    <button>Submit Avatar Settings</button>
-</EditForm>
+
+<button @onclick="SubmitAvatarSettings">Submit Avatar Settings</button>
+
 
 @code {
 
@@ -77,8 +81,18 @@
     public double borderThickness { get; set; } = 1;
 
 
-    public AvatarSettings avatarSettings {get;set;} = new ();
+    public AvatarSettings avatarSettings { get; set; } = new();
 
+    string AttendeeId { get; set; }
+
+    string FileName { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        Attendee a = await UserManager.GetUserAsync(authState.User);
+        AttendeeId = a.Id;
+    }
 
     int heightAndWidthAdjustment(int width)
     {
@@ -94,16 +108,15 @@
     string Message = "No file(s) selected";
     IBrowserFile selectedFile;
 
-    public async Task SubmitAvatarSettings()
+    public void SubmitAvatarSettings()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        Attendee a = await UserManager.GetUserAsync(authState.User);
-        avatarSettings.size = size;
-        avatarSettings.top = top;
-        avatarSettings.left = left;
-        avatarSettings.AttendeeId = a.Id;
 
-        avatarSettings = new ();
+        avatarSettings.Size = size;
+        avatarSettings.Top = top;
+        avatarSettings.Left = left;
+        avatarSettings.FileName = FileName;
+        MeetupService.AddAvatarSettings(avatarSettings);
+        avatarSettings = new();
     }
 
     private async Task OnInputFileChange(InputFileChangeEventArgs e)
@@ -116,9 +129,11 @@
 
     private async void OnSubmit()
     {
+
         if (selectedFile == null) return;
         Stream stream = selectedFile.OpenReadStream();
-        var path = $"{env.WebRootPath}\\avatars\\{selectedFile.Name}";
+
+        var path = $"{env.WebRootPath}\\avatars\\{AttendeeId + Path.GetExtension(selectedFile.Name)}";
         FileStream fs = File.Create(path);
         await stream.CopyToAsync(fs);
         stream.Close();
@@ -127,6 +142,7 @@
         Message = $"a file has been uploaded on server";
         Uploaded = true;
         AvatarName = selectedFile.Name;
+        FileName = AttendeeId + Path.GetExtension(selectedFile.Name);
         this.StateHasChanged();
     }
 }
