@@ -18,6 +18,16 @@ namespace BlazorMeetup.Data
             _dbContextFactory = factory;
         }
 
+
+        public void AddAvatarSettings(AvatarSettings asetting)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                asetting.Id = Guid.NewGuid().ToString();
+                ctx.AvatarSettings.Add(asetting);
+                ctx.SaveChanges();
+            }
+        }
         public void AddTimeAllowedToRestrictDate(TimesAllowed ta)
         {
             using (var ctx = _dbContextFactory.CreateDbContext())

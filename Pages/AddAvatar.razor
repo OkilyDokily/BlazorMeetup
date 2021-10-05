@@ -1,16 +1,40 @@
-﻿@page "/avatars"
+﻿@page "/AddAvatar"
 @using System.IO
 @using Microsoft.AspNetCore.Hosting;
 @using Microsoft.Extensions.Hosting;
 @inject IWebHostEnvironment env
+@inject UserManager<Attendee> UserManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject MeetupService MeetupService
 
-    <style>
-        #addavatarimg {
-            width: 50px;
-            border: 1px black solid;
-            border-radius: 50%;
-        }
-    </style>
+<style>
+    #divimg {
+        width: @(width + "px");
+        height: @(height + "px");
+        border-radius: 50%;
+        border: @(borderThickness + "px") black solid;
+        background-repeat: no-repeat;
+        background-color: #1fe0;
+        background-size: @(size + "%");
+        background-position: @(@left + "%") @(@top + "%");
+    }
+</style>
+@*https://stackoverflow.com/questions/58222480/change-variable-value-on-input-key-press-on-blazor*@
+
+<div>
+    <label>Adjust image left or right</label>
+    <input type="number" value=@left @oninput="(e) => left = Int32.Parse(e.Value.ToString())" />
+</div>
+<div>
+    <label>Adjust image top or bottom</label>
+    <input type="number" value=@top @oninput="(e) => top = Int32.Parse(e.Value.ToString())" />
+</div>
+
+<div>
+    <label>Adjust scaling of image</label>
+    <input type="number" value=@size @oninput="(e) => size = Int32.Parse(e.Value.ToString())" />
+</div>
+
 
 <h1>Blazor Server File Upload</h1>
 
@@ -22,23 +46,65 @@
     <button type="submit">Upload Selected File(s)</button>
 </form>
 
+<div id="divimg" style="background-image: url('/avatars/@AvatarName');">
+  
+</div>
 
-   <img id="addavatarimg" src="/avatars/nerd.jpg" />
 
+<div>
+    <label>Adjust width and height of div</label>
+    <p>See what avatar will look like in various sizes</p>
+    <input type="number" value=@width @oninput="(e) => width = heightAndWidthAdjustment(Int32.Parse(e.Value.ToString()))" />
+</div>
 
+<EditForm Model="avatarSettings" @onsubmit="SubmitAvatarSettings">
 
-
+    <button>Submit Avatar Settings</button>
+</EditForm>
 
 @code {
 
     bool Uploaded { get; set; }
     string AvatarName { get; set; }
 
+    public int left { get; set; }
+    public int top { get; set; }
+    public int size { get; set; } = 75;
+
+    public int width { get; set; } = 60;
+    public int height { get; set; } = 60;
+
+    public double borderThickness { get; set; } = 1;
+
+
+    public AvatarSettings avatarSettings {get;set;} = new ();
+
+
+    int heightAndWidthAdjustment(int width)
+    {
+        if (width < 15) borderThickness = .2;
+        if (width > 15) borderThickness = 1;
+        if (width > 100) borderThickness = 2;
+        height = width;
+        return height;
+    }
+
     //http://www.binaryintellect.net/articles/06473cc7-a391-409e-948d-3752ba3b4a6c.aspx
     //https://www.youtube.com/watch?v=GcrFdvi79lU
     string Message = "No file(s) selected";
     IBrowserFile selectedFile;
 
+    public async Task SubmitAvatarSettings()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        Attendee a = await UserManager.GetUserAsync(authState.User);
+        avatarSettings.size = size;
+        avatarSettings.top = top;
+        avatarSettings.left = left;
+        avatarSettings.AttendeeId = a.Id;
+
+        avatarSettings = new ();
+    }
 
     private async Task OnInputFileChange(InputFileChangeEventArgs e)
     {
