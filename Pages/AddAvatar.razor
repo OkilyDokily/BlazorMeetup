@@ -7,142 +7,28 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject MeetupService MeetupService
 
-<style>
-    #divimg {
-        width: @(width + "px");
-        height: @(height + "px");
-        border-radius: 50%;
-        border: @(borderThickness + "px") black solid;
-        background-repeat: no-repeat;
-        background-color: #1fe0;
-        background-size: @(size + "%");
-        background-position: @(@left + "%") @(@top + "%");
-    }
-</style>
-@*https://stackoverflow.com/questions/58222480/change-variable-value-on-input-key-press-on-blazor*@
 
-<div>
-    <label>Adjust image left or right</label>
-    <input type="number" value=@left @oninput="(e) => left = Int32.Parse(e.Value.ToString())" />
-</div>
-<div>
-    <label>Adjust image top or bottom</label>
-    <input type="number" value=@top @oninput="(e) => top = Int32.Parse(e.Value.ToString())" />
-</div>
+<CascadingValue Value="this">
+    <h3>Create Event</h3>
 
-<div>
-    <label>Adjust scaling of image</label>
-    <input type="number" value=@size @oninput="(e) => size = Int32.Parse(e.Value.ToString())" />
-</div>
+    <TabControl >
+        <TabPage Text="Upload Avatar">
+            <UploadAvatar  />
+        </TabPage>
 
+        <TabPage Text="Center and adjust avatar">
+            <EditAvatar  />
+        </TabPage>
 
-<h1>Blazor Server File Upload</h1>
-
-<h3>@Message</h3>
-
-<form @onsubmit="OnSubmit">
-    <InputFile OnChange="OnInputFileChange" multiple />
-    <br /><br />
-    <button type="submit">Upload Selected File(s)</button>
-</form>
-
-@if (FileName != null)
-{
-    <div id="divimg" style="background-image: url('/avatars/@FileName');">
-
-    </div>
-}
-
-
-
-<div>
-    <label>Adjust width and height of div</label>
-    <p>See what avatar will look like in various sizes</p>
-    <input type="number" value=@width @oninput="(e) => width = heightAndWidthAdjustment(Int32.Parse(e.Value.ToString()))" />
-</div>
-
-
-
-<button @onclick="SubmitAvatarSettings">Submit Avatar Settings</button>
+    </TabControl>
+</CascadingValue>
 
 
 @code {
 
-    bool Uploaded { get; set; }
-    string AvatarName { get; set; }
+  
+ 
+   
 
-    public int left { get; set; }
-    public int top { get; set; }
-    public int size { get; set; } = 75;
-
-    public int width { get; set; } = 60;
-    public int height { get; set; } = 60;
-
-    public double borderThickness { get; set; } = 1;
-
-
-    public AvatarSettings avatarSettings { get; set; } = new();
-
-    string AttendeeId { get; set; }
-
-    string FileName { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        Attendee a = await UserManager.GetUserAsync(authState.User);
-        AttendeeId = a.Id;
-    }
-
-    int heightAndWidthAdjustment(int width)
-    {
-        if (width < 15) borderThickness = .2;
-        if (width > 15) borderThickness = 1;
-        if (width > 100) borderThickness = 2;
-        height = width;
-        return height;
-    }
-
-    //http://www.binaryintellect.net/articles/06473cc7-a391-409e-948d-3752ba3b4a6c.aspx
-    //https://www.youtube.com/watch?v=GcrFdvi79lU
-    string Message = "No file(s) selected";
-    IBrowserFile selectedFile;
-
-    public void SubmitAvatarSettings()
-    {
-
-        avatarSettings.Size = size;
-        avatarSettings.Top = top;
-        avatarSettings.Left = left;
-        avatarSettings.FileName = FileName;
-        MeetupService.AddAvatarSettings(avatarSettings);
-        avatarSettings = new();
-    }
-
-    private async Task OnInputFileChange(InputFileChangeEventArgs e)
-    {
-        selectedFile = e.File;
-        Message = $"a file is selected";
-        this.StateHasChanged();
-    }
-
-
-    private async void OnSubmit()
-    {
-
-        if (selectedFile == null) return;
-        Stream stream = selectedFile.OpenReadStream();
-
-        var path = $"{env.WebRootPath}\\avatars\\{AttendeeId + Path.GetExtension(selectedFile.Name)}";
-        FileStream fs = File.Create(path);
-        await stream.CopyToAsync(fs);
-        stream.Close();
-        fs.Close();
-
-        Message = $"a file has been uploaded on server";
-        Uploaded = true;
-        AvatarName = selectedFile.Name;
-        FileName = AttendeeId + Path.GetExtension(selectedFile.Name);
-        this.StateHasChanged();
-    }
+  
 }

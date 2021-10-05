@@ -18,13 +18,28 @@ namespace BlazorMeetup.Data
             _dbContextFactory = factory;
         }
 
-
+        public AvatarSettings GetAvatarSettingsById(string id)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                return ctx.AvatarSettings.Where(x => x.AttendeeId == id).FirstOrDefault();
+            }
+        }
         public void AddAvatarSettings(AvatarSettings asetting)
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
                 asetting.Id = Guid.NewGuid().ToString();
                 ctx.AvatarSettings.Add(asetting);
+                ctx.SaveChanges();
+            }
+        }
+        public void UpdateAvatarSettings(AvatarSettings asetting)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                
+                ctx.AvatarSettings.Update(asetting);
                 ctx.SaveChanges();
             }
         }
@@ -325,7 +340,7 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                return ctx.Events.Include(x => x.SuggestedDates).Include(x => x.RestrictDates).Include(x => x.Attendee).Include(x => x.Attendees).ThenInclude(x => x.Attendee).FirstOrDefault(x => x.Id == id);
+                return ctx.Events.Include(x => x.SuggestedDates).Include(x => x.RestrictDates).Include(x => x.Attendee).ThenInclude(x=>x.AvatarSettings).Include(x => x.Attendees).ThenInclude(x => x.Attendee).FirstOrDefault(x => x.Id == id);
             }
         }
 

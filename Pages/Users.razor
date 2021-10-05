@@ -1,18 +1,58 @@
 ﻿@page "/Users"
 @inject MeetupService MeetupService
 @inject NavigationManager NavigationManager
-<h3>Users</h3>
-<ul>
-    @foreach (IdentityUser iu in AllUsers)
-    {
-        <li @key="iu.Id" @onclick="()=>GoToPage(iu.Id)">@iu.UserName</li>
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@using System.Security.Claims
+
+<style>
+   .userdivs {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: 1px black solid;
+        background-repeat: no-repeat;
+        background-color: #1fe0;   
     }
-</ul>
+
+    .nosettings {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: 1px black solid;
+        background-repeat: no-repeat;
+        background-color: #1fe0;
+    }
+
+    #usersdiv {
+        display:flex;
+    }
+</style>
+
+
+<h3>Users</h3>
+
+
+<div>
+    @foreach (Attendee iu in AllUsers)
+    {
+       
+        <div id="usersdiv" @key="iu.Id" @onclick="()=>GoToPage(iu.Id)">
+            <div class="userdivs" style="background-image: url(@iu.AvatarSettings.AvatarUrl); background-size: @(iu.AvatarSettings.Size + "%"); background-position: @(iu.AvatarSettings.Left + "%") @(iu.AvatarSettings.Top + "%"); ">
+            </div>
+
+            <div>@iu.UserName</div>
+        </div>
+        
+       
+
+    }
+</div>
 
 @code {
     List<Attendee> AllUsers { get; set; }
     protected override void OnInitialized()
     {
+        
         AllUsers = MeetupService.GetAllUsers();
     }
     void GoToPage(string id)

@@ -1,0 +1,67 @@
+﻿@using System.IO
+@using Microsoft.AspNetCore.Hosting;
+@inject IWebHostEnvironment env
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UserManager<Attendee> UserManager
+@inject MeetupService MeetupService
+<h3>UploadAvatar</h3>
+<h1>Blazor Server File Upload</h1>
+ //http://www.binaryintellect.net/articles/06473cc7-a391-409e-948d-3752ba3b4a6c.aspx
+    //https://www.youtube.com/watch?v=GcrFdvi79lU
+
+<h3>@Message</h3>
+
+<form @onsubmit="OnSubmit">
+    <InputFile OnChange="OnInputFileChange" multiple />
+    <br /><br />
+    <button type="submit">Upload Selected File(s)</button>
+</form>
+
+@code {
+    bool Uploaded { get; set; }
+    string Message = "No file(s) selected";
+    IBrowserFile selectedFile;
+    string AttendeeId { get; set; }
+    string AvatarName { get; set; }
+
+    AvatarSettings avatarSettings { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        Attendee a = await UserManager.GetUserAsync(authState.User);
+        AttendeeId = a.Id;
+        avatarSettings = MeetupService.GetAvatarSettingsById(a.Id);
+    }
+
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        selectedFile = e.File;
+        Message = $"a file is selected";
+        this.StateHasChanged();
+    }
+
+    private async void OnSubmit()
+    {
+
+        if (selectedFile == null) return;
+        Stream stream = selectedFile.OpenReadStream();
+
+        var path = $"{env.WebRootPath}\\avatars\\{AttendeeId + Path.GetExtension(selectedFile.Name)}";
+        FileStream fs = File.Create(path);
+        await stream.CopyToAsync(fs);
+        stream.Close();
+        fs.Close();
+
+        Message = $"a file has been uploaded on server";
+        Uploaded = true;
+        AvatarName = selectedFile.Name;
+       
+        avatarSettings.AvatarUrl = "/avatars/" + AttendeeId + Path.GetExtension(selectedFile.Name);
+        avatarSettings.Top = 0;
+        avatarSettings.Left = 0;
+        MeetupService.UpdateAvatarSettings(avatarSettings);
+        this.StateHasChanged();
+    }
+
+}

@@ -11,6 +11,10 @@ namespace BlazorMeetup.Data
         public ICollection<AttendeeEvent> Events { get; set; }
         public ICollection<SuggestedDateAttendee> SuggestedDates { get; set; }
 
+
+        public virtual AvatarSettings AvatarSettings {get;set;}
+
+ 
        
         public Attendee()
         {

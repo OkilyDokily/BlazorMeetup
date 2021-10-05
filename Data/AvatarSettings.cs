@@ -8,7 +8,8 @@ namespace BlazorMeetup.Data
     public class AvatarSettings
     {
         public string Id { get; set; }
-        public string FileName { get; set; }
+        public string AttendeeId { get; set; }
+        public string AvatarUrl { get; set; }
 
         public int Size { get; set; }
         public int Left { get; set; }
