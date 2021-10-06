@@ -31,7 +31,7 @@
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         Attendee a = await UserManager.GetUserAsync(authState.User);
         AttendeeId = a.Id;
-        avatarSettings = MeetupService.GetAvatarSettingsById(a.Id);
+        avatarSettings = MeetupService.GetAvatarSettingsByUserId(a.Id);
     }
 
     private async Task OnInputFileChange(InputFileChangeEventArgs e)

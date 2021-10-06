@@ -18,7 +18,7 @@ namespace BlazorMeetup.Data
             _dbContextFactory = factory;
         }
 
-        public AvatarSettings GetAvatarSettingsById(string id)
+        public AvatarSettings GetAvatarSettingsByUserId(string id)
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
