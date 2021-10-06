@@ -249,7 +249,9 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-              return ctx.Attendees.Include(x=>x.AvatarSettings).Where(x => !(ctx.TeamAttendees.Any(y => y.EventId == eventId && x.Id == y.AttendeeId))).ToList();
+              Event e = ctx.Events.Include(x=>x.Attendees).ThenInclude(x=>x.Attendee).ThenInclude(x=>x.AvatarSettings).FirstOrDefault(x => x.Id == eventId);
+              List<Attendee> a = e.Attendees.Select(x => x.Attendee).ToList();
+              return a.Where(x => !(ctx.TeamAttendees.Any(y => y.EventId == eventId && x.Id == y.AttendeeId))).ToList();
             }
         }
 
@@ -308,8 +310,7 @@ namespace BlazorMeetup.Data
                 {
                     ctx.RestrictDates.Remove(rd);
                     ctx.SaveChanges();
-                }
-             
+                }             
             }
         }
 
@@ -322,8 +323,7 @@ namespace BlazorMeetup.Data
                 {
                     ctx.TimesAlloweds.Remove(t);
                     ctx.SaveChanges();
-                }
-              
+                }             
             }
         }
 

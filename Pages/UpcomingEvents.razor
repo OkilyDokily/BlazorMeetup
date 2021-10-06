@@ -2,10 +2,23 @@
 @inject MeetupService MeetupService
 @inject NavigationManager NavigationManager
 
+    <style>
+        .userdivs {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 1px black solid;
+            background-repeat: no-repeat;
+            background-color: #1fe0;
+        }
+    </style>
+
+
 <h3>UpcomingEvents</h3>
 <table class="table" style="width:100%;">
     <thead>
         <tr>
+            <th>Avatar</th>
             <th>UserName</th>
             <th>Description</th>
             <th>Date And Time</th>
