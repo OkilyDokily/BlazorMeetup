@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 
+
 namespace BlazorMeetup.Data
 {
     public class CreateUsers
@@ -15,10 +16,14 @@ namespace BlazorMeetup.Data
         }
         public async void InitializeUsers()
         {
-            for(var i = 1;i<11;i++)
+            if(_userManager.Users.Count() < 5)
             {
-                await _userManager.CreateAsync(new Attendee { Email = "test" + i.ToString() + "@gmail.com", UserName = "test" + i.ToString() + "@gmail.com" }, "test");
+                for (var i = 1; i < 11; i++)
+                {
+                    await _userManager.CreateAsync(new Attendee { Email = "test" + i.ToString() + "@gmail.com", UserName = "test" + i.ToString() + "@gmail.com" }, "test");
+                }
             }
+
         }
     }
 }

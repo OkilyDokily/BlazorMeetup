@@ -9,8 +9,8 @@
         border: @(borderThickness + "px") black solid;
         background-repeat: no-repeat;
         background-color: #1fe0;
-        background-size: @(size + "%");
-        background-position: @(@left + "%") @(@top + "%");
+        background-size: @(avatarSettings.Size + "%");
+        background-position: @(avatarSettings.Left + "%") @(avatarSettings.Top + "%");
     }
 </style>
 
@@ -19,16 +19,16 @@
 <div>
     @*https://stackoverflow.com/questions/58222480/change-variable-value-on-input-key-press-on-blazor*@
 <label>Adjust image left or right</label>
-<input type="number" value=@left @oninput="(e) => left = Int32.Parse(e.Value.ToString())" />
+<input type="number" value=@avatarSettings.Left @oninput="(e) => avatarSettings.Left = Int32.Parse(e.Value.ToString())" />
 </div>
 <div>
     <label>Adjust image top or bottom</label>
-    <input type="number" value=@top @oninput="(e) => top = Int32.Parse(e.Value.ToString())" />
+    <input type="number" value=@avatarSettings.Top @oninput="(e) => avatarSettings.Top = Int32.Parse(e.Value.ToString())" />
 </div>
 
 <div>
     <label>Adjust scaling of image</label>
-    <input type="number" value=@size @oninput="(e) => size = Int32.Parse(e.Value.ToString())" />
+    <input type="number" value=@avatarSettings.Size @oninput="(e) => avatarSettings.Size = Int32.Parse(e.Value.ToString())" />
 </div>
 
 
@@ -39,14 +39,12 @@
 </div>
 
 
-<div id="divimg" style="background-image: url(@AvatarUrl);">
+<div id="divimg" style="background-image: url(@avatarSettings.AvatarUrl);">
 
 </div>
 <button @onclick="SubmitAvatarSettings">Submit Avatar Settings</button>
 @code {
-    public int left { get; set; }
-    public int top { get; set; }
-    public int size { get; set; } = 75;
+  
 
     public int width { get; set; } = 60;
     public int height { get; set; } = 60;
@@ -54,8 +52,6 @@
     public double borderThickness { get; set; } = 1;
     public AvatarSettings avatarSettings { get; set; } = new();
     public Attendee DbUser { get; set; }
-
-    public string AvatarUrl { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -75,13 +71,7 @@
     }
 
     public void SubmitAvatarSettings()
-    {
-
-        avatarSettings.Size = size;
-        avatarSettings.Top = top;
-        avatarSettings.Left = left;
-        avatarSettings.AvatarUrl = AvatarUrl;
+    { 
         MeetupService.UpdateAvatarSettings(avatarSettings);
-        avatarSettings = new();
     }
 }

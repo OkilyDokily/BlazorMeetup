@@ -15,17 +15,25 @@
         </tr>
     </thead>
     <tbody>
-    @foreach (Event evt in UpcomingEventsList)
-    {
-        <tr @onclick='()=>NavigationManager.NavigateTo("/EventPage/" + evt.Attendee.Id + "/" + evt.Id)' >
-            <td>@evt.Attendee.UserName</td>
-            <td>@evt.Description</td>
-            <td>@evt.DateAndTime</td>
-            <td>@evt.MaximumAttendees</td>
-            <td>@evt.MinimumAttendees</td>
-            <td>@evt.Attendees.Count</td>
-        </tr>
-    }
+        @foreach (Event evt in UpcomingEventsList)
+        {
+            if (evt.Attendee.AvatarSettings != null)
+            {
+                <tr @onclick='()=>NavigationManager.NavigateTo("/EventPage/" + evt.Attendee.Id + "/" + evt.Id)'>
+                    <td>
+                        <div class="userdivs" style="background-image: url(@evt.Attendee.AvatarSettings.AvatarUrl); background-size: @(evt.Attendee.AvatarSettings.Size + "%"); background-position: @(evt.Attendee.AvatarSettings.Left + "%") @(evt.Attendee.AvatarSettings.Top + "%");">
+                        </div>
+                    </td>
+                    <td>@evt.Attendee.UserName</td>
+                    <td>@evt.Description</td>
+                    <td>@evt.DateAndTime</td>
+                    <td>@evt.MaximumAttendees</td>
+                    <td>@evt.MinimumAttendees</td>
+                    <td>@evt.Attendees.Count</td>
+                </tr>
+            }
+
+        }
     </tbody>   
 </table>
 @code {

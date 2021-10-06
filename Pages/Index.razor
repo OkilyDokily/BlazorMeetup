@@ -71,6 +71,7 @@ Welcome to your new app.
                     string userURL = User.FindFirstValue("urn:discord:avatar:url");
                     MeetupService.AddAvatarSettings(new AvatarSettings { AttendeeId = DbUser.Id, AvatarUrl = "/avatars/blank-profile.webp", Left = 0, Top = 0, Size = 100 });
                 }
+             asettings =  MeetupService.GetAvatarSettingsByUserId(DbUser.Id);
             }
 
 

@@ -168,7 +168,7 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                return ctx.Attendees.ToList();
+                return ctx.Attendees.Include(x=>x.AvatarSettings).ToList();
             }
         }
         public void CreateEvent(Event create)
@@ -240,7 +240,7 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                return ctx.Teams.Include(x=>x.Attendees).ThenInclude(x=>x.Attendee).Where(x => x.EventId == id).ToList();
+                return ctx.Teams.Include(x=>x.Attendees).ThenInclude(x=>x.Attendee).ThenInclude(x=>x.AvatarSettings).Where(x => x.EventId == id).ToList();
             }
         }
 
@@ -249,7 +249,7 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-              return ctx.Attendees.Where(x => !(ctx.TeamAttendees.Any(y => y.EventId == eventId && x.Id == y.AttendeeId))).ToList();
+              return ctx.Attendees.Include(x=>x.AvatarSettings).Where(x => !(ctx.TeamAttendees.Any(y => y.EventId == eventId && x.Id == y.AttendeeId))).ToList();
             }
         }
 
@@ -284,7 +284,7 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                return ctx.Events.Include(x=>x.Attendee).Include(x=>x.Attendees).Where(x => x.DateAndTime >= DateTime.Today).ToList();
+                return ctx.Events.Include(x=>x.Attendee).ThenInclude(x=>x.AvatarSettings).Include(x=>x.Attendees).Where(x => x.DateAndTime >= DateTime.Today).ToList();
             }
         }
 
@@ -331,7 +331,7 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                SuggestedDate sd = ctx.SuggestedDates.Include(x => x.Attendees).ThenInclude(x=>x.Attendee).FirstOrDefault(x=> x.Id == id);
+                SuggestedDate sd = ctx.SuggestedDates.Include(x => x.Attendees).ThenInclude(x=>x.Attendee).ThenInclude(x=>x.AvatarSettings).FirstOrDefault(x=> x.Id == id);
                 return sd.Attendees.Select(x => x.Attendee).ToList();
             }
         }

@@ -11,7 +11,15 @@
     <ul class="list-group list-group-flush">
         @foreach (Attendee a in AttendeesWithoutTeams)
         {
-            <li class="list-group-item">@a.UserName</li>
+            if (a.AvatarSettings != null)
+            {
+                <li class="list-group-item">
+                    <div class="userdivs" style="background-image: url(@a.AvatarSettings.AvatarUrl); background-size: @(a.AvatarSettings.Size + "%"); background-position: @(a.AvatarSettings.Left + "%") @(a.AvatarSettings.Top + "%");">
+                    </div>
+                    <div>@a.UserName</div>
+                </li>
+            }
+
         }
     </ul>
 </div>
@@ -25,7 +33,15 @@
         <ul class="list-group list-group-flush">
             @foreach (TeamAttendee ta in t.Attendees)
             {
-                <li class="list-group-item">@ta.Attendee.UserName</li>
+                if (ta.Attendee.AvatarSettings != null)
+                {
+                    <li class="list-group-item">
+                        <div class="userdivs" style="background-image: url(@ta.Attendee.AvatarSettings.AvatarUrl); background-size: @(ta.Attendee.AvatarSettings.Size + "%"); background-position: @(ta.Attendee.AvatarSettings.Left + "%") @(ta.Attendee.AvatarSettings.Top + "%");">
+                        </div>
+                        <div> @ta.Attendee.UserName</div>
+                    </li>
+                }
+
             }
         </ul>
     </div>

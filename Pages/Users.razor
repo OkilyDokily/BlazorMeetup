@@ -14,15 +14,6 @@
         background-color: #1fe0;   
     }
 
-    .nosettings {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        border: 1px black solid;
-        background-repeat: no-repeat;
-        background-color: #1fe0;
-    }
-
     #usersdiv {
         display:flex;
     }
@@ -35,16 +26,15 @@
 <div>
     @foreach (Attendee iu in AllUsers)
     {
-       
-        <div id="usersdiv" @key="iu.Id" @onclick="()=>GoToPage(iu.Id)">
-            <div class="userdivs" style="background-image: url(@iu.AvatarSettings.AvatarUrl); background-size: @(iu.AvatarSettings.Size + "%"); background-position: @(iu.AvatarSettings.Left + "%") @(iu.AvatarSettings.Top + "%"); ">
+        if (iu.AvatarSettings != null)
+        {
+            <div id="usersdiv" @key="iu.Id" @onclick="()=>GoToPage(iu.Id)">
+                <div class="userdivs" style="background-image: url(@iu.AvatarSettings.AvatarUrl); background-size: @(iu.AvatarSettings.Size + "%"); background-position: @(iu.AvatarSettings.Left + "%") @(iu.AvatarSettings.Top + "%"); ">
+                </div>
+
+                <div>@iu.UserName</div>
             </div>
-
-            <div>@iu.UserName</div>
-        </div>
-        
-       
-
+        }
     }
 </div>
 

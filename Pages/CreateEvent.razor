@@ -62,16 +62,13 @@
             }
             StateHasChanged();
         }
-
     }
 
     protected async override Task OnInitializedAsync()
     {
-
         created.DateAndTime = DateTime.Today;
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         User = authState.User;
         DbUser = await UserManager.GetUserAsync(User);
-
     }
 }
