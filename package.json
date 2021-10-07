@@ -1,0 +1,31 @@
+{
+  "name": "BlazorMeetup",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "buildcss": "postcss wwwroot/css/app.css -o wwwroot/css/app.min.css",
+    "watchcss": "postcss wwwroot/css/app.css -o wwwroot/css/app.min.css --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OkilyDokily/BlazorMeetup.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OkilyDokily/BlazorMeetup/issues"
+  },
+  "homepage": "https://github.com/OkilyDokily/BlazorMeetup#readme",
+  "devDependencies": {
+    "@fullhuman/postcss-purgecss": "^4.0.3",
+    "@tailwindcss/forms": "^0.3.4",
+    "@tailwindcss/typography": "^0.4.1",
+    "autoprefixer": "^10.3.7",
+    "postcss": "^8.3.9",
+    "postcss-cli": "^9.0.1",
+    "tailwindcss": "^2.2.16"
+  }
+}

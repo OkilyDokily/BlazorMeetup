@@ -1,11 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="npm run buildcss" />
+	</Target>
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>aspnet-BlazorMeetup-A79839B6-53FE-4A30-9B1E-4863E8BAF160</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="postcss.config.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="postcss.config.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AKSoftware.Blazor.TailwindTransition" Version="1.1.0" />
     <PackageReference Include="AspNet.Security.OAuth.Discord" Version="5.0.12" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.8" />
