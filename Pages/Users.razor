@@ -4,20 +4,7 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @using System.Security.Claims
 
-<style>
-   .userdivs {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        border: 1px black solid;
-        background-repeat: no-repeat;
-        background-color: #1fe0;   
-    }
 
-    #usersdiv {
-        display:flex;
-    }
-</style>
 
 
 <h3>Users</h3>
@@ -28,8 +15,8 @@
     {
         if (iu.AvatarSettings != null)
         {
-            <div id="usersdiv" @key="iu.Id" @onclick="()=>GoToPage(iu.Id)">
-                <div  style="background-image: url(@iu.AvatarSettings.AvatarUrl); background-size: @(iu.AvatarSettings.Size + "%"); background-position: @(iu.AvatarSettings.Left + "%") @(iu.AvatarSettings.Top + "%"); ">
+            <div  @key="iu.Id" @onclick="()=>GoToPage(iu.Id)">
+                <div  >
                 </div>
 
                 <div>@iu.UserName</div>

@@ -2,22 +2,12 @@
 @inject TeamsUpdateService TeamsUpdateService
 @*inspiration from https://chrissainty.com/investigating-drag-and-drop-with-blazor/*@
 
-<style>
-    .userdivs {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        border: 1px black solid;
-        background-repeat: no-repeat;
-        background-color: #1fe0;
-    }
-</style>
 
 
 <h3>AssignTo</h3>
 
 
-<div  style="width: 18rem; min-height: 140px;border-color:@ChangeColor(new Team { Id="none"});"
+<div  
      @ondrop="() => HandleDropOnUsersWithoutATeam()"
      ondragover="event.preventDefault();"
      @ondragenter='() => OnEnterTeam(new Team { Id = "none"})'
@@ -30,8 +20,8 @@
         {
             if (a.AvatarSettings != null)
             {
-                <li style="display:flex" @ondragstart="() => DragStartUser(a)" draggable="true" >
-                    <div  style="background-image: url(@a.AvatarSettings.AvatarUrl); background-size: @(a.AvatarSettings.Size + "%"); background-position: @(a.AvatarSettings.Left + "%") @(a.AvatarSettings.Top + "%");">
+                <li  @ondragstart="() => DragStartUser(a)" draggable="true" >
+                    <div>
                     </div>
                     <div >@a.UserName</div>
                 </li>
@@ -59,8 +49,8 @@
         {
             if (ta.Attendee.AvatarSettings != null)
             {
-                <li @ondragstart="() => DragStartUser(ta.Attendee,t)" draggable="true"  style="display:flex;">
-                    <div  style="background-image: url(@ta.Attendee.AvatarSettings.AvatarUrl); background-size: @(ta.Attendee.AvatarSettings.Size + "%"); background-position: @(ta.Attendee.AvatarSettings.Left + "%") @(ta.Attendee.AvatarSettings.Top + "%");">
+                <li @ondragstart="() => DragStartUser(ta.Attendee,t)" draggable="true" >
+                    <div >
                     </div>
                     <div>@ta.Attendee.UserName</div>
                 </li>

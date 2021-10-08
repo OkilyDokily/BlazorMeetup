@@ -2,16 +2,6 @@
 @inject MeetupService MeetupService
 @inject NavigationManager NavigationManager
 
-    <style>
-        .userdivs {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            border: 1px black solid;
-            background-repeat: no-repeat;
-            background-color: #1fe0;
-        }
-    </style>
 
 
 <h3 class=>UpcomingEvents</h3>
@@ -34,7 +24,7 @@
             {
                 <tr @onclick='()=>NavigationManager.NavigateTo("/EventPage/" + evt.Attendee.Id + "/" + evt.Id)'>
                     <td>
-                        <div  style="background-image: url(@evt.Attendee.AvatarSettings.AvatarUrl); background-size: @(evt.Attendee.AvatarSettings.Size + "%"); background-position: @(evt.Attendee.AvatarSettings.Left + "%") @(evt.Attendee.AvatarSettings.Top + "%");">
+                        <div >
                         </div>
                     </td>
                     <td>@evt.Attendee.UserName</td>

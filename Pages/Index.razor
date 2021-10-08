@@ -6,22 +6,6 @@
 @inject UserManager<Attendee> UserManager
 @inject RoleManager<IdentityRole> RoleManager
 @inject MeetupService MeetupService
-@if (asettings != null)
-{
-    <style>
-    #divimg {
-        background: url(@asettings.AvatarUrl);
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        border: 1px black solid;
-        background-repeat: no-repeat;
-        background-color: #1fe0;
-        background-size: @(asettings.Size + "%");
-        background-position: @(asettings.Left + "%") @(asettings.Top + "%");
-    }
-    </style>
-}
 
 <h1>Hello, world!</h1>
 
@@ -33,9 +17,8 @@ Welcome to your new app.
     </NotAuthorized>
     <Authorized>
         <a href="#">Hello, @context.User.Identity.Name!</a>
-        <p>Bottom</p>
         <a href="Identity/Account/Logout">Log out</a>
-        <div id="divimg">
+        <div >
 
         </div>
     </Authorized>

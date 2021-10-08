@@ -2,16 +2,6 @@
 @inject TeamsUpdateService TeamsUpdateService
 @implements IDisposable
 
-    <style>
-        .userdivs {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            border: 1px black solid;
-            background-repeat: no-repeat;
-            background-color: #1fe0;
-        }
-    </style>
 
 
 <h3>ShowTeams</h3>
@@ -26,7 +16,7 @@
             if (a.AvatarSettings != null)
             {
                 <li >
-                    <div  style="background-image: url(@a.AvatarSettings.AvatarUrl); background-size: @(a.AvatarSettings.Size + "%"); background-position: @(a.AvatarSettings.Left + "%") @(a.AvatarSettings.Top + "%");">
+                    <div  >
                     </div>
                     <div>@a.UserName</div>
                 </li>

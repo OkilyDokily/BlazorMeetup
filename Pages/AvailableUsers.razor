@@ -4,16 +4,7 @@
 @inject MeetupService MeetupService
 
 
-<style>
-    .userdivs {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        border: 1px black solid;
-        background-repeat: no-repeat;
-        background-color: #1fe0;
-    }
-</style>
+
 
 <h3>Available Users</h3>
 <ul>
@@ -22,7 +13,7 @@
         if (iu.AvatarSettings != null)
         {
             <li @key="iu.Id">
-                <div  style="background-image: url(@iu.AvatarSettings.AvatarUrl); background-size: @(iu.AvatarSettings.Size + "%"); background-position: @(iu.AvatarSettings.Left + "%") @(iu.AvatarSettings.Top + "%");">
+                <div >
                 </div>
                 <div>@iu.UserName</div>
             </li>

@@ -1,18 +1,6 @@
 ﻿@inject MeetupService MeetupService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManager<Attendee> UserManager
-<style>
-    #divimg {
-        width: @(width + "px");
-        height: @(height + "px");
-        border-radius: 50%;
-        border: @(borderThickness + "px") black solid;
-        background-repeat: no-repeat;
-        background-color: #1fe0;
-        background-size: @(avatarSettings.Size + "%");
-        background-position: @(avatarSettings.Left + "%") @(avatarSettings.Top + "%");
-    }
-</style>
 
 
 <h3>EditAvatar</h3>
@@ -39,7 +27,7 @@
 </div>
 
 
-<div id="divimg" style="background-image: url(@avatarSettings.AvatarUrl);">
+<div id="divimg" >
 
 </div>
 <button @onclick="SubmitAvatarSettings">Submit Avatar Settings</button>
