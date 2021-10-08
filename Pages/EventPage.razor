@@ -33,22 +33,22 @@
                         {
                             @if (ae.CanAttendProposedDate == true)
                             {
-                                <div @key="ae.Id" class="userdivs" style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">@ae.Attendee.UserName  <input type="checkbox" checked value="@ae.CanAttendProposedDate" @onchange="() => OnChange(ae.Id)"><div style="display:inline" @onclick="Leave">leave</div></div>
+                                <div @key="ae.Id"  style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">@ae.Attendee.UserName  <input type="checkbox" checked value="@ae.CanAttendProposedDate" @onchange="() => OnChange(ae.Id)"><div style="display:inline" @onclick="Leave">leave</div></div>
                             }
                             else
                             {
-                                <div @key="ae.Id" class="userdivs" style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">@ae.Attendee.UserName  <input type="checkbox" value="@ae.CanAttendProposedDate" @onchange="() => OnChange(ae.Id)"><div style="display:inline" @onclick="Leave">leave</div></div>
+                                <div @key="ae.Id"  style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">@ae.Attendee.UserName  <input type="checkbox" value="@ae.CanAttendProposedDate" @onchange="() => OnChange(ae.Id)"><div style="display:inline" @onclick="Leave">leave</div></div>
                             }
                         }
                         else
                         {
                             @if (ae.CanAttendProposedDate)
                             {
-                                <div @key="ae.Id" class="userdivs" style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">@ae.Attendee.UserName<i class="oi oi-check"></i></div>
+                                <div @key="ae.Id"  style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">@ae.Attendee.UserName<i ></i></div>
                             }
                             else
                             {
-                                <div @key="ae.Id" class="userdivs" style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">@ae.Attendee.UserName</div>
+                                <div @key="ae.Id"  style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">@ae.Attendee.UserName</div>
                             }
                         }
                     }

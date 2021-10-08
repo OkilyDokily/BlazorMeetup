@@ -656,20 +656,6 @@ select {
   }
 }
 
-.px-3 {
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
-}
-
-.px-4 {
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
-.pl-4 {
-  padding-left: 1rem;
-}
-
 *, ::before, ::after {
   --tw-shadow: 0 0 #0000;
 }
@@ -690,4 +676,7 @@ select {
 }
 
 @media (min-width: 1440px) {
+}
+
+@media (min-width: 1536px) {
 }

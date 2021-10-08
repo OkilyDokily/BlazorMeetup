@@ -14,8 +14,8 @@
     </style>
 
 
-<h3 class="">UpcomingEvents</h3>
-<table class="table" style="width:100%;">
+<h3 class=>UpcomingEvents</h3>
+<table >
     <thead>
         <tr>
             <th>Avatar</th>
@@ -34,7 +34,7 @@
             {
                 <tr @onclick='()=>NavigationManager.NavigateTo("/EventPage/" + evt.Attendee.Id + "/" + evt.Id)'>
                     <td>
-                        <div class="userdivs" style="background-image: url(@evt.Attendee.AvatarSettings.AvatarUrl); background-size: @(evt.Attendee.AvatarSettings.Size + "%"); background-position: @(evt.Attendee.AvatarSettings.Left + "%") @(evt.Attendee.AvatarSettings.Top + "%");">
+                        <div  style="background-image: url(@evt.Attendee.AvatarSettings.AvatarUrl); background-size: @(evt.Attendee.AvatarSettings.Size + "%"); background-position: @(evt.Attendee.AvatarSettings.Left + "%") @(evt.Attendee.AvatarSettings.Top + "%");">
                         </div>
                     </td>
                     <td>@evt.Attendee.UserName</td>

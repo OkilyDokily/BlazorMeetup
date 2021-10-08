@@ -17,21 +17,21 @@
 <h3>AssignTo</h3>
 
 
-<div class="card" style="width: 18rem; min-height: 140px;border-color:@ChangeColor(new Team { Id="none"});"
+<div  style="width: 18rem; min-height: 140px;border-color:@ChangeColor(new Team { Id="none"});"
      @ondrop="() => HandleDropOnUsersWithoutATeam()"
      ondragover="event.preventDefault();"
      @ondragenter='() => OnEnterTeam(new Team { Id = "none"})'
  >
-    <div class=" card-header">
+    <div >
     Users
 </div>
-    <ul class="list-group list-group-flush">
+    <ul >
         @foreach (Attendee a in GetAttendeesWithoutTeams())
         {
             if (a.AvatarSettings != null)
             {
-                <li style="display:flex" @ondragstart="() => DragStartUser(a)" draggable="true" class="list-group-item">
-                    <div class="userdivs" style="background-image: url(@a.AvatarSettings.AvatarUrl); background-size: @(a.AvatarSettings.Size + "%"); background-position: @(a.AvatarSettings.Left + "%") @(a.AvatarSettings.Top + "%");">
+                <li style="display:flex" @ondragstart="() => DragStartUser(a)" draggable="true" >
+                    <div  style="background-image: url(@a.AvatarSettings.AvatarUrl); background-size: @(a.AvatarSettings.Size + "%"); background-position: @(a.AvatarSettings.Left + "%") @(a.AvatarSettings.Top + "%");">
                     </div>
                     <div >@a.UserName</div>
                 </li>
@@ -46,21 +46,21 @@
 @foreach (Team t in at.Teams)
 {
    
-<div class="card" style=" width: 18rem; min-height: 140px; border-color:@ChangeColor(t);"
+<div 
      @ondrop="() => HandleDropOnTeam(t)"
      ondragover="event.preventDefault();"
      @ondragenter="() =>OnEnterTeam(t)" 
    >
-    <div class="card-header">
+    <div >
         @t.Name
     </div>
-    <ul class="list-group list-group-flush">
+    <ul >
         @foreach (TeamAttendee ta in t.Attendees)
         {
             if (ta.Attendee.AvatarSettings != null)
             {
-                <li @ondragstart="() => DragStartUser(ta.Attendee,t)" draggable="true" class="list-group-item" style="display:flex;">
-                    <div class="userdivs" style="background-image: url(@ta.Attendee.AvatarSettings.AvatarUrl); background-size: @(ta.Attendee.AvatarSettings.Size + "%"); background-position: @(ta.Attendee.AvatarSettings.Left + "%") @(ta.Attendee.AvatarSettings.Top + "%");">
+                <li @ondragstart="() => DragStartUser(ta.Attendee,t)" draggable="true"  style="display:flex;">
+                    <div  style="background-image: url(@ta.Attendee.AvatarSettings.AvatarUrl); background-size: @(ta.Attendee.AvatarSettings.Size + "%"); background-position: @(ta.Attendee.AvatarSettings.Left + "%") @(ta.Attendee.AvatarSettings.Top + "%");">
                     </div>
                     <div>@ta.Attendee.UserName</div>
                 </li>

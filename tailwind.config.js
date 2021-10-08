@@ -3,6 +3,7 @@ module.exports = {
     purge: {
         enabled: true,
         content: [
+            './**/*.cshtml',
             './**/*.html',
             './**/*.razor'
         ],
@@ -14,7 +15,7 @@ module.exports = {
             md: '768px',
             lg: '976px',
             xl: '1440px',
-            '2xl': '1536px'
+           '2xl': '1536px'
         },
         colors: {
             gray: colors.coolGray,

@@ -1,42 +1,42 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">BlazorMeetup</a>
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
+﻿<div >
+    <a  href=>BlazorMeetup</a>
+    <button  @onclick="ToggleNavMenu">
+        <span ></span>
     </button>
 </div>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <ul class="nav flex-column">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
+<div  @onclick="ToggleNavMenu">
+    <ul >
+        <li >
+            <NavLink  href= Match="NavLinkMatch.All">
+                 Home
             </NavLink>
         </li>
         <AuthorizeView>
             <Authorized>
-                <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="CreateEvent">
-                        <span class="oi oi-plus" aria-hidden="true"></span> Create Event
+                <li >
+                    <NavLink  href="CreateEvent">
+                        Create Event
                     </NavLink>
                 </li>
-                <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="YourEvents">
-                        <span class="oi oi-spreadsheet" aria-hidden="true"></span> Your Events
+                <li >
+                    <NavLink  href="YourEvents">
+                        Your Events
                     </NavLink>
                 </li>
-                <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="Users">
-                        <span class="oi oi-people" aria-hidden="true"></span> Users
+                <li >
+                    <NavLink href="Users">
+                         Users
                     </NavLink>
                 </li>
-                <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="UpcomingEvents">
-                        <span class="oi oi-calendar" aria-hidden="true"></span> Upcoming Events
+                <li >
+                    <NavLink  href="UpcomingEvents">
+                         Upcoming Events
                     </NavLink>
                 </li>
-                <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="AddAvatar">
-                        <span class="oi oi-person" aria-hidden="true"></span> Avatar Settings
+                <li >
+                    <NavLink  href="AddAvatar">
+                         Avatar Settings
                     </NavLink>
                 </li>
             </Authorized>

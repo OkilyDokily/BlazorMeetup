@@ -1,5 +1,5 @@
 <CascadingValue Value="this" >
-    <div class="btn-group" role="group">
+    <div  role="group">
         @foreach (TabPage tabPage in Pages)
         {
             <button type="button" class="btn @GetButtonClass(tabPage)" @onclick=@Clickable(tabPage)>
@@ -30,7 +30,7 @@
     string GetButtonClass(TabPage page)
     {
         if (!ButtonsWork) return "";
-        return page == ActivePage ? "btn-primary" : "btn-secondary";
+        return page == ActivePage ? "" : "";
     }
 
     public void ActivatePage(TabPage page)
