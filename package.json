@@ -1,7 +1,7 @@
 {
   "name": "blazormeetup",
   "version": "1.0.0",
-  "description":"" ,
+  "description": "",
   "main": "index.js",
   "scripts": {
     "buildcss": "postcss wwwroot/css/app.css -o wwwroot/css/app.min.css",
@@ -13,7 +13,7 @@
     "url": "git+https://github.com/OkilyDokily/BlazorMeetup.git"
   },
   "keywords": [],
-  "author":"" ,
+  "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/OkilyDokily/BlazorMeetup/issues"
@@ -27,5 +27,8 @@
     "postcss": "^8.3.9",
     "postcss-cli": "^9.0.1",
     "tailwindcss": "^2.2.16"
+  },
+  "dependencies": {
+    "postcss-import": "^14.0.2"
   }
 }

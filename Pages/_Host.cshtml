@@ -7,32 +7,35 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BlazorMeetup</title>
-    <link href="~/css/app.css" rel="stylesheet" />
+    @*<link href="~/css/app.css" rel="stylesheet" />*@
     <link href="~/css/app.min.css" rel="stylesheet" />
-
+    <link href="~/css/site.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.css" rel="stylesheet" />
 
 </head>
-<body class="p-16">
+
+<body class="p-1 text-blue-400 h-screen w-full">
     <component type="typeof(App)" render-mode="Server" />
 
-    <div id="blazor-error-ui" class="hidden"
+    <div class="hidden">
         <environment include="Staging,Production">
             An error has occurred. This application may no longer respond until reloaded.
         </environment>
         <environment include="Development">
             An unhandled exception has occurred. See browser dev tools for details.
         </environment>
-        <a href= >Reload</a>
-        <a >🗙</a>
+        <a href="">Reload</a>
+        <a>🗙</a>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
     <script src="~/js/jsinterop.js"></script>
     <script src="_framework/blazor.server.js"></script>
 </body>
+
 </html>

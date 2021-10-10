@@ -1,16 +1,16 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="flex container">
-    <div >
+<div class="flex container p-0 h-screen">
+    <div class="bg-gray-200">
         <NavMenu />
     </div>
 
-    <div >
-        <div class="flex justify-end align-middle">
+    <div class="w-full">
+        <div class="flex justify-between align-middle p-3">
             <LoginDisplay />
         </div>
 
-        <div >
+        <div class="p-6 text-blue-600" id="body-tailwind">
             @Body
         </div>
     </div>

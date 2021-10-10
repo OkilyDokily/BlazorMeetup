@@ -1,3 +1,10 @@
 ﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+
+.navlink {
+    @apply font-sans text-lg mb-4 p-3 hover:text-blue-600  transition  ;
+}
+
