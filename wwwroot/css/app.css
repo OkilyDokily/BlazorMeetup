@@ -5,6 +5,18 @@
 
 
 .navlink {
-    @apply font-sans text-lg mb-4 p-3 hover:text-blue-600  transition  ;
+    @apply font-sans text-lg mb-4 p-3 hover:text-blue-600  transition;
 }
 
+button {
+    @apply border-blue-100 bg-blue-400 text-blue-600 hover:bg-blue-600 hover:text-blue-800 hover:border-blue-300 p-3 transition m-1;
+}
+
+div.avatar{
+
+    @apply rounded-full h-5 w-5 border-blue-100;
+}
+
+tr{
+    @apply cursor-pointer;
+}

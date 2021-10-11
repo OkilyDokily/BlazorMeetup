@@ -24,7 +24,7 @@
             {
                 <tr @onclick='()=>NavigationManager.NavigateTo("/EventPage/" + evt.Attendee.Id + "/" + evt.Id)'>
                     <td>
-                        <div >
+                        <div class="avatar"  style='background-image: url(@evt.Attendee.AvatarSettings.AvatarUrl); background-size: @(evt.Attendee.AvatarSettings.Size + "%"); background-position: @(evt.Attendee.AvatarSettings.Left + "%") @(evt.Attendee.AvatarSettings.Top + "%");'>
                         </div>
                     </td>
                     <td>@evt.Attendee.UserName</td>

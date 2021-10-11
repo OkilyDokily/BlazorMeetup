@@ -1,5 +1,5 @@
-<CascadingValue Value="this" >
-    <div  role="group">
+<CascadingValue Value="this">
+    <div role="group">
         @foreach (TabPage tabPage in Pages)
         {
             <button type="button" class="btn @GetButtonClass(tabPage)" @onclick=@Clickable(tabPage)>
@@ -25,7 +25,6 @@
             ActivePage = tabPage;
         StateHasChanged();
     }
- 
 
     string GetButtonClass(TabPage page)
     {
@@ -69,7 +68,7 @@
         }
         else
         {
-            return ()=> { } ;
+            return () => { };
         }
     }
 }

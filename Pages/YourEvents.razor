@@ -12,29 +12,47 @@
 
 <h3>Your Events</h3>
 <h3>Sorted By Most Recent</h3>
-<ul>
-    @foreach (Event e in events)
-    {
-        <li @key="e.Id" @onclick="() => GoToPage(e.Id)">@e.Description <span style="color:blue;" @onclick="()=>GoToEdit(e.Id)"  @onclick:stopPropagation="true">Edit</span> <span style="color:blue;"  @onclick:stopPropagation="true"  @onclick="()=>GoToDelete(e.Id)">Delete</span></li>
-    }
-</ul>
 
-@code 
+<table>
+    <thead>
+        <tr>
+            <th>Description</th>
+            <th>Date And Time</th>
+            <th>Maximum Attendees</th>
+            <th>Minimum Attendees</th>
+            <th>Current Number of Attendees</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Event evt in events)
+        {
+            <tr @onclick='() => GoToPage(evt.Id)'>            
+                <td>@evt.Description</td>
+                <td>@evt.DateAndTime</td>
+                <td>@evt.MaximumAttendees</td>
+                <td>@evt.MinimumAttendees</td>
+                <td>@evt.Attendees.Count</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code
 {
     List<Event> events = new();
-    Attendee Your { get; set;}
+    Attendee Your { get; set; }
 
     protected async override Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         Your = await UserManager.GetUserAsync(authState.User);
-        events  = MeetupService.GetYourEvents(Your.Id);
+        events = MeetupService.GetYourEvents(Your.Id);
         events.Reverse();
     }
 
     void GoToPage(string id)
     {
-        NavigationManager.NavigateTo("/EventPage/" +Your.Id + "/" +id);
+        NavigationManager.NavigateTo("/EventPage/" + Your.Id + "/" + id);
     }
 
     void GoToEdit(string id)

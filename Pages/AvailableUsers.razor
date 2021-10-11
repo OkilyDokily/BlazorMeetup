@@ -13,7 +13,8 @@
         if (iu.AvatarSettings != null)
         {
             <li @key="iu.Id">
-                <div >
+                <div class="avatar"
+            style='background-image: url(@iu.AvatarSettings.AvatarUrl); background-size: @(iu.AvatarSettings.Size + "%"); background-position: @(iu.AvatarSettings.Left + "%") @(iu.AvatarSettings.Top + "%");'>
                 </div>
                 <div>@iu.UserName</div>
             </li>
@@ -39,6 +40,6 @@
     public void GoBack()
     {
         string EventId = MeetupService.GetSuggestedDateById(id).EventId;
-        NavigationManager.NavigateTo("/EventPage/" + sd.AttendeeId +"/" + EventId);
+        NavigationManager.NavigateTo("/EventPage/" + sd.AttendeeId + "/" + EventId);
     }
 }

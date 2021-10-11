@@ -6,33 +6,38 @@
 <h3>EditAvatar</h3>
 <div>
     @*https://stackoverflow.com/questions/58222480/change-variable-value-on-input-key-press-on-blazor*@
-<label>Adjust image left or right</label>
-<input type="number" value=@avatarSettings.Left @oninput="(e) => avatarSettings.Left = Int32.Parse(e.Value.ToString())" />
+    <label>Adjust image left or right</label>
+    <input type="number" value=@avatarSettings.Left
+        @oninput="(e) => avatarSettings.Left = Int32.Parse(e.Value.ToString())" />
 </div>
 <div>
     <label>Adjust image top or bottom</label>
-    <input type="number" value=@avatarSettings.Top @oninput="(e) => avatarSettings.Top = Int32.Parse(e.Value.ToString())" />
+    <input type="number" value=@avatarSettings.Top
+        @oninput="(e) => avatarSettings.Top = Int32.Parse(e.Value.ToString())" />
 </div>
 
 <div>
     <label>Adjust scaling of image</label>
-    <input type="number" value=@avatarSettings.Size @oninput="(e) => avatarSettings.Size = Int32.Parse(e.Value.ToString())" />
+    <input type="number" value=@avatarSettings.Size
+        @oninput="(e) => avatarSettings.Size = Int32.Parse(e.Value.ToString())" />
 </div>
 
 
 <div>
     <label>Adjust width and height of div</label>
     <p>See what avatar will look like in various sizes</p>
-    <input type="number" value=@width @oninput="(e) => width = heightAndWidthAdjustment(Int32.Parse(e.Value.ToString()))" />
+    <input type="number" value=@width
+        @oninput="(e) => width = heightAndWidthAdjustment(Int32.Parse(e.Value.ToString()))" />
 </div>
 
 
-<div id="divimg" >
+<div id="divimg" class="avatar"
+    style='background-image: url(@avatarSettings.AvatarUrl); background-size: @(avatarSettings.Size + "%"); background-position: @(avatarSettings.Left + "%") @(avatarSettings.Top + "%");'>
 
 </div>
 <button @onclick="SubmitAvatarSettings">Submit Avatar Settings</button>
 @code {
-  
+
 
     public int width { get; set; } = 60;
     public int height { get; set; } = 60;
@@ -59,7 +64,7 @@
     }
 
     public void SubmitAvatarSettings()
-    { 
+    {
         MeetupService.UpdateAvatarSettings(avatarSettings);
     }
 }

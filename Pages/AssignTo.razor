@@ -7,23 +7,21 @@
 <h3>AssignTo</h3>
 
 
-<div  
-     @ondrop="() => HandleDropOnUsersWithoutATeam()"
-     ondragover="event.preventDefault();"
-     @ondragenter='() => OnEnterTeam(new Team { Id = "none"})'
- >
-    <div >
-    Users
-</div>
-    <ul >
+<div @ondrop="() => HandleDropOnUsersWithoutATeam()" ondragover="event.preventDefault();"
+    @ondragenter='() => OnEnterTeam(new Team { Id = "none"})'>
+    <div>
+        Users
+    </div>
+    <ul>
         @foreach (Attendee a in GetAttendeesWithoutTeams())
         {
             if (a.AvatarSettings != null)
             {
-                <li  @ondragstart="() => DragStartUser(a)" draggable="true" >
-                    <div>
+                <li @ondragstart="() => DragStartUser(a)" draggable="true">
+                    <div class="avatar"
+                style='background-image: url(@a.AvatarSettings.AvatarUrl); background-size: @(a.AvatarSettings.Size + "%"); background-position: @(a.AvatarSettings.Left + "%") @(a.AvatarSettings.Top + "%");'>
                     </div>
-                    <div >@a.UserName</div>
+                    <div>@a.UserName</div>
                 </li>
 
             }
@@ -35,31 +33,28 @@
 
 @foreach (Team t in at.Teams)
 {
-   
-<div 
-     @ondrop="() => HandleDropOnTeam(t)"
-     ondragover="event.preventDefault();"
-     @ondragenter="() =>OnEnterTeam(t)" 
-   >
-    <div >
-        @t.Name
-    </div>
-    <ul >
-        @foreach (TeamAttendee ta in t.Attendees)
-        {
-            if (ta.Attendee.AvatarSettings != null)
-            {
-                <li @ondragstart="() => DragStartUser(ta.Attendee,t)" draggable="true" >
-                    <div >
-                    </div>
-                    <div>@ta.Attendee.UserName</div>
-                </li>
-            }
 
-        }
-    </ul>
-</div>
-   
+    <div @ondrop="() => HandleDropOnTeam(t)" ondragover="event.preventDefault();" @ondragenter="() =>OnEnterTeam(t)">
+        <div>
+            @t.Name
+        </div>
+        <ul>
+            @foreach (TeamAttendee ta in t.Attendees)
+            {
+                if (ta.Attendee.AvatarSettings != null)
+                {
+                    <li @ondragstart="() => DragStartUser(ta.Attendee,t)" draggable="true">
+                        <div class="avatar"
+                style='background-image: url(@ta.Attendee.AvatarSettings.AvatarUrl); background-size: @(ta.Attendee.AvatarSettings.Size + "%"); background-position: @(ta.Attendee.AvatarSettings.Left + "%") @(ta.Attendee.AvatarSettings.Top + "%");'>
+                        </div>
+                        <div>@ta.Attendee.UserName</div>
+                    </li>
+                }
+
+            }
+        </ul>
+    </div>
+
 }
 
 @code {

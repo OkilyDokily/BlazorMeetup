@@ -9,27 +9,37 @@
 
 <h3>Users</h3>
 
-
-<div>
-    @foreach (Attendee iu in AllUsers)
-    {
-        if (iu.AvatarSettings != null)
+<table>
+    <thead>
+        <tr>
+            <th>Avatar</th>
+            <th>Username</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Attendee iu in AllUsers)
         {
-            <div  @key="iu.Id" @onclick="()=>GoToPage(iu.Id)">
-                <div  >
-                </div>
-
-                <div>@iu.UserName</div>
-            </div>
+            if (iu.AvatarSettings != null)
+            {
+                <tr @key="iu.Id" @onclick="()=>GoToPage(iu.Id)">
+                    <td>
+                        <div class="avatar"
+                    style='background-image: url(@iu.AvatarSettings.AvatarUrl); background-size: @(iu.AvatarSettings.Size + "%"); background-position: @(iu.AvatarSettings.Left + "%") @(iu.AvatarSettings.Top + "%");'>
+                        </div>
+                    </td>
+                    <td>
+                        @iu.UserName
+                    </td>
+                </tr>
+            }
         }
-    }
-</div>
-
+    </tbody>
+</table>
 @code {
     List<Attendee> AllUsers { get; set; }
     protected override void OnInitialized()
     {
-        
+
         AllUsers = MeetupService.GetAllUsers();
     }
     void GoToPage(string id)

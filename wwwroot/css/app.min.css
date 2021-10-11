@@ -90,8 +90,7 @@ Add the correct text decoration in Chrome, Edge, and Safari.
 Add the correct font weight in Edge and Safari.
 */
 
-b,
-strong {
+b {
   font-weight: bolder;
 }
 
@@ -233,7 +232,6 @@ Add the correct display in Chrome and Safari.
 
 
 h1,
-h2,
 h3,
 p {
   margin: 0;
@@ -359,7 +357,6 @@ table {
 }
 
 h1,
-h2,
 h3 {
   font-size: inherit;
   font-weight: inherit;
@@ -726,24 +723,9 @@ select {
   justify-content: space-between;
 }
 
-.border-blue-100 {
-  --tw-border-opacity: 1;
-  border-color: rgba(224, 242, 254, var(--tw-border-opacity));
-}
-
-.hover\:border-blue-300:hover {
-  --tw-border-opacity: 1;
-  border-color: rgba(125, 211, 252, var(--tw-border-opacity));
-}
-
 .bg-gray-200 {
   --tw-bg-opacity: 1;
   background-color: rgba(229, 231, 235, var(--tw-bg-opacity));
-}
-
-.bg-blue-300 {
-  --tw-bg-opacity: 1;
-  background-color: rgba(125, 211, 252, var(--tw-bg-opacity));
 }
 
 .p-0 {
@@ -774,11 +756,6 @@ select {
 .text-blue-600 {
   --tw-text-opacity: 1;
   color: rgba(2, 132, 199, var(--tw-text-opacity));
-}
-
-.text-blue-800 {
-  --tw-text-opacity: 1;
-  color: rgba(7, 89, 133, var(--tw-text-opacity));
 }
 
 *, ::before, ::after {
@@ -815,6 +792,58 @@ select {
   transition-duration: 150ms;
 }
 
+button {
+  margin: 0.25rem;
+  --tw-border-opacity: 1;
+  border-color: rgba(224, 242, 254, var(--tw-border-opacity));
+}
+
+button:hover {
+  --tw-border-opacity: 1;
+  border-color: rgba(125, 211, 252, var(--tw-border-opacity));
+}
+
+button {
+  --tw-bg-opacity: 1;
+  background-color: rgba(56, 189, 248, var(--tw-bg-opacity));
+}
+
+button:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgba(2, 132, 199, var(--tw-bg-opacity));
+}
+
+button {
+  padding: 0.75rem;
+  --tw-text-opacity: 1;
+  color: rgba(2, 132, 199, var(--tw-text-opacity));
+}
+
+button:hover {
+  --tw-text-opacity: 1;
+  color: rgba(7, 89, 133, var(--tw-text-opacity));
+}
+
+button {
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+div.avatar{
+  height: 1.25rem;
+  width: 1.25rem;
+  border-radius: 9999px;
+  --tw-border-opacity: 1;
+  border-color: rgba(224, 242, 254, var(--tw-border-opacity));
+}
+
+tr{
+  cursor: pointer;
+}
+
 @media (min-width: 480px) {
 }
 
@@ -826,4 +855,3 @@ select {
 
 @media (min-width: 1536px) {
 }
-
