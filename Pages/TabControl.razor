@@ -2,7 +2,7 @@
     <div role="group">
         @foreach (TabPage tabPage in Pages)
         {
-            <button type="button" class="btn @GetButtonClass(tabPage)" @onclick=@Clickable(tabPage)>
+            <button type="button" class="tab-button @GetButtonClass(tabPage)" @onclick=@Clickable(tabPage)>
                 @tabPage.Text
             </button>
         }
@@ -28,8 +28,8 @@
 
     string GetButtonClass(TabPage page)
     {
-        if (!ButtonsWork) return "";
-        return page == ActivePage ? "" : "";
+        if (!ButtonsWork) return "bg-gray-200";
+        return page == ActivePage ? "bg-blue-700 text-color-700" : "";
     }
 
     public void ActivatePage(TabPage page)

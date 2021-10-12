@@ -4,19 +4,20 @@
 
 
 <h3>EditAvatar</h3>
-<div>
+<form>
+<div class="form-item">
     @*https://stackoverflow.com/questions/58222480/change-variable-value-on-input-key-press-on-blazor*@
     <label>Adjust image left or right</label>
     <input type="number" value=@avatarSettings.Left
         @oninput="(e) => avatarSettings.Left = Int32.Parse(e.Value.ToString())" />
 </div>
-<div>
+<div class="form-item">
     <label>Adjust image top or bottom</label>
     <input type="number" value=@avatarSettings.Top
         @oninput="(e) => avatarSettings.Top = Int32.Parse(e.Value.ToString())" />
 </div>
 
-<div>
+<div class="form-item">
     <label>Adjust scaling of image</label>
     <input type="number" value=@avatarSettings.Size
         @oninput="(e) => avatarSettings.Size = Int32.Parse(e.Value.ToString())" />
@@ -36,6 +37,7 @@
 
 </div>
 <button @onclick="SubmitAvatarSettings">Submit Avatar Settings</button>
+</form>
 @code {
 
 

@@ -5,18 +5,18 @@
 
 
 <h3>ShowTeams</h3>
-<div  style="width: 18rem; min-height: 140px;">
+<div style="width: 18rem; min-height: 140px;">
 
-    <div >
+    <div>
         Users
     </div>
-    <ul >
+    <ul>
         @foreach (Attendee a in AttendeesWithoutTeams)
         {
             if (a.AvatarSettings != null)
             {
-                <li >
-                    <div  >
+                <li>
+                    <div>
                     </div>
                     <div>@a.UserName</div>
                 </li>
@@ -28,17 +28,18 @@
 
 @foreach (Team t in Teams)
 {
-    <div  style=" width: 18rem; min-height: 140px; ">
-        <div >
+    <div style=" width: 18rem; min-height: 140px; ">
+        <div>
             @t.Name
         </div>
-        <ul >
+        <ul>
             @foreach (TeamAttendee ta in t.Attendees)
             {
                 if (ta.Attendee.AvatarSettings != null)
                 {
-                    <li >
-                        <div  style="background-image: url(@ta.Attendee.AvatarSettings.AvatarUrl); background-size: @(ta.Attendee.AvatarSettings.Size + "%"); background-position: @(ta.Attendee.AvatarSettings.Left + "%") @(ta.Attendee.AvatarSettings.Top + "%");">
+                    <li>
+                        <div class="avatar"
+                style="background-image: url(@ta.Attendee.AvatarSettings.AvatarUrl); background-size: @(ta.Attendee.AvatarSettings.Size + "%"); background-position: @(ta.Attendee.AvatarSettings.Left + "%") @(ta.Attendee.AvatarSettings.Top + "%");">
                         </div>
                         <div> @ta.Attendee.UserName</div>
                     </li>
@@ -60,7 +61,11 @@
 
     protected override void OnInitialized()
     {
-        myDelegate = async () => await InvokeAsync(() => { this.UpdateTeamsWithMeetupService(); this.UpDateAttendeesWithoutTeams(); this.StateHasChanged(); Debug.WriteLine("Invookkked"); });
+        myDelegate = async () => await InvokeAsync(() =>
+        {
+            this.UpdateTeamsWithMeetupService();
+            this.UpDateAttendeesWithoutTeams(); this.StateHasChanged();
+        });
         TeamsUpdateService.AddEvent(eventPage.pageEvent.Id, myDelegate);
 
         UpdateTeamsWithMeetupService();
@@ -80,6 +85,6 @@
 
     public void Dispose()
     {
-        TeamsUpdateService.RemoveDelegate(eventPage.pageEvent.Id,myDelegate);
+        TeamsUpdateService.RemoveDelegate(eventPage.pageEvent.Id, myDelegate);
     }
 }

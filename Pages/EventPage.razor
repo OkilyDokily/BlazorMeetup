@@ -8,105 +8,123 @@
 @inject UserManager<Attendee> UserManager
 @inject NavigationManager NavigationManager
 
-   
-    <CascadingValue Value="this">
-        <TabControl>
-            <TabPage Text="Main">
-                <h3>Event</h3>
-                @pageEvent.DateAndTime
-                <h3>Attendees</h3>
-                @foreach (AttendeeEvent ae in pageEvent.Attendees)
 
+<CascadingValue Value="this">
+    <TabControl>
+        <TabPage Text="Main">
+            <h3>Event</h3>
+            @pageEvent.DateAndTime
+            <h3>Attendees</h3>
+            @foreach (AttendeeEvent ae in pageEvent.Attendees)
+
+            {
+                if (ae.Attendee.AvatarSettings != null)
                 {
-                    if (ae.Attendee.AvatarSettings != null)
+                    @if (ae.AttendeeId == LoggedInUser.Id)
                     {
-                        @if (ae.AttendeeId == LoggedInUser.Id)
+                        @if (ae.CanAttendProposedDate == true)
                         {
-                            @if (ae.CanAttendProposedDate == true)
-                            {
-                                <div @key="ae.Id"  style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">@ae.Attendee.UserName  <input type="checkbox" checked value="@ae.CanAttendProposedDate" @onchange="() => OnChange(ae.Id)"><div style="display:inline" @onclick="Leave">leave</div></div>
-                            }
-                            else
-                            {
-                                <div @key="ae.Id"  style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">@ae.Attendee.UserName  <input type="checkbox" value="@ae.CanAttendProposedDate" @onchange="() => OnChange(ae.Id)"><div style="display:inline" @onclick="Leave">leave</div></div>
-                            }
+                            <div @key="ae.Id" class="avatar"
+                style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">
+                            </div>
+                            @ae.Attendee.UserName
+                            <input type="checkbox" checked value="@ae.CanAttendProposedDate" @onchange="() => OnChange(ae.Id)">
+                            <div style="display:inline" @onclick="Leave">leave</div>
                         }
                         else
                         {
-                            @if (ae.CanAttendProposedDate)
-                            {
-                                <div @key="ae.Id"  style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">@ae.Attendee.UserName<i ></i></div>
-                            }
-                            else
-                            {
-                                <div @key="ae.Id"  style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">@ae.Attendee.UserName</div>
-                            }
+                            <div @key="ae.Id" class="avatar"
+                style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">
+                            </div>
+                            @ae.Attendee.UserName
+                            <input type="checkbox" value="@ae.CanAttendProposedDate" @onchange="() => OnChange(ae.Id)">
+                            <div style="display:inline" @onclick="Leave">leave</div>
                         }
                     }
-
+                    else
+                    {
+                        @if (ae.CanAttendProposedDate)
+                        {
+                            <div @key="ae.Id" class="avatar"
+                style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">
+                            </div>
+                            @ae.Attendee.UserName
+                        }
+                        else
+                        {
+                            <div @key="ae.Id" class="avatar"
+                style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">
+                            </div>
+                            @ae.Attendee.UserName
+                        }
+                    }
                 }
+
+            }
+            <div>
                 @if (!MeetupService.AttendeeEventExists(LoggedInUser.Id, id))
                 {
                     <button @onclick="() => JoinEvent()">I'm Interested</button>
                 }
 
-                <button @onclick="() => GoBack()">User Event List</button>
-                <button @onclick='() => NavigationManager.NavigateTo("/AssignTeams/" + id)'>Assign Users To Teams</button>
-            </TabPage>
+                <button @onclick="() => GoBack()">Go back to user's list</button>
+                <button @onclick='() => NavigationManager.NavigateTo("/AssignTeams/" + id)'>Assign Users To
+                    Teams</button>
+            </div>
+        </TabPage>
+
+        <TabPage Text="Suggest a time for available dates">
+            <SuggestDate LoggedInId="@LoggedInUser.Id" />
+        </TabPage>
+
+        <TabPage Text="See who is on which team">
+            <ShowTeams />
+        </TabPage>
+
+    </TabControl>
+</CascadingValue>
+@code {
+
+    public Event pageEvent { get; set; }
+    [Parameter]
+    public string userId { get; set; }
+    [Parameter]
+    public string id { get; set; }
+    Event created = new();
+    Attendee LoggedInUser { get; set; }
 
 
-            <TabPage Text="Suggest a time for available dates">
-                <SuggestDate  LoggedInId="@LoggedInUser.Id" />
-            </TabPage>
-
-            <TabPage Text="See who is on which team">
-                <ShowTeams />
-            </TabPage>
-
-        </TabControl>
-    </CascadingValue>
-    @code {
-
-        public Event pageEvent { get; set; }
-        [Parameter]
-        public string userId { get; set; }
-        [Parameter]
-        public string id { get; set; }
-        Event created = new();
-        Attendee LoggedInUser { get; set; }
-
-
-        protected override async Task OnInitializedAsync()
-        {
-            var auth = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-            pageEvent = MeetupService.GetEventById(id);
-            LoggedInUser = await UserManager.GetUserAsync(auth.User);
-        }
-
-        void GoBack()
-        {
-            NavigationManager.NavigateTo("/UserEvents/" + userId);
-        }
-
-        void JoinEvent()
-        {
-            MeetupService.JoinEvent(LoggedInUser.Id, id);
-            pageEvent = MeetupService.GetEventById(id);
-            StateHasChanged();
-        }
-
-        void Leave()
-        {
-            MeetupService.LeaveEvent(LoggedInUser.Id, id);
-            pageEvent = MeetupService.GetEventById(id);
-            StateHasChanged();
-        }
-
-
-        void OnChange(string id)
-        {
-            MeetupService.ChangeCanAttendInitialDate(id);
-
-        }
-    
+    protected override async Task OnInitializedAsync()
+    {
+        var auth = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        pageEvent = MeetupService.GetEventById(id);
+        Console.WriteLine(pageEvent.Description);
+        LoggedInUser = await UserManager.GetUserAsync(auth.User);
     }
+
+    void GoBack()
+    {
+        NavigationManager.NavigateTo("/UserEvents/" + userId);
+    }
+
+    void JoinEvent()
+    {
+        MeetupService.JoinEvent(LoggedInUser.Id, id);
+        pageEvent = MeetupService.GetEventById(id);
+        StateHasChanged();
+    }
+
+    void Leave()
+    {
+        MeetupService.LeaveEvent(LoggedInUser.Id, id);
+        pageEvent = MeetupService.GetEventById(id);
+        StateHasChanged();
+    }
+
+
+    void OnChange(string id)
+    {
+        MeetupService.ChangeCanAttendInitialDate(id);
+    }
+
+}

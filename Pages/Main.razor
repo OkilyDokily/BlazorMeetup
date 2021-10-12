@@ -4,19 +4,19 @@
 <EditForm Model="@ParentEvent" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
-    <div>
+    <div class="form-item">
         <label>Description</label>
         <InputText @bind-Value="ParentEvent.Description" />
     </div>
-    <div>
+    <div class="form-item">
         <label>Maximum Attendees</label>
         <InputNumber @bind-Value="ParentEvent.MaximumAttendees" />
     </div>
-    <div>
+    <div class="form-item">
         <label>Minimum Attendees</label>
         <InputNumber @bind-Value="ParentEvent.MinimumAttendees" />
     </div>
-    <div>
+    <div class="form-item">
         <label>Date of Event</label>
         <InputDate @bind-Value="ParentEvent.DateAndTime" />
     </div>
@@ -46,4 +46,3 @@
         IJSRunTime.CreateMessage("You've successfully created a new event.");
     }
 }
-

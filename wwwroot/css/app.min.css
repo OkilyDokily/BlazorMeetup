@@ -728,6 +728,11 @@ select {
   background-color: rgba(229, 231, 235, var(--tw-bg-opacity));
 }
 
+.bg-blue-700 {
+  --tw-bg-opacity: 1;
+  background-color: rgba(3, 105, 161, var(--tw-bg-opacity));
+}
+
 .p-0 {
   padding: 0px;
 }
@@ -832,7 +837,18 @@ button {
   transition-duration: 150ms;
 }
 
-div.avatar{
+button.tab-button{
+  border-radius: 10px 10px 0 0;
+  margin: 0px;
+  height: auto;
+  --tw-border-opacity: 1;
+  border-color: rgba(2, 132, 199, var(--tw-border-opacity));
+  padding: 0px;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.avatar{
   height: 1.25rem;
   width: 1.25rem;
   border-radius: 9999px;
@@ -842,6 +858,35 @@ div.avatar{
 
 tr{
   cursor: pointer;
+}
+
+.lg-avatar{
+  height: 4rem;
+  width: 4rem;
+  border-radius: 9999px;
+  --tw-border-opacity: 1;
+  border-color: rgba(224, 242, 254, var(--tw-border-opacity));
+}
+
+.form-item{
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-item input{
+  width: 12rem;
+}
+
+.form-item label{
+  margin-right: 1.25rem;
+  width: 7rem;
+  text-align: right;
+}
+
+form{
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
 }
 
 @media (min-width: 480px) {

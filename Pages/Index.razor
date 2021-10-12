@@ -12,25 +12,22 @@
 
 
     Welcome to your new app.
-    <AuthorizeView >
+    <AuthorizeView>
         <NotAuthorized>
             <a href="Identity/Account/Login">Log in</a>
         </NotAuthorized>
         <Authorized>
             <a href="#">Hello, @context.User.Identity.Name!</a>
             <a href="Identity/Account/Logout">Log out</a>
-            <div>
+            <div class="lg-avatar "
+                style='background-image: url(@asettings.AvatarUrl); background-size: @(asettings.Size + "%"); background-position: @(@asettings.Left + "%") @(@asettings.Top + "%");'>
 
             </div>
         </Authorized>
     </AuthorizeView>
 </div>
 
-
-
 @code {
-
-    string avatar;
     ClaimsPrincipal User { get; set; }
     List<Claim> Claims { get; set; }
     Attendee DbUser { get; set; }
@@ -42,7 +39,6 @@
 
         if (User.Identity.IsAuthenticated)
         {
-
             DbUser = await UserManager.GetUserAsync(User);
             asettings = MeetupService.GetAvatarSettingsByUserId(DbUser.Id);
             if (DbUser != null && asettings == null)
@@ -50,18 +46,29 @@
                 if (User.FindFirstValue("urn:discord:avatar:url") != null)
                 {
                     string userURL = User.FindFirstValue("urn:discord:avatar:url");
-                    MeetupService.AddAvatarSettings(new AvatarSettings { AttendeeId = DbUser.Id, AvatarUrl = userURL, Left = 0, Top = 0, Size = 100 });
+                    MeetupService.AddAvatarSettings(new AvatarSettings
+                    {
+                        AttendeeId = DbUser.Id,
+                        AvatarUrl = userURL,
+                        Left = 0,
+                        Top = 0,
+                        Size = 100
+                    });
                 }
                 else
                 {
                     string userURL = User.FindFirstValue("urn:discord:avatar:url");
-                    MeetupService.AddAvatarSettings(new AvatarSettings { AttendeeId = DbUser.Id, AvatarUrl = "/avatars/blank-profile.webp", Left = 0, Top = 0, Size = 100 });
+                    MeetupService.AddAvatarSettings(new AvatarSettings
+                    {
+                        AttendeeId = DbUser.Id,
+                        AvatarUrl = "/avatars/blank-profile.webp",
+                        Left = 0,
+                        Top = 0,
+                        Size = 100
+                    });
                 }
-             asettings =  MeetupService.GetAvatarSettingsByUserId(DbUser.Id);
+                asettings = MeetupService.GetAvatarSettingsByUserId(DbUser.Id);
             }
-
-
         }
-
     }
 }
