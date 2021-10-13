@@ -1,8 +1,6 @@
 ﻿@page "/EventPage/{userId}/{id}"
 @using BlazorMeetup.Data
-@using Microsoft.AspNetCore.Components.Web
 @inject UserManager<Attendee> UserManager
-@*@attribute [Authorize]*@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject MeetupService MeetupService
 @inject UserManager<Attendee> UserManager
@@ -59,16 +57,14 @@
                         }
                     }
                 }
-
             }
             <div>
-                @if (!MeetupService.AttendeeEventExists(LoggedInUser.Id, id))
+                @if (!MeetupService.AttendeeEventExists(LoggedInUser.Id, Id))
                 {
                     <button @onclick="() => JoinEvent()">I'm Interested</button>
                 }
-
                 <button @onclick="() => GoBack()">Go back to user's list</button>
-                <button @onclick='() => NavigationManager.NavigateTo("/AssignTeams/" + id)'>Assign Users To
+                <button @onclick='() => NavigationManager.NavigateTo("/AssignTeams/" + Id)'>Assign Users To
                     Teams</button>
             </div>
         </TabPage>
@@ -80,44 +76,46 @@
         <TabPage Text="See who is on which team">
             <ShowTeams />
         </TabPage>
-
     </TabControl>
 </CascadingValue>
 @code {
 
+
+    [Parameter]
+    public string UserId { get; set; }
+    [Parameter]
+    public string Id { get; set; }
     public Event pageEvent { get; set; }
-    [Parameter]
-    public string userId { get; set; }
-    [Parameter]
-    public string id { get; set; }
-    Event created = new();
     Attendee LoggedInUser { get; set; }
 
+    protected override void OnParametersSet()
+    {
+        pageEvent = MeetupService.GetEventById(Id);
+        Console.WriteLine("parameter sfdsafsdafadsf");
+    }
 
     protected override async Task OnInitializedAsync()
     {
         var auth = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        pageEvent = MeetupService.GetEventById(id);
-        Console.WriteLine(pageEvent.Description);
         LoggedInUser = await UserManager.GetUserAsync(auth.User);
     }
 
     void GoBack()
     {
-        NavigationManager.NavigateTo("/UserEvents/" + userId);
+        NavigationManager.NavigateTo("/UserEvents/" + UserId);
     }
 
     void JoinEvent()
     {
-        MeetupService.JoinEvent(LoggedInUser.Id, id);
-        pageEvent = MeetupService.GetEventById(id);
+        MeetupService.JoinEvent(LoggedInUser.Id, Id);
+        pageEvent = MeetupService.GetEventById(Id);
         StateHasChanged();
     }
 
     void Leave()
     {
-        MeetupService.LeaveEvent(LoggedInUser.Id, id);
-        pageEvent = MeetupService.GetEventById(id);
+        MeetupService.LeaveEvent(LoggedInUser.Id, Id);
+        pageEvent = MeetupService.GetEventById(Id);
         StateHasChanged();
     }
 
