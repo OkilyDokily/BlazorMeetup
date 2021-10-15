@@ -22,38 +22,46 @@
                     {
                         @if (ae.CanAttendProposedDate == true)
                         {
-                            <div @key="ae.Id" class="avatar"
-                style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">
+                            <div class="flex" @key="ae.Id">
+                                <div class="avatar"
+                    style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">
+                                </div>
+                                @ae.Attendee.UserName
+                                <input type="checkbox" checked value="@ae.CanAttendProposedDate" @onchange="() => OnChange(ae.Id)">
+                                <div style="display:inline" @onclick="Leave">leave</div>
                             </div>
-                            @ae.Attendee.UserName
-                            <input type="checkbox" checked value="@ae.CanAttendProposedDate" @onchange="() => OnChange(ae.Id)">
-                            <div style="display:inline" @onclick="Leave">leave</div>
                         }
                         else
                         {
-                            <div @key="ae.Id" class="avatar"
-                style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">
+                            <div class="flex" @key="ae.Id">
+                                <div class="avatar"
+                    style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">
+                                </div>
+                                @ae.Attendee.UserName
+                                <input type="checkbox" value="@ae.CanAttendProposedDate" @onchange="() => OnChange(ae.Id)">
+                                <div style="display:inline" @onclick="Leave">leave</div>
                             </div>
-                            @ae.Attendee.UserName
-                            <input type="checkbox" value="@ae.CanAttendProposedDate" @onchange="() => OnChange(ae.Id)">
-                            <div style="display:inline" @onclick="Leave">leave</div>
                         }
                     }
                     else
                     {
                         @if (ae.CanAttendProposedDate)
                         {
-                            <div @key="ae.Id" class="avatar"
-                style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">
+                            <div class="flex" @key="ae.Id">
+                                <div class="avatar"
+                    style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">
+                                </div>
+                                @ae.Attendee.UserName
                             </div>
-                            @ae.Attendee.UserName
                         }
                         else
                         {
-                            <div @key="ae.Id" class="avatar"
-                style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">
+                            <div @key="ae.Id" class="flex">
+                                <div class="avatar"
+                    style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">
+                                </div>
+                                @ae.Attendee.UserName
                             </div>
-                            @ae.Attendee.UserName
                         }
                     }
                 }

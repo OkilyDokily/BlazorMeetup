@@ -6,50 +6,52 @@
 
 <h3>ShowTeams</h3>
 <div class="teams-collection">
-
-    <div>
-        Users
-    </div>
-    <ul>
-        @foreach (Attendee a in AttendeesWithoutTeams)
-        {
-            if (a.AvatarSettings != null)
-            {
-                <li>
-                    <div>
-                    </div>
-                    <div>@a.UserName</div>
-                </li>
-            }
-
-        }
-    </ul>
-</div>
-
-@foreach (Team t in Teams)
-{
     <div class="team">
+
         <div>
-            @t.Name
+            Users
         </div>
         <ul>
-            @foreach (TeamAttendee ta in t.Attendees)
+            @foreach (Attendee a in AttendeesWithoutTeams)
             {
-                if (ta.Attendee.AvatarSettings != null)
+                if (a.AvatarSettings != null)
                 {
                     <li class="flex">
                         <div class="avatar"
-                style="background-image: url(@ta.Attendee.AvatarSettings.AvatarUrl); background-size: @(ta.Attendee.AvatarSettings.Size + "%"); background-position: @(ta.Attendee.AvatarSettings.Left + "%") @(ta.Attendee.AvatarSettings.Top + "%");">
+                    style="background-image: url(@a.AvatarSettings.AvatarUrl); background-size: @(a.AvatarSettings.Size + "%"); background-position: @(a.AvatarSettings.Left + "%") @(a.AvatarSettings.Top + "%");">
                         </div>
-                        <div> @ta.Attendee.UserName</div>
+                        <div>@a.UserName</div>
                     </li>
                 }
 
             }
         </ul>
     </div>
-}
 
+    @foreach (Team t in Teams)
+    {
+        <div class="team">
+            <div>
+                @t.Name
+            </div>
+            <ul>
+                @foreach (TeamAttendee ta in t.Attendees)
+                {
+                    if (ta.Attendee.AvatarSettings != null)
+                    {
+                        <li class="flex">
+                            <div class="avatar"
+                    style="background-image: url(@ta.Attendee.AvatarSettings.AvatarUrl); background-size: @(ta.Attendee.AvatarSettings.Size + "%"); background-position: @(ta.Attendee.AvatarSettings.Left + "%") @(ta.Attendee.AvatarSettings.Top + "%");">
+                            </div>
+                            <div> @ta.Attendee.UserName</div>
+                        </li>
+                    }
+
+                }
+            </ul>
+        </div>
+    }
+</div>
 @code {
     [CascadingParameter]
     EventPage eventPage { get; set; }
