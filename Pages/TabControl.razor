@@ -1,5 +1,5 @@
 <CascadingValue Value="this">
-    <div role="group">
+    <div class="divide-x-2" role="group">
         @foreach (TabPage tabPage in Pages)
         {
             <button type="button" class="tab-button @GetButtonClass(tabPage)" @onclick=@Clickable(tabPage)>

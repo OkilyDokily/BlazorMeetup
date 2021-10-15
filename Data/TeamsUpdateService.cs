@@ -15,7 +15,9 @@ namespace BlazorMeetup.Data
         }
         public void InvokeUpdate(string eventId)
         {
-            //Debug.WriteLine(UpdateEvents[eventId].GetInvocationList().Length.ToString() + " number of delegates");
+
+            if (!UpdateEvents.ContainsKey(eventId)) return;
+
             foreach (var del in UpdateEvents[eventId].GetInvocationList())
             {
                 try

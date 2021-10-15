@@ -44,7 +44,6 @@
 
     private async void OnSubmit()
     {
-
         if (selectedFile == null) return;
         Stream stream = selectedFile.OpenReadStream();
 
@@ -64,5 +63,4 @@
         MeetupService.UpdateAvatarSettings(avatarSettings);
         this.StateHasChanged();
     }
-
 }

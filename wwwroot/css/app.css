@@ -16,6 +16,15 @@ button.tab-button{
    @apply p-0 px-2 h-auto m-0 border-blue-600;
 }
 
+.team {
+    @apply w-48 min-w-min h-1/4 mr-5;
+}
+
+.teams-collection{
+    @apply flex h-screen justify-start;
+}
+
+
 .avatar{
     @apply rounded-full h-5 w-5 border-blue-100;
 }

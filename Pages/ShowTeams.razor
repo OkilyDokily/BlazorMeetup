@@ -5,7 +5,7 @@
 
 
 <h3>ShowTeams</h3>
-<div style="width: 18rem; min-height: 140px;">
+<div class="teams-collection">
 
     <div>
         Users
@@ -28,7 +28,7 @@
 
 @foreach (Team t in Teams)
 {
-    <div style=" width: 18rem; min-height: 140px; ">
+    <div class="team">
         <div>
             @t.Name
         </div>
@@ -37,7 +37,7 @@
             {
                 if (ta.Attendee.AvatarSettings != null)
                 {
-                    <li>
+                    <li class="flex">
                         <div class="avatar"
                 style="background-image: url(@ta.Attendee.AvatarSettings.AvatarUrl); background-size: @(ta.Attendee.AvatarSettings.Size + "%"); background-position: @(ta.Attendee.AvatarSettings.Left + "%") @(ta.Attendee.AvatarSettings.Top + "%");">
                         </div>
