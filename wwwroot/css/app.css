@@ -24,6 +24,13 @@ button.tab-button{
     @apply flex h-screen justify-start;
 }
 
+.attendees{
+    @apply flex m-1 ml-2;
+}
+
+.attendees *{
+    @apply flex justify-start align-middle mr-2;
+}
 
 .avatar{
     @apply rounded-full h-5 w-5 border-blue-100;

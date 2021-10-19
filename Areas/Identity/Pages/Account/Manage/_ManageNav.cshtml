@@ -1,16 +1,10 @@
-﻿@using BlazorMeetup.Data 
+﻿@using BlazorMeetup.Data
 @inject SignInManager<Attendee> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
-<ul >
-    <li ><a  id="profile" asp-page="./Index">Profile</a></li>
-    <li ><a  id="email" asp-page="./Email">Email</a></li>
-    <li ><a  id="change-password" asp-page="./ChangePassword">Password</a></li>
-    @if (hasExternalLogins)
-    {
-        <li id="external-logins" ><a id="external-login" asp-page="./ExternalLogins">External logins</a></li>
-    }
-    <li ><a  id="two-factor" asp-page="./TwoFactorAuthentication">Two-factor authentication</a></li>
-    <li ><a  id="personal-data" asp-page="./PersonalData">Personal data</a></li>
+<ul>
+    <li><a id="profile" asp-page="./Index">Profile</a></li>
+  
+    <li><a id="personal-data" asp-page="./PersonalData">Personal data</a></li>
 </ul>

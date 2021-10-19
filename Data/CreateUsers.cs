@@ -16,13 +16,13 @@ namespace BlazorMeetup.Data
         }
         public async void InitializeUsers()
         {
-            if(_userManager.Users.Count() < 5)
-            {
-                for (var i = 1; i < 11; i++)
-                {
-                    await _userManager.CreateAsync(new Attendee { Email = "test" + i.ToString() + "@gmail.com", UserName = "test" + i.ToString() + "@gmail.com" }, "test");
-                }
-            }
+            // if(_userManager.Users.Count() < 5)
+            // {
+            //     for (var i = 1; i < 11; i++)
+            //     {
+            //         await _userManager.CreateAsync(new Attendee { Email = "test" + i.ToString() + "@gmail.com", UserName = "test" + i.ToString() + "@gmail.com" }, "test");
+            //     }
+            // }
 
         }
     }

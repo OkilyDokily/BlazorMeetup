@@ -14,7 +14,6 @@
             @pageEvent.DateAndTime
             <h3>Attendees</h3>
             @foreach (AttendeeEvent ae in pageEvent.Attendees)
-
             {
                 if (ae.Attendee.AvatarSettings != null)
                 {
@@ -22,22 +21,22 @@
                     {
                         @if (ae.CanAttendProposedDate == true)
                         {
-                            <div class="flex" @key="ae.Id">
+                            <div class="attendees" @key="ae.Id">
                                 <div class="avatar"
                     style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">
                                 </div>
-                                @ae.Attendee.UserName
+                                <div>@ae.Attendee.UserName</div>
                                 <input type="checkbox" checked value="@ae.CanAttendProposedDate" @onchange="() => OnChange(ae.Id)">
                                 <div style="display:inline" @onclick="Leave">leave</div>
                             </div>
                         }
                         else
                         {
-                            <div class="flex" @key="ae.Id">
+                            <div class="attendees" @key="ae.Id">
                                 <div class="avatar"
                     style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">
                                 </div>
-                                @ae.Attendee.UserName
+                                <div>@ae.Attendee.UserName</div>
                                 <input type="checkbox" value="@ae.CanAttendProposedDate" @onchange="() => OnChange(ae.Id)">
                                 <div style="display:inline" @onclick="Leave">leave</div>
                             </div>
@@ -47,20 +46,20 @@
                     {
                         @if (ae.CanAttendProposedDate)
                         {
-                            <div class="flex" @key="ae.Id">
+                            <div class="attendees" @key="ae.Id">
                                 <div class="avatar"
                     style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">
                                 </div>
-                                @ae.Attendee.UserName
+                                <div>@ae.Attendee.UserName</div>
                             </div>
                         }
                         else
                         {
-                            <div @key="ae.Id" class="flex">
+                            <div @key="ae.Id" class="attendees">
                                 <div class="avatar"
                     style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">
                                 </div>
-                                @ae.Attendee.UserName
+                                <div>@ae.Attendee.UserName</div>
                             </div>
                         }
                     }
@@ -125,7 +124,6 @@
         pageEvent = MeetupService.GetEventById(Id);
         StateHasChanged();
     }
-
 
     void OnChange(string id)
     {

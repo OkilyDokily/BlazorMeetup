@@ -32,8 +32,8 @@
 </div>
 
 
-<div id="divimg" class="avatar"
-    style='background-image: url(@avatarSettings.AvatarUrl); background-size: @(avatarSettings.Size + "%"); background-position: @(avatarSettings.Left + "%") @(avatarSettings.Top + "%");'>
+<div class="avatar"
+    style='width:@width; height:@height; background-image: url(@avatarSettings.AvatarUrl); background-size: @(avatarSettings.Size + "%"); background-position: @(avatarSettings.Left + "%") @(avatarSettings.Top + "%");'>
 
 </div>
 <button @onclick="SubmitAvatarSettings">Submit Avatar Settings</button>

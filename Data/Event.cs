@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 
 namespace BlazorMeetup.Data
 {
@@ -19,6 +16,7 @@ namespace BlazorMeetup.Data
         public virtual Attendee Attendee { get; set; }
         public virtual ICollection<RestrictDate> RestrictDates { get; set; }
 
+        public virtual ICollection<Team> Teams { get; set; }
         public DateTime DateAndTime { get; set; }
         public Event()
         {

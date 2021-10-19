@@ -2,42 +2,44 @@
 
 namespace BlazorMeetup.Migrations
 {
-    public partial class again : Migration
+    public partial class third : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "AvatarSettingsId",
+                name: "AttendeeId",
                 table: "AspNetUsers",
-                type: "TEXT",
-                nullable: true);
+                type: "varchar(255)",
+                nullable: true)
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_AvatarSettingsId",
+                name: "IX_AspNetUsers_AttendeeId",
                 table: "AspNetUsers",
-                column: "AvatarSettingsId");
+                column: "AttendeeId",
+                unique: true);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUsers_AvatarSettings_AvatarSettingsId",
+                name: "FK_AspNetUsers_AvatarSettings_AttendeeId",
                 table: "AspNetUsers",
-                column: "AvatarSettingsId",
+                column: "AttendeeId",
                 principalTable: "AvatarSettings",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_AspNetUsers_AvatarSettings_AvatarSettingsId",
+                name: "FK_AspNetUsers_AvatarSettings_AttendeeId",
                 table: "AspNetUsers");
 
             migrationBuilder.DropIndex(
-                name: "IX_AspNetUsers_AvatarSettingsId",
+                name: "IX_AspNetUsers_AttendeeId",
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
-                name: "AvatarSettingsId",
+                name: "AttendeeId",
                 table: "AspNetUsers");
         }
     }
