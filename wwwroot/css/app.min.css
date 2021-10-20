@@ -625,10 +625,6 @@ select {
   margin: 0.25rem;
 }
 
-.mb-1 {
-  margin-bottom: 0.25rem;
-}
-
 .flex {
   display: flex;
 }
@@ -805,6 +801,30 @@ select {
   transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
+}
+
+html{
+  background-color: lightgray;
+}
+
+#NavMenu-Div{
+  background-color:lightgray;
+}
+
+#application-name{
+  margin-bottom: 2.5rem;
+  --tw-border-opacity: 1;
+  border-color: rgba(56, 189, 248, var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgba(2, 132, 199, var(--tw-bg-opacity));
+  padding: 1.25rem;
+  background-blend-mode: color-burn;
+  background-blend-mode: luminosity;
+}
+
+#link-bar{
+  background: linear-gradient(90deg, #6087c2 0%, #406bd6 100%);
+  color: #dae1ed;
 }
 
 button {

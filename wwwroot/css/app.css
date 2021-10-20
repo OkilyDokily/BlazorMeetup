@@ -3,8 +3,27 @@
 @tailwind utilities;
 
 
+
 .navlink {
     @apply font-sans text-lg mb-4 p-3 hover:text-blue-600 transition;
+}
+
+html{
+    background-color: lightgray;
+}
+
+#NavMenu-Div{
+    background-color:lightgray;
+}
+
+#application-name{
+    @apply mb-10 p-5 border-blue-400 bg-blend-luminosity bg-blend-color-burn  bg-blue-600;
+
+}
+
+#link-bar{
+  background: linear-gradient(90deg, #6087c2 0%, #406bd6 100%); 
+    color: #dae1ed;
 }
 
 button {

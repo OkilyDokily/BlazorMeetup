@@ -6,21 +6,21 @@
 <CascadingValue Value="this">
     <h3>Create Event</h3>
 
-    <TabControl >
+    <TabControl>
         <TabPage Text="Create Teams">
             <EditForm Model="team" OnValidSubmit="@OnSubmit">
                 <InputText @bind-Value="@team.Name" placeholder="Name of Team" />
-       
+
                 <button>Create Team</button>
             </EditForm>
-            @foreach(Team t in Teams)
+            @foreach (Team t in Teams)
             {
                 <div>@t.Name</div>
             }
         </TabPage>
 
         <TabPage Text="Assign Users">
-           <AssignTo />
+            <AssignTo />
         </TabPage>
     </TabControl>
 </CascadingValue>

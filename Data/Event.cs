@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace BlazorMeetup.Data
 {
@@ -7,6 +8,7 @@ namespace BlazorMeetup.Data
     {
         public string Id { get; set; }
         public string AttendeeId { get; set; }
+        [Required]
         public string Description { get; set; }
         public int MaximumAttendees { get; set; }
         public int MinimumAttendees { get; set; }
