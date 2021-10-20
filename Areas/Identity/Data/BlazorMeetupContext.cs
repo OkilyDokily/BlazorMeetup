@@ -25,9 +25,8 @@ namespace BlazorMeetup.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
+            builder.Entity<AvatarSettings>().HasOne<Attendee>().WithOne(x => x.AvatarSettings).OnDelete(DeleteBehavior.ClientSetNull);
 
-            builder.Entity<AvatarSettings>().HasOne(x => x.Attendee).WithOne().OnDelete(DeleteBehavior.Cascade);
-            builder.Entity<Attendee>().HasOne(x => x.AvatarSettings).WithOne().HasForeignKey("Attendee", "AttendeeId").OnDelete(DeleteBehavior.ClientSetNull);
 
             builder.Entity<Event>().HasOne(x => x.Attendee).WithOne().OnDelete(DeleteBehavior.Cascade);
 
@@ -44,8 +43,6 @@ namespace BlazorMeetup.Data
             builder.Entity<AttendeeEvent>().HasOne(x => x.Event).WithMany(x => x.Attendees).OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(builder);
-
-
 
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.

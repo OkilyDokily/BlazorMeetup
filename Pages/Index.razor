@@ -75,6 +75,7 @@
                     });
                 }
                 asettings = MeetupService.GetAvatarSettingsByUserId(DbUser.Id);
+                StateHasChanged();
             }
         }
     }

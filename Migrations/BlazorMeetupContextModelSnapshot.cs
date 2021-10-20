@@ -431,12 +431,6 @@ namespace BlazorMeetup.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
-                    b.Property<string>("AttendeeId")
-                        .HasColumnType("varchar(255)");
-
-                    b.HasIndex("AttendeeId")
-                        .IsUnique();
-
                     b.HasDiscriminator().HasValue("Attendee");
                 });
 
@@ -459,12 +453,9 @@ namespace BlazorMeetup.Migrations
 
             modelBuilder.Entity("BlazorMeetup.Data.AvatarSettings", b =>
                 {
-                    b.HasOne("BlazorMeetup.Data.Attendee", "Attendee")
-                        .WithOne()
-                        .HasForeignKey("BlazorMeetup.Data.AvatarSettings", "AttendeeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Attendee");
+                    b.HasOne("BlazorMeetup.Data.Attendee", null)
+                        .WithOne("AvatarSettings")
+                        .HasForeignKey("BlazorMeetup.Data.AvatarSettings", "AttendeeId");
                 });
 
             modelBuilder.Entity("BlazorMeetup.Data.Event", b =>
@@ -606,15 +597,6 @@ namespace BlazorMeetup.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("BlazorMeetup.Data.Attendee", b =>
-                {
-                    b.HasOne("BlazorMeetup.Data.AvatarSettings", "AvatarSettings")
-                        .WithOne()
-                        .HasForeignKey("BlazorMeetup.Data.Attendee", "AttendeeId");
-
-                    b.Navigation("AvatarSettings");
-                });
-
             modelBuilder.Entity("BlazorMeetup.Data.Event", b =>
                 {
                     b.Navigation("Attendees");
@@ -643,6 +625,8 @@ namespace BlazorMeetup.Migrations
 
             modelBuilder.Entity("BlazorMeetup.Data.Attendee", b =>
                 {
+                    b.Navigation("AvatarSettings");
+
                     b.Navigation("Events");
 
                     b.Navigation("SuggestedDates");

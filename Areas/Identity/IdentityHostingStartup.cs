@@ -22,8 +22,6 @@ namespace BlazorMeetup.Areas.Identity
                 services.AddDbContextFactory<BlazorMeetupContext>(item => item.UseMySql(connectionString, serverVersion));
                 services.AddDbContext<BlazorMeetupContext>(item => item.UseMySql(connectionString, serverVersion));
 
-
-
                 services.AddDefaultIdentity<Attendee>(options => options.SignIn.RequireConfirmedAccount = false).AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<BlazorMeetupContext>();
 

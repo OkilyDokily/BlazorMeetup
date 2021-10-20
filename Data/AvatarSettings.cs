@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using System.ComponentModel.DataAnnotations.Schema;
 namespace BlazorMeetup.Data
 {
     public class AvatarSettings
     {
         public string Id { get; set; }
-        public string AttendeeId { get; set; }
         public string AvatarUrl { get; set; }
-
-        public virtual Attendee Attendee {get;set;}
+        public string AttendeeId { get; set; }
         public int Size { get; set; }
         public int Left { get; set; }
         public int Top { get; set; }

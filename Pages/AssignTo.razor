@@ -54,6 +54,9 @@
 
     }
 </div>
+
+
+
 @code {
 
     [CascadingParameter]
@@ -64,12 +67,21 @@
 
     Team OnEnterTeamAcc { get; set; }
 
+
+
+    protected override void OnInitialized()
+    {
+        
+        base.OnInitialized();
+    }
+
+
+
     public void DragStartUser(Attendee a, Team t = null)
     {
         team = t;
         DragStartAtt = a;
     }
-
 
     public void HandleDropOnUsersWithoutATeam()
     {

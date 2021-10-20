@@ -18,7 +18,9 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                return ctx.AvatarSettings.Where(x => x.AttendeeId == id).FirstOrDefault();
+
+                Attendee a = ctx.Attendees.Include(x => x.AvatarSettings).Where(x => x.Id == id).First();
+                return a.AvatarSettings;
             }
         }
         public void AddAvatarSettings(AvatarSettings asetting)
@@ -244,7 +246,9 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
+                // if(ctx.Events.Include(x=>x.Attendees))
                 Event e = ctx.Events.Include(x => x.Attendees).ThenInclude(x => x.Attendee).ThenInclude(x => x.AvatarSettings).FirstOrDefault(x => x.Id == eventId);
+
                 List<Attendee> a = e.Attendees.Select(x => x.Attendee).ToList();
                 return a.Where(x => !(ctx.TeamAttendees.Any(y => y.EventId == eventId && x.Id == y.AttendeeId))).ToList();
             }

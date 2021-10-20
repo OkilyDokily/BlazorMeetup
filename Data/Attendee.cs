@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using System.ComponentModel.DataAnnotations.Schema;
 namespace BlazorMeetup.Data
 {
     public class Attendee : IdentityUser
@@ -11,7 +11,6 @@ namespace BlazorMeetup.Data
         public virtual ICollection<AttendeeEvent> Events { get; set; }
         public ICollection<SuggestedDateAttendee> SuggestedDates { get; set; }
 
-        string AvatarSettingsId { get; set; }
         public virtual AvatarSettings AvatarSettings { get; set; }
 
         public virtual ICollection<TeamAttendee> Teams { get; set; }

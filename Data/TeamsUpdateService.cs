@@ -14,7 +14,14 @@ namespace BlazorMeetup.Data
         {
 
             if (!UpdateEvents.ContainsKey(eventId)) return;
-
+            try
+            {
+                UpdateEvents[eventId].GetInvocationList();
+            }
+            catch
+            {
+                return;
+            }
             foreach (var del in UpdateEvents[eventId].GetInvocationList())
             {
                 try
