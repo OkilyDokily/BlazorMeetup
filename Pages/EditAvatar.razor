@@ -3,40 +3,40 @@
 @inject UserManager<Attendee> UserManager
 
 
-<h3>EditAvatar</h3>
+<h3 class="mb-4">Edit Avatar</h3>
 <form>
-<div class="form-item">
-    @*https://stackoverflow.com/questions/58222480/change-variable-value-on-input-key-press-on-blazor*@
-    <label>Adjust image left or right</label>
-    <input type="number" value=@avatarSettings.Left
-        @oninput="(e) => avatarSettings.Left = Int32.Parse(e.Value.ToString())" />
-</div>
-<div class="form-item">
-    <label>Adjust image top or bottom</label>
-    <input type="number" value=@avatarSettings.Top
-        @oninput="(e) => avatarSettings.Top = Int32.Parse(e.Value.ToString())" />
-</div>
+    <div class="form-item">
+        @*https://stackoverflow.com/questions/58222480/change-variable-value-on-input-key-press-on-blazor*@
+        <label>Adjust image left or right</label>
+        <input type="number" value=@avatarSettings.Left
+            @oninput="(e) => avatarSettings.Left = Int32.Parse(e.Value.ToString())" />
+    </div>
+    <div class="form-item">
+        <label>Adjust image top or bottom</label>
+        <input type="number" value=@avatarSettings.Top
+            @oninput="(e) => avatarSettings.Top = Int32.Parse(e.Value.ToString())" />
+    </div>
 
-<div class="form-item">
-    <label>Adjust scaling of image</label>
-    <input type="number" value=@avatarSettings.Size
-        @oninput="(e) => avatarSettings.Size = Int32.Parse(e.Value.ToString())" />
-</div>
-
-
-<div>
-    <label>Adjust width and height of div</label>
-    <p>See what avatar will look like in various sizes</p>
-    <input type="number" value=@width
-        @oninput="(e) => width = heightAndWidthAdjustment(Int32.Parse(e.Value.ToString()))" />
-</div>
+    <div class="form-item">
+        <label>Adjust scaling of image</label>
+        <input type="number" value=@avatarSettings.Size
+            @oninput="(e) => avatarSettings.Size = Int32.Parse(e.Value.ToString())" />
+    </div>
 
 
-<div class="avatar"
-    style='width:@width; height:@height; background-image: url(@avatarSettings.AvatarUrl); background-size: @(avatarSettings.Size + "%"); background-position: @(avatarSettings.Left + "%") @(avatarSettings.Top + "%");'>
+    <div>
+        <label>Adjust width and height of div</label>
+        <p>See what avatar will look like in various sizes</p>
+        <input type="number" value=@width
+            @oninput="(e) => width = heightAndWidthAdjustment(Int32.Parse(e.Value.ToString()))" />
+    </div>
 
-</div>
-<button @onclick="SubmitAvatarSettings">Submit Avatar Settings</button>
+
+    <div class="avatar"
+        style='width:@width; height:@height; background-image: url(@avatarSettings.AvatarUrl); background-size: @(avatarSettings.Size + "%"); background-position: @(avatarSettings.Left + "%") @(avatarSettings.Top + "%");'>
+
+    </div>
+    <button @onclick="SubmitAvatarSettings">Submit Avatar Settings</button>
 </form>
 @code {
 

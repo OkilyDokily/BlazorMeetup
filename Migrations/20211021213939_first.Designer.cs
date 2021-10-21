@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazorMeetup.Migrations
 {
     [DbContext(typeof(BlazorMeetupContext))]
-    [Migration("20211020100853_first")]
+    [Migration("20211021213939_first")]
     partial class first
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -82,6 +82,7 @@ namespace BlazorMeetup.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int>("MaximumAttendees")
@@ -92,8 +93,7 @@ namespace BlazorMeetup.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AttendeeId")
-                        .IsUnique();
+                    b.HasIndex("AttendeeId");
 
                     b.ToTable("Events");
                 });
@@ -463,8 +463,8 @@ namespace BlazorMeetup.Migrations
             modelBuilder.Entity("BlazorMeetup.Data.Event", b =>
                 {
                     b.HasOne("BlazorMeetup.Data.Attendee", "Attendee")
-                        .WithOne()
-                        .HasForeignKey("BlazorMeetup.Data.Event", "AttendeeId")
+                        .WithMany("EventsOwned")
+                        .HasForeignKey("AttendeeId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Attendee");
@@ -630,6 +630,8 @@ namespace BlazorMeetup.Migrations
                     b.Navigation("AvatarSettings");
 
                     b.Navigation("Events");
+
+                    b.Navigation("EventsOwned");
 
                     b.Navigation("SuggestedDates");
 

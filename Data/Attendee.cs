@@ -15,8 +15,10 @@ namespace BlazorMeetup.Data
 
         public virtual ICollection<TeamAttendee> Teams { get; set; }
 
+        public virtual ICollection<Event> EventsOwned { get; set; }
         public Attendee()
         {
+            this.EventsOwned = new HashSet<Event>();
             this.Events = new HashSet<AttendeeEvent>();
             this.SuggestedDates = new HashSet<SuggestedDateAttendee>();
             this.Teams = new HashSet<TeamAttendee>();

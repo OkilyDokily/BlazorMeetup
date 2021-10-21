@@ -228,7 +228,7 @@ namespace BlazorMeetup.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     AttendeeId = table.Column<string>(type: "varchar(255)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Description = table.Column<string>(type: "longtext", nullable: true)
+                    Description = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     MaximumAttendees = table.Column<int>(type: "int", nullable: false),
                     MinimumAttendees = table.Column<int>(type: "int", nullable: false),
@@ -492,8 +492,7 @@ namespace BlazorMeetup.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Events_AttendeeId",
                 table: "Events",
-                column: "AttendeeId",
-                unique: true);
+                column: "AttendeeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RestrictDates_EventId",
