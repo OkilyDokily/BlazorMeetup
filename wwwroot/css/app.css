@@ -5,7 +5,7 @@
 
 
 .navlink {
-    @apply font-sans text-lg mb-4 p-3 hover:text-blue-600 transition;
+    @apply font-sans text-lg mb-4 p-3 hover:text-blue-200 transition;
 }
 
 html{
@@ -22,8 +22,12 @@ html{
 }
 
 #link-bar{
-  background: linear-gradient(90deg, #6087c2 0%, #406bd6 100%); 
+  background: linear-gradient(90deg, #0284C7 0%, #406bd6 100%); 
     color: #dae1ed;
+}
+
+body {
+    @apply p-0 w-auto;
 }
 
 button {

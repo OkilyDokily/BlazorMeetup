@@ -796,7 +796,7 @@ select {
 
 .navlink:hover {
   --tw-text-opacity: 1;
-  color: rgba(2, 132, 199, var(--tw-text-opacity));
+  color: rgba(186, 230, 253, var(--tw-text-opacity));
 }
 
 .navlink {
@@ -827,8 +827,13 @@ html{
 }
 
 #link-bar{
-  background: linear-gradient(90deg, #6087c2 0%, #406bd6 100%);
+  background: linear-gradient(90deg, #0284C7 0%, #406bd6 100%);
   color: #dae1ed;
+}
+
+body {
+  width: auto;
+  padding: 0px;
 }
 
 button {
