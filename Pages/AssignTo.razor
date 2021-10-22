@@ -3,9 +3,6 @@
 @*inspiration from https://chrissainty.com/investigating-drag-and-drop-with-blazor/*@
 
 
-
-<h3>AssignTo</h3>
-
 <div class="teams-collection">
     <div class="team" @ondrop="() => HandleDropOnUsersWithoutATeam()" ondragover="event.preventDefault();"
         @ondragenter='() => OnEnterTeam(new Team { Id = "none"})'>
@@ -68,14 +65,11 @@
     Team OnEnterTeamAcc { get; set; }
 
 
-
     protected override void OnInitialized()
     {
-        
+
         base.OnInitialized();
     }
-
-
 
     public void DragStartUser(Attendee a, Team t = null)
     {
@@ -91,7 +85,6 @@
         TeamsUpdateService.InvokeUpdate(at.EventId);
         StateHasChanged();
     }
-
 
     public void HandleDropOnTeam(Team t)
     {

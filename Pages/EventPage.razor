@@ -10,7 +10,7 @@
 <CascadingValue Value="this">
     <TabControl>
         <TabPage Text="Main">
-            <h3>Event</h3>
+            <h3 class="mx-2">Event Details</h3>
             @pageEvent.DateAndTime
             <h3>Attendees</h3>
             @foreach (AttendeeEvent ae in pageEvent.Attendees)
@@ -71,8 +71,6 @@
                     <button @onclick="() => JoinEvent()">I'm Interested</button>
                 }
                 <button @onclick="() => GoBack()">Go back to user's list</button>
-                <button @onclick='() => NavigationManager.NavigateTo("/AssignTeams/" + Id)'>Assign Users To
-                    Teams</button>
             </div>
         </TabPage>
 
@@ -80,9 +78,18 @@
             <SuggestDate LoggedInId="@LoggedInUser.Id" />
         </TabPage>
 
-        <TabPage Text="See who is on which team">
-            <ShowTeams />
-        </TabPage>
+        @if (LoggedInUser.Id == UserId)
+        {
+            <TabPage Text="Assign User To Teams">
+                <AssignTeams EventId=@Id />
+            </TabPage>
+        }
+        else
+        {
+            <TabPage Text="See who is on which team">
+                <ShowTeams />
+            </TabPage>
+        }
     </TabControl>
 </CascadingValue>
 @code {

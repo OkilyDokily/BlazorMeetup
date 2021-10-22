@@ -4,12 +4,11 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManager<Attendee> UserManager
 @inject MeetupService MeetupService
-<h3>UploadAvatar</h3>
-<h1>Blazor Server File Upload</h1>
+
 @*http://www.binaryintellect.net/articles/06473cc7-a391-409e-948d-3752ba3b4a6c.aspx
     https://www.youtube.com/watch?v=GcrFdvi79lU*@
 
-<h3>@Message</h3>
+<h3 class="mx-2">@Message</h3>
 
 <form @onsubmit="OnSubmit">
     <InputFile OnChange="OnInputFileChange" multiple />

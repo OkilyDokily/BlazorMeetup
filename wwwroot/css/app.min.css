@@ -625,8 +625,23 @@ select {
   margin: 0.25rem;
 }
 
-.mb-4 {
-  margin-bottom: 1rem;
+.mx-1 {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}
+
+.mx-2 {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.my-2 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
 }
 
 .flex {
@@ -723,6 +738,10 @@ select {
   }
 }
 
+.flex-row-reverse {
+  flex-direction: row-reverse;
+}
+
 .justify-between {
   justify-content: space-between;
 }
@@ -786,6 +805,17 @@ select {
   --tw-ring-shadow: 0 0 #0000;
 }
 
+table{
+  margin-top: 0.5rem;
+  table-layout: auto;
+}
+
+th{
+  min-width: 200px;
+  text-align: left;
+  margin-bottom: 0.5rem;
+}
+
 .navlink {
   margin-bottom: 1rem;
   padding: 0.75rem;
@@ -827,7 +857,7 @@ html{
 }
 
 #link-bar{
-  background: linear-gradient(90deg, #0284C7 0%, #406bd6 100%);
+  background: linear-gradient(90deg, #0284C7 0%, #0284C7 100%);
   color: #dae1ed;
 }
 
@@ -892,9 +922,6 @@ button.tab-button{
   margin-right: 1.25rem;
   height: 25%;
   width: 12rem;
-  min-width: -webkit-min-content;
-  min-width: -moz-min-content;
-  min-width: min-content;
 }
 
 .teams-collection{

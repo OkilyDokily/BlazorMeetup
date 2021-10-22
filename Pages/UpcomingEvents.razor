@@ -1,11 +1,11 @@
-﻿@page "/UpcomingEvents" 
+﻿@page "/UpcomingEvents"
 @inject MeetupService MeetupService
 @inject NavigationManager NavigationManager
 
 
 
-<h3 class=>UpcomingEvents</h3>
-<table >
+<h3 class=>Upcoming Events</h3>
+<table>
     <thead>
         <tr>
             <th>Avatar</th>
@@ -24,7 +24,8 @@
             {
                 <tr @onclick='()=>NavigationManager.NavigateTo("/EventPage/" + evt.Attendee.Id + "/" + evt.Id)'>
                     <td>
-                        <div class="avatar"  style='background-image: url(@evt.Attendee.AvatarSettings.AvatarUrl); background-size: @(evt.Attendee.AvatarSettings.Size + "%"); background-position: @(evt.Attendee.AvatarSettings.Left + "%") @(evt.Attendee.AvatarSettings.Top + "%");'>
+                        <div class="avatar"
+                    style='background-image: url(@evt.Attendee.AvatarSettings.AvatarUrl); background-size: @(evt.Attendee.AvatarSettings.Size + "%"); background-position: @(evt.Attendee.AvatarSettings.Left + "%") @(evt.Attendee.AvatarSettings.Top + "%");'>
                         </div>
                     </td>
                     <td>@evt.Attendee.UserName</td>
@@ -37,7 +38,7 @@
             }
 
         }
-    </tbody>   
+    </tbody>
 </table>
 @code {
     List<Event> UpcomingEventsList { get; set; }

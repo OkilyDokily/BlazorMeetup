@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+table{
+    @apply table-auto mt-2;
+}
+
+th{
+    min-width: 200px;
+    text-align: left;
+    @apply mb-2;
+}
 
 
 .navlink {
@@ -22,7 +31,7 @@ html{
 }
 
 #link-bar{
-  background: linear-gradient(90deg, #0284C7 0%, #406bd6 100%); 
+  background: linear-gradient(90deg, #0284C7 0%, #0284C7 100%); 
     color: #dae1ed;
 }
 
@@ -40,7 +49,7 @@ button.tab-button{
 }
 
 .team {
-    @apply w-48 min-w-min h-1/4 mr-5;
+    @apply w-48 h-1/4 mr-5;
 }
 
 .teams-collection{

@@ -8,7 +8,7 @@
 <EditForm Model=@tm OnValidSubmit="@SuggestADate">
     @if (eventPage.pageEvent.RestrictDates == null || eventPage.pageEvent.RestrictDates.Count == 0)
     {
-        <InputDate @bind-Value="@tm.Date"/>
+        <InputDate class="mx-1" @bind-Value="@tm.Date" />
     }
     else
     {
@@ -22,15 +22,17 @@
 
     <select @bind="@tm.Hours">
         @foreach (int num in tm.GetHours(MeetupService.GetRestrictDateById(RestrictDateId)?.TimesAlloweds?.ToList()))
-        {           
-            <option value="@num">@(num == 0 ? "12AM" : (num == 12) ? "12PM" : (num - 12) < 0  ? num + "AM" : (num -12) + "PM")</option>
+        {
+            <option value="@num">@(num == 0 ? "12AM" : (num == 12) ? "12PM" : (num - 12) < 0 ? num + "AM" : (num -12) +
+            "PM")</option>
         }
     </select>
     <select @bind="@tm.Minutes">
-        @foreach (int i in tm.GetMinutes(tm.Hours, MeetupService.GetRestrictDateById(RestrictDateId)?.TimesAlloweds?.ToList()))
+        @foreach (int i in tm.GetMinutes(tm.Hours,
+        MeetupService.GetRestrictDateById(RestrictDateId)?.TimesAlloweds?.ToList()))
         {
-          <option value="@i">@(i == 0 ? "00" : i)</option>
-        }     
+            <option value="@i">@(i == 0 ? "00" : i)</option>
+        }
     </select>
     <button>Suggest a time for this date</button>
 </EditForm>
@@ -40,21 +42,23 @@
 {
     @if (CanAttend(sd))
     {
-        <div @onclick="()=>SeeAvailableUser(sd)" @key="sd.Id">@sd.DateTime @sd.Attendee.UserName  <input type="checkbox" @onclick:stopPropagation="true" checked @onchange="() => RemoveSuggestedDateFromAttendee(sd)"></div>
+        <div @onclick="()=>SeeAvailableUser(sd)" @key="sd.Id">@sd.DateTime @sd.Attendee.UserName <input type="checkbox"
+        @onclick:stopPropagation="true" checked @onchange="() => RemoveSuggestedDateFromAttendee(sd)"></div>
     }
     else
     {
-        <div @onclick="()=>SeeAvailableUser(sd)" @key="sd.Id">@sd.DateTime @sd.Attendee.UserName  <input type="checkbox" @onclick:stopPropagation="true" @onchange="() => AddSuggestedDateToAttendee(sd)"></div>
+        <div @onclick="()=>SeeAvailableUser(sd)" @key="sd.Id">@sd.DateTime @sd.Attendee.UserName <input type="checkbox"
+        @onclick:stopPropagation="true" @onchange="() => AddSuggestedDateToAttendee(sd)"></div>
     }
 }
 
 @code {
     [CascadingParameter]
     EventPage eventPage { get; set; }
-    
+
     [Parameter]
     public string LoggedInId { get; set; }
- 
+
     SuggestedDate suggested = new SuggestedDate();
     [Parameter]
     public string Id { get; set; }
@@ -89,11 +93,12 @@
     {
         suggested.EventId = eventPage.pageEvent.Id;
         suggested.AttendeeId = LoggedInId;
-        if(eventPage.pageEvent.RestrictDates.Count != 0 && eventPage.pageEvent.RestrictDates != null)
+        if (eventPage.pageEvent.RestrictDates.Count != 0 && eventPage.pageEvent.RestrictDates != null)
         {
             RestrictDateId = eventPage.pageEvent.RestrictDates.First().Id;
             tm.Hours = tm.GetHours(MeetupService.GetRestrictDateById(RestrictDateId).TimesAlloweds.ToList()).FirstOrDefault();
-            tm.Minutes = tm.GetMinutes(tm.Hours, MeetupService.GetRestrictDateById(RestrictDateId).TimesAlloweds.ToList()).FirstOrDefault();
+            tm.Minutes = tm.GetMinutes(tm.Hours,
+            MeetupService.GetRestrictDateById(RestrictDateId).TimesAlloweds.ToList()).FirstOrDefault();
         }
         else
         {

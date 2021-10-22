@@ -1,9 +1,8 @@
 ﻿@inject MeetupService MeetupService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManager<Attendee> UserManager
+@page "/EditAvatar"
 
-
-<h3 class="mb-4">Edit Avatar</h3>
 <form>
     <div class="form-item">
         @*https://stackoverflow.com/questions/58222480/change-variable-value-on-input-key-press-on-blazor*@
@@ -24,16 +23,8 @@
     </div>
 
 
-    <div>
-        <label>Adjust width and height of div</label>
-        <p>See what avatar will look like in various sizes</p>
-        <input type="number" value=@width
-            @oninput="(e) => width = heightAndWidthAdjustment(Int32.Parse(e.Value.ToString()))" />
-    </div>
-
-
-    <div class="avatar"
-        style='width:@width; height:@height; background-image: url(@avatarSettings.AvatarUrl); background-size: @(avatarSettings.Size + "%"); background-position: @(avatarSettings.Left + "%") @(avatarSettings.Top + "%");'>
+    <div class="avatar my-2"
+        style='width:60px; height:60px; background-image: url(@avatarSettings.AvatarUrl); background-size: @(avatarSettings.Size + "%"); background-position: @(avatarSettings.Left + "%") @(avatarSettings.Top + "%");'>
 
     </div>
     <button @onclick="SubmitAvatarSettings">Submit Avatar Settings</button>
@@ -41,8 +32,7 @@
 @code {
 
 
-    public int width { get; set; } = 60;
-    public int height { get; set; } = 60;
+
 
     public double borderThickness { get; set; } = 1;
     public AvatarSettings avatarSettings { get; set; } = new();
@@ -55,15 +45,6 @@
         avatarSettings = MeetupService.GetAvatarSettingsByUserId(DbUser.Id);
     }
 
-
-    int heightAndWidthAdjustment(int width)
-    {
-        if (width < 15) borderThickness = .2;
-        if (width > 15) borderThickness = 1;
-        if (width > 100) borderThickness = 2;
-        height = width;
-        return height;
-    }
 
     public void SubmitAvatarSettings()
     {

@@ -1,5 +1,5 @@
 <CascadingValue Value="this">
-    <div class="divide-x-2" role="group">
+    <div class="divide-x-2 mb-2" role="group">
         @foreach (TabPage tabPage in Pages)
         {
             <button type="button" class="tab-button @GetButtonClass(tabPage)" @onclick=@Clickable(tabPage)>
@@ -29,7 +29,7 @@
     string GetButtonClass(TabPage page)
     {
         if (!ButtonsWork) return "bg-gray-200";
-        return page == ActivePage ? "bg-blue-700 text-color-700" : "";
+        return page == ActivePage ? "bg-blue-700 text-blue-400" : "";
     }
 
     public void ActivatePage(TabPage page)

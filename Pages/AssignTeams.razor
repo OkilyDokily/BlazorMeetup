@@ -1,11 +1,6 @@
-﻿@page "/AssignTeams/{EventId}"
-@inject MeetupService MeetupService
-
-<h3>AssignTeams</h3>
+﻿@inject MeetupService MeetupService
 
 <CascadingValue Value="this">
-    <h3>Create Event</h3>
-
     <TabControl>
         <TabPage Text="Create Teams">
             <EditForm Model="team" OnValidSubmit="@OnSubmit">

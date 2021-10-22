@@ -6,11 +6,8 @@
 @inject NavigationManager NavigationManager
 @using BlazorMeetup.Data
 @using Microsoft.AspNetCore.Identity
-@using System.Diagnostics;
 
 
-
-<h3>Your Events</h3>
 <h3>Sorted By Most Recent</h3>
 
 <table>
@@ -26,7 +23,7 @@
     <tbody>
         @foreach (Event evt in events)
         {
-            <tr @onclick='() => GoToPage(evt.Id)'>            
+            <tr @onclick='() => GoToPage(evt.Id)'>
                 <td>@evt.Description</td>
                 <td>@evt.DateAndTime</td>
                 <td>@evt.MaximumAttendees</td>
