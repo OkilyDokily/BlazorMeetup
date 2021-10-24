@@ -32,14 +32,18 @@
 @code {
 
 
-
-
-    public double borderThickness { get; set; } = 1;
+    [Parameter]
+    public string TeamId { get; set; }
     public AvatarSettings avatarSettings { get; set; } = new();
     public Attendee DbUser { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
+        if (TeamId != null)
+        {
+            avatarSettings = MeetupService.GetAvatarSettingsByTeamId(TeamId);
+            return;
+        }
         AuthenticationState user = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         DbUser = await UserManager.GetUserAsync(user.User);
         avatarSettings = MeetupService.GetAvatarSettingsByUserId(DbUser.Id);

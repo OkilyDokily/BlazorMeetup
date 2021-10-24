@@ -18,6 +18,8 @@
 
 
 @code {
+    [Parameter]
+    public string TeamId { get; set; }
     bool Uploaded { get; set; }
     string Message = "No file(s) selected";
     IBrowserFile selectedFile;
@@ -28,6 +30,11 @@
 
     protected override async Task OnInitializedAsync()
     {
+        if (TeamId != null)
+        {
+            avatarSettings = MeetupService.GetAvatarSettingsByTeamId(TeamId);
+            return;
+        }
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         Attendee a = await UserManager.GetUserAsync(authState.User);
         AttendeeId = a.Id;
@@ -45,8 +52,16 @@
     {
         if (selectedFile == null) return;
         Stream stream = selectedFile.OpenReadStream();
+        string path;
+        if (TeamId != null)
+        {
+            path = $"{env.WebRootPath}\\avatars\\{AttendeeId + Path.GetExtension(selectedFile.Name)}";
+        }
+        else
+        {
+            path = $"{env.WebRootPath}\\avatars\\{TeamId + Path.GetExtension(selectedFile.Name)}";
+        }
 
-        var path = $"{env.WebRootPath}\\avatars\\{AttendeeId + Path.GetExtension(selectedFile.Name)}";
         FileStream fs = File.Create(path);
         await stream.CopyToAsync(fs);
         stream.Close();
@@ -55,8 +70,15 @@
         Message = $"a file has been uploaded on server";
         Uploaded = true;
         AvatarName = selectedFile.Name;
+        if (TeamId != null)
+        {
+            avatarSettings.AvatarUrl = "/avatars/" + AttendeeId + Path.GetExtension(selectedFile.Name);
+        }
+        else
+        {
+            avatarSettings.AvatarUrl = "/avatars/" + TeamId + Path.GetExtension(selectedFile.Name);
+        }
 
-        avatarSettings.AvatarUrl = "/avatars/" + AttendeeId + Path.GetExtension(selectedFile.Name);
         avatarSettings.Top = 0;
         avatarSettings.Left = 0;
         MeetupService.UpdateAvatarSettings(avatarSettings);

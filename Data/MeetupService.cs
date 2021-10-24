@@ -23,13 +23,24 @@ namespace BlazorMeetup.Data
                 return a.AvatarSettings;
             }
         }
-        public void AddAvatarSettings(AvatarSettings asetting)
+
+        public AvatarSettings GetAvatarSettingsByTeamId(string id)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+
+                Team t = ctx.Teams.Include(x => x.AvatarSettings).Where(x => x.Id == id).First();
+                return t.AvatarSettings;
+            }
+        }
+        public string AddAvatarSettings(AvatarSettings asetting)
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
                 asetting.Id = Guid.NewGuid().ToString();
                 ctx.AvatarSettings.Add(asetting);
                 ctx.SaveChanges();
+                return asetting.Id;
             }
         }
         public void UpdateAvatarSettings(AvatarSettings asetting)
@@ -228,7 +239,8 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                team.Id = Guid.NewGuid().ToString();
+                string newId = Guid.NewGuid().ToString();
+                team.Id = newId;
                 ctx.Teams.Add(team);
                 ctx.SaveChanges();
             }
@@ -238,7 +250,7 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                return ctx.Teams.Include(x => x.Attendees).ThenInclude(x => x.Attendee).ThenInclude(x => x.AvatarSettings).Where(x => x.EventId == id).ToList();
+                return ctx.Teams.Include(x => x.AvatarSettings).Include(x => x.Attendees).ThenInclude(x => x.Attendee).ThenInclude(x => x.AvatarSettings).Where(x => x.EventId == id).ToList();
             }
         }
 

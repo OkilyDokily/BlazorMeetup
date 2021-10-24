@@ -1,4 +1,5 @@
 ﻿@inject MeetupService MeetupService
+@inject NavigationManager NavigationManager
 
 <CascadingValue Value="this">
     <TabControl>
@@ -10,7 +11,12 @@
             </EditForm>
             @foreach (Team t in Teams)
             {
-                <div>@t.Name</div>
+                <div class="avatar" style='background-image: url(@t.AvatarSettings.AvatarUrl); background-size:
+                @(t.AvatarSettings.Size
+                + "%"); background-position:
+                @(@t.AvatarSettings.Left + "%") @(@t.AvatarSettings.Top + "%");'>
+                </div>
+                <div @onclick="()=>GoToTeamAvatar(t.Id)">@t.Name</div>
             }
         </TabPage>
 
@@ -29,6 +35,12 @@
     public Team team;
     public Event e { get; set; }
 
+
+    public void GoToTeamAvatar(String teamId)
+    {
+        NavigationManager.NavigateTo("/AddAvatar/" + teamId);
+    }
+
     protected override void OnInitialized()
     {
         Teams = MeetupService.GetTeamsByEventId(EventId);
@@ -38,10 +50,21 @@
 
     public void OnSubmit()
     {
+
         team.EventId = EventId;
+        string AvatarId = MeetupService.AddAvatarSettings(new AvatarSettings
+        {
+            AvatarUrl = "/avatars/blank-profile.webp",
+            Left = 0,
+            Top = 0,
+            Size = 100
+        });
+
+        team.AvatarSettingsId = AvatarId;
         MeetupService.CreateTeam(team);
-        team = new Team();
+
         Teams = MeetupService.GetTeamsByEventId(EventId);
+        team = new Team();
         StateHasChanged();
     }
 

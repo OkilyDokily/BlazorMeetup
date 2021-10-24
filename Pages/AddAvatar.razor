@@ -1,7 +1,6 @@
-﻿@page "/AddAvatar"
-@using System.IO
+﻿@page "/AddAvatar/{TeamId}"
+
 @using Microsoft.AspNetCore.Hosting;
-@using Microsoft.Extensions.Hosting;
 @inject IWebHostEnvironment env
 @inject UserManager<Attendee> UserManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -11,13 +10,13 @@
 <CascadingValue Value="this">
     <h3>Create Event</h3>
 
-    <TabControl >
+    <TabControl>
         <TabPage Text="Upload Avatar">
-            <UploadAvatar  />
+            <UploadAvatar TeamId=@TeamId />
         </TabPage>
 
         <TabPage Text="Center and adjust avatar">
-            <EditAvatar  />
+            <EditAvatar TeamId=@TeamId />
         </TabPage>
 
     </TabControl>
@@ -26,9 +25,9 @@
 
 @code {
 
-  
- 
-   
+    [Parameter]
+    public string TeamId { get; set; }
 
-  
+
+
 }

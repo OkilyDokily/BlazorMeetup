@@ -27,6 +27,7 @@ namespace BlazorMeetup.Data
 
             builder.Entity<AvatarSettings>().HasOne<Attendee>().WithOne(x => x.AvatarSettings).OnDelete(DeleteBehavior.Cascade);
 
+            builder.Entity<AvatarSettings>().HasOne<Team>().WithOne(x => x.AvatarSettings).OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Event>().HasOne(x => x.Attendee).WithMany(x => x.EventsOwned).OnDelete(DeleteBehavior.Cascade);
 

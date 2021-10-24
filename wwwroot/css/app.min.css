@@ -231,7 +231,6 @@ Add the correct display in Chrome and Safari.
  */
 
 
-h1,
 h3,
 p {
   margin: 0;
@@ -356,7 +355,7 @@ table {
   border-collapse: collapse;
 }
 
-h1,
+
 h3 {
   font-size: inherit;
   font-weight: inherit;
@@ -857,7 +856,7 @@ html{
 }
 
 #link-bar{
-  background: linear-gradient(90deg, #0284C7 0%, #0284C7 100%);
+  background: linear-gradient(90deg, #38BDF8 0%, #38BDF8 100%);
   color: #dae1ed;
 }
 

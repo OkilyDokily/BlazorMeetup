@@ -5,22 +5,20 @@
 @inject UserManager<Attendee> UserManager
 @inject RoleManager<IdentityRole> RoleManager
 @inject MeetupService MeetupService
+@inject NavigationManager NavigationManager
+
 
 <div id="index" class="w-1/4 m-1">
-    <h1>Hello, world!</h1>
-
-
-    Welcome to your new app.
     <AuthorizeView>
         <NotAuthorized>
             <a href="Identity/Account/Login">Log in</a>
         </NotAuthorized>
         <Authorized>
-            <a href="#">Hello, @context.User.Identity.Name!</a>
-            <a href="Identity/Account/Logout">Log out</a>
+            <a href="#">@context.User.Identity.Name!</a>
+
             @if (asettings != null)
             {
-                <div class="lg-avatar" style='background-image: url(@asettings.AvatarUrl); background-size:
+                <div @onclick=GoToEdit class="lg-avatar" style='background-image: url(@asettings.AvatarUrl); background-size:
                 @(asettings.Size
                 + "%"); background-position:
                 @(@asettings.Left + "%") @(@asettings.Top + "%");'>
@@ -36,6 +34,11 @@
     List<Claim> Claims { get; set; }
     Attendee DbUser { get; set; }
     AvatarSettings asettings { get; set; }
+
+    public void GoToEdit()
+    {
+        NavigationManager.NavigateTo("/EditAvatar");
+    }
     protected async override Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
