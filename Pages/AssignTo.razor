@@ -30,8 +30,11 @@
 
         <div class="team" @ondrop="() => HandleDropOnTeam(t)" ondragover="event.preventDefault();"
         @ondragenter="() =>OnEnterTeam(t)">
-            <div>
-                @t.Name
+            <div class="flex">
+                <div class="avatar"
+                style="background-image: url(@t.AvatarSettings.AvatarUrl); background-size: @(t.AvatarSettings.Size + "%"); background-position: @(t.AvatarSettings.Left + "%") @(t.AvatarSettings.Top + "%");">
+                </div>
+                <div>@t.Name</div>
             </div>
             <ul>
                 @foreach (TeamAttendee ta in t.Attendees)
@@ -48,7 +51,6 @@
                 }
             </ul>
         </div>
-
     }
 </div>
 

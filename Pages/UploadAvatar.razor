@@ -1,4 +1,5 @@
 ﻿@using System.IO
+@using System
 @using Microsoft.AspNetCore.Hosting;
 @inject IWebHostEnvironment env
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -11,7 +12,7 @@
 <h3 class="mx-2">@Message</h3>
 
 <form @onsubmit="OnSubmit">
-    <InputFile OnChange="OnInputFileChange" multiple />
+    <InputFile OnChange="OnInputFileChange" type="file" accept="image/*" />
     <br /><br />
     <button type="submit">Upload Selected File(s)</button>
 </form>
@@ -46,6 +47,36 @@
     private async Task OnInputFileChange(InputFileChangeEventArgs e)
     {
         selectedFile = e.File;
+        List<string> permittedExtensions = new()
+        {
+            "JPG",
+            "PNG",
+            "GIF",
+            "WEBP",
+            "TIFF",
+            "PSD",
+            "RAW",
+            "BMP",
+            "HEIF",
+            "INDD",
+            "JPEG"
+        };
+
+        string ext = Path.GetExtension(selectedFile.Name).ToLowerInvariant();
+        Console.Write(ext);
+        if (string.IsNullOrEmpty(ext) || !permittedExtensions.Select(x => "." + x.ToLowerInvariant()).Contains(ext))
+        {
+            Message = $"Image does not have the correct extension";
+            selectedFile = null;
+            return;
+        }
+        if (selectedFile.Size > 1000000)
+        {
+            Message = $"File to big";
+            selectedFile = null;
+            return;
+        }
+
         Message = $"a file is selected";
         this.StateHasChanged();
     }
@@ -54,7 +85,10 @@
     {
         if (selectedFile == null) return;
         Stream stream = selectedFile.OpenReadStream();
+
+
         string path;
+
         if (TeamId != null)
         {
             path = $"{env.WebRootPath}\\avatars\\{TeamId + Path.GetExtension(selectedFile.Name)}";

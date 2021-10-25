@@ -436,7 +436,7 @@ code {
   border-color: rgba(229, 231, 235, var(--tw-border-opacity));
 }
 
-[type='text'],[type='url'],[type='number'],[type='date'],[type='time'],[multiple],select {
+[type='text'],[type='url'],[type='number'],[type='date'],[type='time'],select {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
@@ -453,7 +453,7 @@ code {
   --tw-shadow: 0 0 #0000;
 }
 
-[type='text']:focus, [type='url']:focus, [type='number']:focus, [type='date']:focus, [type='time']:focus, [multiple]:focus, select:focus {
+[type='text']:focus, [type='url']:focus, [type='number']:focus, [type='date']:focus, [type='time']:focus, select:focus {
   outline: 2px solid transparent;
   outline-offset: 2px;
   --tw-ring-inset: var(--tw-empty,/*!*/ /*!*/);
@@ -489,16 +489,6 @@ select {
   padding-right: 2.5rem;
   -webkit-print-color-adjust: exact;
           color-adjust: exact;
-}
-
-[multiple] {
-  background-image: initial;
-  background-position: initial;
-  background-repeat: unset;
-  background-size: initial;
-  padding-right: 0.75rem;
-  -webkit-print-color-adjust: unset;
-          color-adjust: unset;
 }
 
 [type='checkbox'] {
