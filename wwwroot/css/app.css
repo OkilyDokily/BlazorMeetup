@@ -65,7 +65,7 @@ button.tab-button{
 }
 
 .avatar{
-    @apply rounded-full h-5 w-5 border-blue-100;
+    @apply rounded-full h-5 w-5 border-blue-100 bg-no-repeat;
 }
 
 tr{
@@ -73,7 +73,7 @@ tr{
 }
 
 .lg-avatar{
-    @apply rounded-full h-16 w-16 border-blue-100;
+    @apply rounded-full h-16 w-16 border-blue-100 bg-no-repeat;
 }
 
 .form-item{

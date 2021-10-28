@@ -629,6 +629,10 @@ select {
   margin-bottom: 0.5rem;
 }
 
+.mr-2 {
+  margin-right: 0.5rem;
+}
+
 .mb-2 {
   margin-bottom: 0.5rem;
 }
@@ -938,6 +942,7 @@ button.tab-button{
   border-radius: 9999px;
   --tw-border-opacity: 1;
   border-color: rgba(224, 242, 254, var(--tw-border-opacity));
+  background-repeat: no-repeat;
 }
 
 tr{
@@ -950,6 +955,7 @@ tr{
   border-radius: 9999px;
   --tw-border-opacity: 1;
   border-color: rgba(224, 242, 254, var(--tw-border-opacity));
+  background-repeat: no-repeat;
 }
 
 .form-item{

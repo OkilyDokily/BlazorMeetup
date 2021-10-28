@@ -1,17 +1,10 @@
 ﻿@page
 @model LoginModel
 
-@{
-    ViewData["Title"] = "Log in";
-}
-
-<h1>@ViewData["Title"]</h1>
 <div>
     <div>
         <section>
             <form method="post">
-                <h4>Use a local account to log in.</h4>
-                <hr />
                 <div asp-validation-summary="All"></div>
                 <div>
                     <label asp-for="Input.Email"></label>
@@ -40,8 +33,7 @@
     </div>
     <div>
         <section>
-            <h4>Use another service to log in.</h4>
-            <hr />
+            
             @{
                 if ((Model.ExternalLogins?.Count ?? 0) == 0)
                 {
