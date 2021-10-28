@@ -11,12 +11,14 @@
             </EditForm>
             @foreach (Team t in Teams)
             {
-                <div class="avatar" style='background-image: url(@t.AvatarSettings.AvatarUrl); background-size:
+                <div class="flex">
+                    <div class="avatar mr-2" style='background-image: url(@t.AvatarSettings.AvatarUrl); background-size:
                 @(t.AvatarSettings.Size
                 + "%"); background-position:
                 @(@t.AvatarSettings.Left + "%") @(@t.AvatarSettings.Top + "%");'>
+                    </div>
+                    <div @onclick="()=>GoToTeamAvatar(t.Id)">@t.Name</div>
                 </div>
-                <div @onclick="()=>GoToTeamAvatar(t.Id)">@t.Name</div>
             }
         </TabPage>
 

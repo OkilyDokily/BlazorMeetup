@@ -1,10 +1,14 @@
 ﻿@using System.IO
 @using System
-@using Microsoft.AspNetCore.Hosting;
+@using Microsoft.AspNetCore.Hosting
+@using nClam
+@using Microsoft.Extensions.Configuration
 @inject IWebHostEnvironment env
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManager<Attendee> UserManager
 @inject MeetupService MeetupService
+@inject IConfiguration Configuration;
+
 
 @*http://www.binaryintellect.net/articles/06473cc7-a391-409e-948d-3752ba3b4a6c.aspx
     https://www.youtube.com/watch?v=GcrFdvi79lU*@
@@ -47,8 +51,8 @@
     private async Task OnInputFileChange(InputFileChangeEventArgs e)
     {
         selectedFile = e.File;
-        List<string> permittedExtensions = new()
-        {
+        @* List<string> permittedExtensions = new()
+            {
             "JPG",
             "PNG",
             "GIF",
@@ -60,22 +64,23 @@
             "HEIF",
             "INDD",
             "JPEG"
-        };
+            };
 
-        string ext = Path.GetExtension(selectedFile.Name).ToLowerInvariant();
-        Console.Write(ext);
-        if (string.IsNullOrEmpty(ext) || !permittedExtensions.Select(x => "." + x.ToLowerInvariant()).Contains(ext))
-        {
+            string ext = Path.GetExtension(selectedFile.Name).ToLowerInvariant();
+
+            if (string.IsNullOrEmpty(ext) || !permittedExtensions.Select(x => "." + x.ToLowerInvariant()).Contains(ext))
+            {
             Message = $"Image does not have the correct extension";
             selectedFile = null;
             return;
-        }
+            } *@
         if (selectedFile.Size > 1000000)
         {
             Message = $"File to big";
             selectedFile = null;
             return;
         }
+
 
         Message = $"a file is selected";
         this.StateHasChanged();
@@ -84,8 +89,33 @@
     private async void OnSubmit()
     {
         if (selectedFile == null) return;
-        Stream stream = selectedFile.OpenReadStream();
 
+        //https://martink.me/articles/blazor-file-select-with-virus-scan
+        Stream stream = selectedFile.OpenReadStream();
+        var clam = new ClamClient(Configuration["ClamAVServer:URL"],
+        Convert.ToInt32(Configuration["ClamAVServer:Port"]));
+        var scanResult = await clam.SendAndScanFileAsync(stream);
+        stream.Close();
+        switch (scanResult.Result)
+        {
+            case ClamScanResults.Clean:
+                Message = $"File is clean according to antivirus software";
+                Console.WriteLine(Message);
+                break;
+            case ClamScanResults.VirusDetected:
+                Message = $"File is infected according to antivirus software";
+                return;
+            case ClamScanResults.Error:
+                Message = $"File scan produced an error from antivirus software {scanResult.RawResult}";
+                return;
+            case ClamScanResults.Unknown:
+                Message = $"File scan produced an unknown status from antivirus software, {scanResult.RawResult}";
+                Console.WriteLine(Message);
+                return;
+            default:
+                Message = $"Unknown error";
+                return;
+        }
 
         string path;
 
@@ -99,6 +129,7 @@
         }
 
         FileStream fs = File.Create(path);
+        stream = selectedFile.OpenReadStream();
         await stream.CopyToAsync(fs);
         stream.Close();
         fs.Close();
@@ -109,14 +140,14 @@
         if (TeamId != null)
         {
             avatarSettings.AvatarUrl = "/avatars/" + TeamId + Path.GetExtension(selectedFile.Name);
+            Console.WriteLine("avatar team");
         }
         else
         {
             avatarSettings.AvatarUrl = "/avatars/" + AttendeeId + Path.GetExtension(selectedFile.Name);
+            Console.WriteLine("avatar attendee");
         }
 
-        avatarSettings.Top = 0;
-        avatarSettings.Left = 0;
         MeetupService.UpdateAvatarSettings(avatarSettings);
         this.StateHasChanged();
     }

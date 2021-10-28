@@ -10,8 +10,8 @@ namespace BlazorMeetup.Data
         public string Id { get; set; }
         public string AvatarUrl { get; set; }
         public string AttendeeId { get; set; }
-        public int Size { get; set; }
-        public int Left { get; set; }
-        public int Top { get; set; }
+        public int Size { get; set; } = 100;
+        public int Left { get; set; } = 0;
+        public int Top { get; set; } = 0;
     }
 }
