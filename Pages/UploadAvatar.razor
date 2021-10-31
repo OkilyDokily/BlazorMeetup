@@ -29,7 +29,6 @@
     string Message = "No file(s) selected";
     IBrowserFile selectedFile;
     string AttendeeId { get; set; }
-    string AvatarName { get; set; }
 
     AvatarSettings avatarSettings { get; set; }
 
@@ -116,17 +115,11 @@
                 return;
         }
 
-        string path;
-
-        if (TeamId != null)
-        {
-            path = $"{env.WebRootPath}\\avatars\\{TeamId + Path.GetExtension(selectedFile.Name)}";
-        }
-        else
-        {
-            path = $"{env.WebRootPath}\\avatars\\{AttendeeId + Path.GetExtension(selectedFile.Name)}";
-        }
-        RemovePreviousAvatarFromFileSystemTeam();
+        
+        
+        RemovePreviousAvatarFromFileSystem();
+        avatarSettings.AvatarIdentification = Guid.NewGuid().ToString();
+        string path = $"{env.WebRootPath}\\avatars\\{avatarSettings.AvatarIdentification + Path.GetExtension(selectedFile.Name)}";
         FileStream fs = File.Create(path);
         stream = selectedFile.OpenReadStream();
         await stream.CopyToAsync(fs);
@@ -135,31 +128,26 @@
 
         Message = $"a file has been uploaded on server";
 
-        AvatarName = selectedFile.Name;
-
-        if (TeamId != null)
-        {
-
-            avatarSettings.AvatarUrl = "/avatars/" + TeamId + Path.GetExtension(selectedFile.Name);
-            Console.WriteLine("avatar team");
-        }
-        else
-        {
-
-            avatarSettings.AvatarUrl = "/avatars/" + AttendeeId + Path.GetExtension(selectedFile.Name);
-            Console.WriteLine("avatar attendee");
-        }
+    
+        avatarSettings.AvatarUrl = "/avatars/" + avatarSettings.AvatarIdentification + Path.GetExtension(selectedFile.Name);
+        Console.WriteLine("avatar team");
+       
 
         MeetupService.UpdateAvatarSettings(avatarSettings);
         this.StateHasChanged();
     }
 
-    public void RemovePreviousAvatarFromFileSystemTeam()
+    public void RemovePreviousAvatarFromFileSystem()
     {
-        string path = $"{env.WebRootPath}" + avatarSettings.AvatarUrl;
-        if (path == $"{env.WebRootPath}" + "/avatars/" + "blank-profile.webp")
+       
+        if (avatarSettings?.AvatarIdentification== "default")
         {
             Console.WriteLine("File was default avatar");
+            return;
+        }
+        if (avatarSettings.AvatarIdentification == null)
+        {
+            Console.WriteLine("avatar discriminator was null");
             return;
         }
         FileInfo file = new FileInfo($"{env.WebRootPath}" + avatarSettings.AvatarUrl);
