@@ -51,8 +51,8 @@
     private async Task OnInputFileChange(InputFileChangeEventArgs e)
     {
         selectedFile = e.File;
-        @* List<string> permittedExtensions = new()
-            {
+        List<string> permittedExtensions = new()
+        {
             "JPG",
             "PNG",
             "GIF",
@@ -64,23 +64,22 @@
             "HEIF",
             "INDD",
             "JPEG"
-            };
+        };
 
-            string ext = Path.GetExtension(selectedFile.Name).ToLowerInvariant();
+        string ext = Path.GetExtension(selectedFile.Name).ToLowerInvariant();
 
-            if (string.IsNullOrEmpty(ext) || !permittedExtensions.Select(x => "." + x.ToLowerInvariant()).Contains(ext))
-            {
+        if (string.IsNullOrEmpty(ext) || !permittedExtensions.Select(x => "." + x.ToLowerInvariant()).Contains(ext))
+        {
             Message = $"Image does not have the correct extension";
             selectedFile = null;
             return;
-            } *@
+        }
         if (selectedFile.Size > 1000000)
         {
             Message = $"File to big";
             selectedFile = null;
             return;
         }
-
 
         Message = $"a file is selected";
         this.StateHasChanged();
@@ -127,7 +126,7 @@
         {
             path = $"{env.WebRootPath}\\avatars\\{AttendeeId + Path.GetExtension(selectedFile.Name)}";
         }
-
+        RemovePreviousAvatarFromFileSystemTeam();
         FileStream fs = File.Create(path);
         stream = selectedFile.OpenReadStream();
         await stream.CopyToAsync(fs);
@@ -137,13 +136,16 @@
         Message = $"a file has been uploaded on server";
 
         AvatarName = selectedFile.Name;
+
         if (TeamId != null)
         {
+
             avatarSettings.AvatarUrl = "/avatars/" + TeamId + Path.GetExtension(selectedFile.Name);
             Console.WriteLine("avatar team");
         }
         else
         {
+
             avatarSettings.AvatarUrl = "/avatars/" + AttendeeId + Path.GetExtension(selectedFile.Name);
             Console.WriteLine("avatar attendee");
         }
@@ -151,4 +153,27 @@
         MeetupService.UpdateAvatarSettings(avatarSettings);
         this.StateHasChanged();
     }
+
+    public void RemovePreviousAvatarFromFileSystemTeam()
+    {
+        string path = $"{env.WebRootPath}" + avatarSettings.AvatarUrl;
+        if (path == $"{env.WebRootPath}" + "/avatars/" + "blank-profile.webp")
+        {
+            Console.WriteLine("File was default avatar");
+            return;
+        }
+        FileInfo file = new FileInfo($"{env.WebRootPath}" + avatarSettings.AvatarUrl);
+        if (file.Exists)//check file exsit or not
+        {
+
+            file.Delete();
+            Console.WriteLine(" file deleted successfully");
+
+        }
+        else
+        {
+            Console.WriteLine(" This file does not exists ");
+        }
+    }
+
 }

@@ -43,6 +43,10 @@ button {
     @apply mt-4 border-blue-100 bg-blue-400 text-blue-600 hover:bg-blue-600 hover:text-blue-800 hover:border-blue-300 p-3 transition m-1;
 }
 
+#pagesbody button{
+    @apply mt-4 border-gray-500 bg-gray-600 text-gray-200 hover:bg-gray-700 hover:text-gray-300 hover:border-gray-300 p-3 transition m-1;
+}
+
 button.tab-button{
    border-radius: 10px 10px 0 0;
    @apply p-0 px-2 h-auto m-0 border-blue-600;

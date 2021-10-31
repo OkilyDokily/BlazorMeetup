@@ -1,7 +1,4 @@
 ﻿@using Microsoft.AspNetCore.Hosting
-@using BlazorMeetup.Shared
-@using BlazorMeetup.Pages
-@using BlazorMeetup.Data
 @using Microsoft.AspNetCore.Mvc.ViewEngines
 @inject IWebHostEnvironment Environment
 @inject ICompositeViewEngine Engine
@@ -12,17 +9,22 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - BlazorMeetup</title>
+    <link href="~/css/app.min.css"  rel="stylesheet" >
+    <link href="~/css/site.css"  rel="stylesheet" >
 </head>
-<body>
-        <main role="main" 
-            <component type="typeof(MainLayoutRazorPages)" render-mode="ServerPrerendered" />
+<body class="flex justify-center items-center h-screen" >
+    <div id="pagesbody" class="w-96 bg-white h-auto" style="background-color:white"> 
+        
+        <main role="main" >
             @RenderBody()
+             
         </main>
-    <footer >
-        <div >
-            &copy; 2021 - BlazorMeetup - <a asp-area= asp-page="Privacy">Privacy</a>
-        </div>
-    </footer>
+       <footer >
+            <div >
+                &copy; 2021 - BlazorMeetup - <a asp-area= asp-page="Privacy">Privacy</a>
+            </div>
+        </footer>
+    </div>
     <script src="~/Identity/lib/jquery/dist/jquery.min.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
