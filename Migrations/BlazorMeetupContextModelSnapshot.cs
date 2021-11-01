@@ -165,9 +165,6 @@ namespace BlazorMeetup.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("AvatarSettingsId")
-                        .HasColumnType("varchar(255)");
-
                     b.Property<string>("EventId")
                         .HasColumnType("varchar(255)");
 
@@ -175,9 +172,6 @@ namespace BlazorMeetup.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AvatarSettingsId")
-                        .IsUnique();
 
                     b.HasIndex("EventId");
 
@@ -205,6 +199,37 @@ namespace BlazorMeetup.Migrations
                     b.HasIndex("TeamId");
 
                     b.ToTable("TeamAttendees");
+                });
+
+            modelBuilder.Entity("BlazorMeetup.Data.TeamAvatarSettings", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("AvatarIdentification")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("AvatarUrl")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Left")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Size")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TeamId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("Top")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TeamId")
+                        .IsUnique();
+
+                    b.ToTable("TeamAvatarSettings");
                 });
 
             modelBuilder.Entity("BlazorMeetup.Data.TimesAllowed", b =>
@@ -521,17 +546,10 @@ namespace BlazorMeetup.Migrations
 
             modelBuilder.Entity("BlazorMeetup.Data.Team", b =>
                 {
-                    b.HasOne("BlazorMeetup.Data.AvatarSettings", "AvatarSettings")
-                        .WithOne()
-                        .HasForeignKey("BlazorMeetup.Data.Team", "AvatarSettingsId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("BlazorMeetup.Data.Event", "Event")
                         .WithMany("Teams")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("AvatarSettings");
 
                     b.Navigation("Event");
                 });
@@ -551,6 +569,14 @@ namespace BlazorMeetup.Migrations
                     b.Navigation("Attendee");
 
                     b.Navigation("Team");
+                });
+
+            modelBuilder.Entity("BlazorMeetup.Data.TeamAvatarSettings", b =>
+                {
+                    b.HasOne("BlazorMeetup.Data.Team", null)
+                        .WithOne("TeamAvatarSettings")
+                        .HasForeignKey("BlazorMeetup.Data.TeamAvatarSettings", "TeamId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("BlazorMeetup.Data.TimesAllowed", b =>
@@ -638,6 +664,8 @@ namespace BlazorMeetup.Migrations
             modelBuilder.Entity("BlazorMeetup.Data.Team", b =>
                 {
                     b.Navigation("Attendees");
+
+                    b.Navigation("TeamAvatarSettings");
                 });
 
             modelBuilder.Entity("BlazorMeetup.Data.Attendee", b =>

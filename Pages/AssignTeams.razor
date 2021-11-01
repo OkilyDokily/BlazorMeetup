@@ -12,12 +12,13 @@
             @foreach (Team t in Teams)
             {
                 <div class="flex">
-                    <div class="avatar mr-2" style='background-image: url(@t.AvatarSettings.AvatarUrl); background-size:
-                @(t.AvatarSettings.Size
+                    <div class="avatar mr-2" style='background-image: url(@t.TeamAvatarSettings.AvatarUrl); background-size:
+                @(t.TeamAvatarSettings.Size
                 + "%"); background-position:
-                @(@t.AvatarSettings.Left + "%") @(@t.AvatarSettings.Top + "%");'>
+                @(@t.TeamAvatarSettings.Left + "%") @(@t.TeamAvatarSettings.Top + "%");'>
                     </div>
                     <div @onclick="()=>GoToTeamAvatar(t.Id)">@t.Name</div>
+                    <div @onclick="()=>DeleteTeam(t)">Delete Team</div>
                 </div>
             }
         </TabPage>
@@ -27,8 +28,6 @@
         </TabPage>
     </TabControl>
 </CascadingValue>
-
-
 
 @code {
     [Parameter]
@@ -52,10 +51,11 @@
 
     public void OnSubmit()
     {
-
+        team.Id = Guid.NewGuid().ToString();
         team.EventId = EventId;
-        string AvatarId = MeetupService.AddAvatarSettings(new AvatarSettings
+        MeetupService.AddTeamAvatarSettings(new TeamAvatarSettings
         {
+            TeamId = team.Id,
             AvatarUrl = "/avatars/blank-profile.webp",
             Left = 0,
             Top = 0,
@@ -63,7 +63,7 @@
             AvatarIdentification = "default"
         });
 
-        team.AvatarSettingsId = AvatarId;
+
         MeetupService.CreateTeam(team);
 
         Teams = MeetupService.GetTeamsByEventId(EventId);
@@ -71,4 +71,8 @@
         StateHasChanged();
     }
 
+    public void DeleteTeam(Team t)
+    {
+        MeetupService.DeleteTeam(t);
+    }
 }

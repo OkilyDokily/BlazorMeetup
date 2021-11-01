@@ -22,12 +22,13 @@ namespace BlazorMeetup.Data
         public virtual DbSet<Team> Teams { get; set; }
         public virtual DbSet<TeamAttendee> TeamAttendees { get; set; }
         public virtual DbSet<AvatarSettings> AvatarSettings { get; set; }
+        public virtual DbSet<TeamAvatarSettings> TeamAvatarSettings { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
             builder.Entity<AvatarSettings>().HasOne<Attendee>().WithOne(x => x.AvatarSettings).OnDelete(DeleteBehavior.Cascade);
 
-            builder.Entity<AvatarSettings>().HasOne<Team>().WithOne(x => x.AvatarSettings).OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<TeamAvatarSettings>().HasOne<Team>().WithOne(x => x.TeamAvatarSettings).OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Event>().HasOne(x => x.Attendee).WithMany(x => x.EventsOwned).OnDelete(DeleteBehavior.Cascade);
 

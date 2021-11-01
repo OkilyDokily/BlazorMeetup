@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazorMeetup.Migrations
 {
     [DbContext(typeof(BlazorMeetupContext))]
-    [Migration("20211021213939_first")]
-    partial class first
+    [Migration("20211101130343_teamavatarsfixed")]
+    partial class teamavatarsfixed
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -49,6 +49,9 @@ namespace BlazorMeetup.Migrations
 
                     b.Property<string>("AttendeeId")
                         .HasColumnType("varchar(255)");
+
+                    b.Property<string>("AvatarIdentification")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("AvatarUrl")
                         .HasColumnType("longtext");
@@ -198,6 +201,37 @@ namespace BlazorMeetup.Migrations
                     b.HasIndex("TeamId");
 
                     b.ToTable("TeamAttendees");
+                });
+
+            modelBuilder.Entity("BlazorMeetup.Data.TeamAvatarSettings", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("AvatarIdentification")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("AvatarUrl")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Left")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Size")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TeamId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("Top")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TeamId")
+                        .IsUnique();
+
+                    b.ToTable("TeamAvatarSettings");
                 });
 
             modelBuilder.Entity("BlazorMeetup.Data.TimesAllowed", b =>
@@ -457,7 +491,8 @@ namespace BlazorMeetup.Migrations
                 {
                     b.HasOne("BlazorMeetup.Data.Attendee", null)
                         .WithOne("AvatarSettings")
-                        .HasForeignKey("BlazorMeetup.Data.AvatarSettings", "AttendeeId");
+                        .HasForeignKey("BlazorMeetup.Data.AvatarSettings", "AttendeeId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("BlazorMeetup.Data.Event", b =>
@@ -536,6 +571,14 @@ namespace BlazorMeetup.Migrations
                     b.Navigation("Attendee");
 
                     b.Navigation("Team");
+                });
+
+            modelBuilder.Entity("BlazorMeetup.Data.TeamAvatarSettings", b =>
+                {
+                    b.HasOne("BlazorMeetup.Data.Team", null)
+                        .WithOne("TeamAvatarSettings")
+                        .HasForeignKey("BlazorMeetup.Data.TeamAvatarSettings", "TeamId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("BlazorMeetup.Data.TimesAllowed", b =>
@@ -623,6 +666,8 @@ namespace BlazorMeetup.Migrations
             modelBuilder.Entity("BlazorMeetup.Data.Team", b =>
                 {
                     b.Navigation("Attendees");
+
+                    b.Navigation("TeamAvatarSettings");
                 });
 
             modelBuilder.Entity("BlazorMeetup.Data.Attendee", b =>

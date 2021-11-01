@@ -35,13 +35,14 @@
     [Parameter]
     public string TeamId { get; set; }
     public AvatarSettings avatarSettings { get; set; } = new();
+    public TeamAvatarSettings teamAvatarSettings { get; set; } = new();
     public Attendee DbUser { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         if (TeamId != null)
         {
-            avatarSettings = MeetupService.GetAvatarSettingsByTeamId(TeamId);
+            teamAvatarSettings = MeetupService.GetAvatarSettingsByTeamId(TeamId);
             return;
         }
         AuthenticationState user = await AuthenticationStateProvider.GetAuthenticationStateAsync();

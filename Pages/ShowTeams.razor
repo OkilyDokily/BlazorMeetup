@@ -34,10 +34,10 @@
     {
         <div class="team">
             <div>
-                  <div class="avatar"
-                    style="background-image: url(@t.AvatarSettings.AvatarUrl); background-size: @(t.AvatarSettings.Size + "%"); background-position: @(t.AvatarSettings.Left + "%") @(t.AvatarSettings.Top + "%");">
+                <div class="avatar"
+                style="background-image: url(@t.TeamAvatarSettings.AvatarUrl); background-size: @(t.TeamAvatarSettings.Size + "%"); background-position: @(t.TeamAvatarSettings.Left + "%") @(t.TeamAvatarSettings.Top + "%");">
                 </div>
-                <div>@t.Name</div>   
+                <div>@t.Name</div>
             </div>
             <ul>
                 @foreach (TeamAttendee ta in t.Attendees)

@@ -31,6 +31,8 @@
     string AttendeeId { get; set; }
 
     AvatarSettings avatarSettings { get; set; }
+    
+    TeamAvatarSettings teamAvatarSettings { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -38,7 +40,7 @@
         if (TeamId != null)
         {
 
-            avatarSettings = MeetupService.GetAvatarSettingsByTeamId(TeamId);
+            teamAvatarSettings = MeetupService.GetAvatarSettingsByTeamId(TeamId);
             return;
         }
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
@@ -114,9 +116,8 @@
                 Message = $"Unknown error";
                 return;
         }
-
-        
-        
+        if(TeamId == null)
+        {
         RemovePreviousAvatarFromFileSystem();
         avatarSettings.AvatarIdentification = Guid.NewGuid().ToString();
         string path = $"{env.WebRootPath}\\avatars\\{avatarSettings.AvatarIdentification + Path.GetExtension(selectedFile.Name)}";
@@ -135,6 +136,30 @@
 
         MeetupService.UpdateAvatarSettings(avatarSettings);
         this.StateHasChanged();
+        return;
+        }
+        else
+        {
+    RemovePreviousAvatarFromFileSystem();
+        avatarSettings.AvatarIdentification = Guid.NewGuid().ToString();
+        string path = $"{env.WebRootPath}\\avatars\\{avatarSettings.AvatarIdentification + Path.GetExtension(selectedFile.Name)}";
+        FileStream fs = File.Create(path);
+        stream = selectedFile.OpenReadStream();
+        await stream.CopyToAsync(fs);
+        stream.Close();
+        fs.Close();
+
+        Message = $"a file has been uploaded on server";
+
+    
+        avatarSettings.AvatarUrl = "/avatars/" + avatarSettings.AvatarIdentification + Path.GetExtension(selectedFile.Name);
+        Console.WriteLine("avatar team");
+       
+
+        MeetupService.UpdateAvatarSettings(avatarSettings);
+        this.StateHasChanged();
+        return;
+        }
     }
 
     public void RemovePreviousAvatarFromFileSystem()
@@ -153,7 +178,6 @@
         FileInfo file = new FileInfo($"{env.WebRootPath}" + avatarSettings.AvatarUrl);
         if (file.Exists)//check file exsit or not
         {
-
             file.Delete();
             Console.WriteLine(" file deleted successfully");
 

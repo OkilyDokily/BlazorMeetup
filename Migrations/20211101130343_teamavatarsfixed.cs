@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BlazorMeetup.Migrations
 {
-    public partial class first : Migration
+    public partial class teamavatarsfixed : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -202,6 +202,8 @@ namespace BlazorMeetup.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     AvatarUrl = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    AvatarIdentification = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     AttendeeId = table.Column<string>(type: "varchar(255)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Size = table.Column<int>(type: "int", nullable: false),
@@ -216,7 +218,7 @@ namespace BlazorMeetup.Migrations
                         column: x => x.AttendeeId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -436,6 +438,34 @@ namespace BlazorMeetup.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "TeamAvatarSettings",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    AvatarUrl = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    AvatarIdentification = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TeamId = table.Column<string>(type: "varchar(255)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Size = table.Column<int>(type: "int", nullable: false),
+                    Left = table.Column<int>(type: "int", nullable: false),
+                    Top = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TeamAvatarSettings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TeamAvatarSettings_Teams_TeamId",
+                        column: x => x.TeamId,
+                        principalTable: "Teams",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -530,6 +560,12 @@ namespace BlazorMeetup.Migrations
                 column: "TeamId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TeamAvatarSettings_TeamId",
+                table: "TeamAvatarSettings",
+                column: "TeamId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Teams_EventId",
                 table: "Teams",
                 column: "EventId");
@@ -568,6 +604,9 @@ namespace BlazorMeetup.Migrations
 
             migrationBuilder.DropTable(
                 name: "TeamAttendees");
+
+            migrationBuilder.DropTable(
+                name: "TeamAvatarSettings");
 
             migrationBuilder.DropTable(
                 name: "TimesAlloweds");

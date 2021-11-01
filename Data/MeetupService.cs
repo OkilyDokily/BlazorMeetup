@@ -24,21 +24,30 @@ namespace BlazorMeetup.Data
             }
         }
 
-        public AvatarSettings GetAvatarSettingsByTeamId(string id)
+        public TeamAvatarSettings GetAvatarSettingsByTeamId(string id)
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
 
-                Team t = ctx.Teams.Include(x => x.AvatarSettings).Where(x => x.Id == id).First();
-                return t.AvatarSettings;
+                Team t = ctx.Teams.Include(x => x.TeamAvatarSettings).Where(x => x.Id == id).First();
+                return t.TeamAvatarSettings;
             }
         }
+
         public string AddAvatarSettings(AvatarSettings asetting)
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                asetting.Id = Guid.NewGuid().ToString();
                 ctx.AvatarSettings.Add(asetting);
+                ctx.SaveChanges();
+                return asetting.Id;
+            }
+        }
+        public string AddTeamAvatarSettings(TeamAvatarSettings asetting)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                ctx.TeamAvatarSettings.Add(asetting);
                 ctx.SaveChanges();
                 return asetting.Id;
             }
@@ -246,11 +255,20 @@ namespace BlazorMeetup.Data
             }
         }
 
+        public void DeleteTeam(Team team)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                ctx.Teams.Remove(team);
+                ctx.SaveChanges();
+            }
+        }
+
         public List<Team> GetTeamsByEventId(string id)
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                return ctx.Teams.Include(x => x.AvatarSettings).Include(x => x.Attendees).ThenInclude(x => x.Attendee).ThenInclude(x => x.AvatarSettings).Where(x => x.EventId == id).ToList();
+                return ctx.Teams.Include(x => x.TeamAvatarSettings).Include(x => x.Attendees).ThenInclude(x => x.Attendee).ThenInclude(x => x.AvatarSettings).Where(x => x.EventId == id).ToList();
             }
         }
 
@@ -284,6 +302,7 @@ namespace BlazorMeetup.Data
                 ctx.SaveChanges();
             }
         }
+
 
         public List<Event> GetYourEvents(string id)
         {
