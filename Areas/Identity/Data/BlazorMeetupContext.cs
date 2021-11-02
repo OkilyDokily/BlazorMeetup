@@ -16,7 +16,6 @@ namespace BlazorMeetup.Data
         public virtual DbSet<AttendeeEvent> AttendeeEvents { get; set; }
         public virtual DbSet<SuggestedDate> SuggestedDates { get; set; }
         public virtual DbSet<RestrictDate> RestrictDates { get; set; }
-
         public virtual DbSet<TimesAllowed> TimesAlloweds { get; set; }
         public virtual DbSet<SuggestedDateAttendee> SuggestedDateAttendees { get; set; }
         public virtual DbSet<Team> Teams { get; set; }
@@ -58,7 +57,6 @@ namespace BlazorMeetup.Data
                 ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning));
             optionsBuilder.
                 ConfigureWarnings(w => w.Ignore(CoreEventId.RowLimitingOperationWithoutOrderByWarning));
-
         }
     }
 }

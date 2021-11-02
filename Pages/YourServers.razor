@@ -1,0 +1,57 @@
+@page "/YourServers"
+@attribute [Authorize]
+@inject MeetupService MeetupService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UserManager<Attendee> UserManager
+@inject NavigationManager NavigationManager
+@using BlazorMeetup.Data
+@using Microsoft.AspNetCore.Identity
+
+
+<h3>Sorted By Most Recent</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>Server</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Server server in Servers)
+        {
+            <tr @onclick='() => GoToPage(evt.Id)'>
+                <td>@evt.Description</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code
+{
+    List<Server> servers = new();
+    Attendee Your { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        Your = await UserManager.GetUserAsync(authState.User);
+        servers = MeetupService.GetYourServers(Your.Id);
+    }
+
+    void GoToPage(string id)
+    {
+        NavigationManager.NavigateTo("/EventPage/" + Your.Id + "/" + id);
+    }
+
+    void GoToEdit(string id)
+    {
+        NavigationManager.NavigateTo("/CreateEvent/" + id);
+    }
+
+    void GoToDelete(string id)
+    {
+        MeetupService.DeleteEventById(id);
+        events = MeetupService.GetYourEvents(Your.Id);
+        StateHasChanged();
+    }
+}

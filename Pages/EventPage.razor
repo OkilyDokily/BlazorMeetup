@@ -12,7 +12,7 @@
         <TabPage Text="Main">
             <h3 class="mx-2">Event Details</h3>
             @pageEvent.DateAndTime
-            <h3>Attendees</h3>
+            <h3 class="mt-4 font-medium">Attendees</h3>
             @foreach (AttendeeEvent ae in pageEvent.Attendees)
             {
                 if (ae.Attendee.AvatarSettings != null)
@@ -65,12 +65,12 @@
                     }
                 }
             }
-            <div>
+            <div class="mt-7">
                 @if (!MeetupService.AttendeeEventExists(LoggedInUser.Id, Id))
                 {
                     <button @onclick="() => JoinEvent()">I'm Interested</button>
                 }
-                <button @onclick="() => GoBack()">Go back to user's list</button>
+                <div class="font-light" @onclick="() => GoBack()">Go back to user's list</div>
             </div>
         </TabPage>
 

@@ -49,6 +49,7 @@
         {
 
             DbUser = await UserManager.GetUserAsync(User);
+            Console.WriteLine(DbUser.Id);
             asettings = MeetupService.GetAvatarSettingsByUserId(DbUser.Id);
 
             if (DbUser != null && asettings == null)

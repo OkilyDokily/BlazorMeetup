@@ -37,6 +37,7 @@ namespace BlazorMeetup
             {
                 options.Scope.Add("identify");
                 options.Scope.Add("email");
+                options.Scope.Add("guilds");
                 options.ClientId = Configuration["Discord:AppId"];
                 options.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
                 options.ClaimActions.MapJsonKey("urn:google:locale", "locale", "string");

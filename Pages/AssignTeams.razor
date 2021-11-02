@@ -32,10 +32,8 @@
 @code {
     [Parameter]
     public string EventId { get; set; }
-    public List<Team> Teams { get; set; }
-    public Team team;
-    public Event e { get; set; }
-
+    public List<Team> Teams { get; set; } = new();
+    public Team team = new();
 
     public void GoToTeamAvatar(String teamId)
     {
@@ -45,14 +43,14 @@
     protected override void OnInitialized()
     {
         Teams = MeetupService.GetTeamsByEventId(EventId);
-        team = new Team();
-        e = MeetupService.GetEventById(EventId);
+
     }
 
     public void OnSubmit()
     {
         team.Id = Guid.NewGuid().ToString();
         team.EventId = EventId;
+        MeetupService.CreateTeam(team);
         MeetupService.AddTeamAvatarSettings(new TeamAvatarSettings
         {
             TeamId = team.Id,
@@ -63,9 +61,6 @@
             AvatarIdentification = "default"
         });
 
-
-        MeetupService.CreateTeam(team);
-
         Teams = MeetupService.GetTeamsByEventId(EventId);
         team = new Team();
         StateHasChanged();
@@ -74,5 +69,7 @@
     public void DeleteTeam(Team t)
     {
         MeetupService.DeleteTeam(t);
+        Teams = MeetupService.GetTeamsByEventId(EventId);
+        StateHasChanged();
     }
 }

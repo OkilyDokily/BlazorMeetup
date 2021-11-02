@@ -38,6 +38,7 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
+                asetting.Id = Guid.NewGuid().ToString();
                 ctx.AvatarSettings.Add(asetting);
                 ctx.SaveChanges();
                 return asetting.Id;
@@ -47,6 +48,7 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
+                asetting.Id = Guid.NewGuid().ToString();
                 ctx.TeamAvatarSettings.Add(asetting);
                 ctx.SaveChanges();
                 return asetting.Id;

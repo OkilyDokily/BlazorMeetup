@@ -629,6 +629,14 @@ select {
   margin-bottom: 0.5rem;
 }
 
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.mt-7 {
+  margin-top: 1.75rem;
+}
+
 .mr-2 {
   margin-right: 0.5rem;
 }
@@ -789,6 +797,14 @@ select {
 
 .align-middle {
   vertical-align: middle;
+}
+
+.font-light {
+  font-weight: 300;
+}
+
+.font-medium {
+  font-weight: 500;
 }
 
 .text-blue-400 {
