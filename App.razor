@@ -1,3 +1,40 @@
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@using System.Security.Claims
+@using System.Collections.Generic;
+@inject IHttpClientFactory clientFactory
+@inject UserManager<Attendee> UserManager
+@code {
+
+    ClaimsPrincipal User { get; set; }
+    TokenProvider tokenProvider { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+
+        User = authState.User;
+
+
+        if (User.Identity.IsAuthenticated)
+        {
+            var result = User.Claims.Where(x => x.Type == ClaimTypes.Email).ToList().FirstOrDefault();
+            //DbUser = await UserManager.GetUserAsync(User);
+            Console.WriteLine(result.Value + " result value from user claims");
+            if (!StaticTokenHolder.tokens.ContainsKey(result.Value)) return;
+            TokenProvider tokenProvider = StaticTokenHolder.tokens[result.Value];
+            if (tokenProvider.AccessToken != "" && tokenProvider.AccessToken != null)
+            {
+                Console.WriteLine(tokenProvider.AccessToken != "" && tokenProvider != null);
+                Console.WriteLine(tokenProvider.AccessToken + " token from onintializedasync");
+                @* DiscordRequestService drs = new DiscordRequestService(clientFactory, tokenProvider);
+                    List<Server> servers = await drs.GetServersAsync(); *@
+            }
+        }
+    }
+}
+
+
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
         <Found Context="routeData">

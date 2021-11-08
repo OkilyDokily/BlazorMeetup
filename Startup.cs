@@ -11,14 +11,20 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
+using System;
+
 
 namespace BlazorMeetup
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
         }
 
         public IConfiguration Configuration { get; }
@@ -33,20 +39,44 @@ namespace BlazorMeetup
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<Attendee>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
-            services.AddAuthentication().AddDiscord(options =>
+            services.AddSingleton<TokenProvider>();
+            services.AddAuthentication(o => o.DefaultChallengeScheme = "Discord").AddDiscord(options =>
             {
                 options.Scope.Add("identify");
                 options.Scope.Add("email");
                 options.Scope.Add("guilds");
                 options.ClientId = Configuration["Discord:AppId"];
-                options.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
-                options.ClaimActions.MapJsonKey("urn:google:locale", "locale", "string");
                 options.ClaimActions.MapJsonKey("urn:discord:discriminator", "discriminator", ClaimValueTypes.UInteger32);
                 options.ClaimActions.MapJsonKey("urn:discord:avatar", "avatar", ClaimValueTypes.String);
                 options.ClaimActions.MapJsonKey("urn:discord:verified", "verified", ClaimValueTypes.Boolean);
+
                 options.ClientSecret = Configuration["Discord:AppSecret"];
+                options.SaveTokens = true;
                 options.Events = new OAuthEvents
                 {
+
+                    OnCreatingTicket = ctx =>
+                    {
+                        Console.WriteLine("creating !!!!!!!!");
+
+                        List<AuthenticationToken> tokens = ctx.Properties.GetTokens().ToList();
+                        Console.WriteLine(tokens.Count);
+                        foreach (AuthenticationToken t in tokens)
+                        {
+                            Console.WriteLine(t.Name);
+                            Console.WriteLine(t.Value);
+                        }
+                        TokenProvider tokenProvider = new();
+                        tokenProvider.AccessToken = tokens.Where(x => x.Name == "access_token").ToList().First().Value;
+                        Console.WriteLine("first value is " + tokens.Where(x => x.Name == "access_token").ToList().First().Value);
+                        tokenProvider.RefreshToken = tokens.Where(x => x.Name == "refresh_token").ToList().First().Value;
+                        var result = ctx.Identity.Claims.Where(x => x.Type == ClaimTypes.Email).ToList().FirstOrDefault();
+                        Console.WriteLine("Name " + result.Value);
+                        StaticTokenHolder.tokens.TryAdd(result.Value, tokenProvider);
+                        ctx.Properties.StoreTokens(tokens);
+
+                        return Task.CompletedTask;
+                    },
                     OnRemoteFailure = context =>
                     {
 
@@ -57,7 +87,7 @@ namespace BlazorMeetup
                     }
                 };
 
-                options.SaveTokens = true;
+
             }
 
             );
@@ -72,13 +102,18 @@ namespace BlazorMeetup
                 options.Password.RequiredLength = 1;
                 options.Password.RequiredUniqueChars = 1;
             });
+
+
             services.AddScoped<CreateUsers>();
             services.AddSingleton<TeamsUpdateService>();
+            services.AddHttpClient();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, CreateUsers cu)
         {
+
 
             if (env.IsDevelopment())
             {

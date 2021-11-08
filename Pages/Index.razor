@@ -41,16 +41,21 @@
     }
     protected async override Task OnInitializedAsync()
     {
+        @* var accessToken = await HttpContext.GetTokenAsync("access_token");
+        var refreshToken = await HttpContext.GetTokenAsync("refresh_token");
+        var expiresAt = DateTimeOffset.Parse(await HttpContext.GetTokenAsync("expires_at")); *@
+
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
 
         User = authState.User;
 
         if (User.Identity.IsAuthenticated)
         {
-
+            @* GetDiscordServers(); *@
             DbUser = await UserManager.GetUserAsync(User);
-            Console.WriteLine(DbUser.Id);
             asettings = MeetupService.GetAvatarSettingsByUserId(DbUser.Id);
+
+    
 
             if (DbUser != null && asettings == null)
             {
@@ -78,9 +83,15 @@
                         Size = 100
                     });
                 }
+
                 asettings = MeetupService.GetAvatarSettingsByUserId(DbUser.Id);
                 StateHasChanged();
             }
         }
     }
+    @* public void GetDiscordServers()
+        {
+        string server = User.HasClaim()
+        Console.WriteLine(server);
+        } *@
 }

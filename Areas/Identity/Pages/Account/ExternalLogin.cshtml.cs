@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -74,7 +71,7 @@ namespace BlazorMeetup.Areas.Identity.Pages.Account
             if (remoteError != null)
             {
                 ErrorMessage = $"Error from external provider: {remoteError}";
-                return RedirectToPage("./Login", new {ReturnUrl = returnUrl });
+                return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
@@ -84,10 +81,15 @@ namespace BlazorMeetup.Areas.Identity.Pages.Account
             }
 
             // Sign in the user with this external login provider if the user already has a login.
-            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor : true);
+            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: true, bypassTwoFactor: true);
             if (result.Succeeded)
             {
+
+                var props = new AuthenticationProperties();
+                props.StoreTokens(info.AuthenticationTokens);
+                props.IsPersistent = true;
                 _logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name, info.LoginProvider);
+
                 return LocalRedirect(returnUrl);
             }
             if (result.IsLockedOut)
@@ -136,13 +138,13 @@ namespace BlazorMeetup.Areas.Identity.Pages.Account
                         //    Locale
                         //    Picture
 
-                        foreach(Claim claim in info.Principal.Claims)
+                        foreach (Claim claim in info.Principal.Claims)
                         {
                             await _userManager.AddClaimAsync(user,
                                 claim);
                         }
-                    
-                        
+
+
                         ///// From Microsoft guidance
                         _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
 
@@ -171,7 +173,7 @@ namespace BlazorMeetup.Areas.Identity.Pages.Account
 
                         /////From Microsoft guidance.
 
-                        await _signInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);
+                        await _signInManager.SignInAsync(user, isPersistent: true, info.LoginProvider);
 
                         return LocalRedirect(returnUrl);
                     }

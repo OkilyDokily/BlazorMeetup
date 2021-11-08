@@ -19,8 +19,8 @@
     <tbody>
         @foreach (Server server in Servers)
         {
-            <tr @onclick='() => GoToPage(evt.Id)'>
-                <td>@evt.Description</td>
+            <tr @onclick='() => GoToPage(server.Id)'>
+                <td>@server.Name</td>
             </tr>
         }
     </tbody>
@@ -28,30 +28,19 @@
 
 @code
 {
-    List<Server> servers = new();
+    List<Server> Servers = new();
     Attendee Your { get; set; }
 
     protected async override Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         Your = await UserManager.GetUserAsync(authState.User);
-        servers = MeetupService.GetYourServers(Your.Id);
+        @* servers = MeetupService.GetYourServers(Your.Id); *@
     }
 
     void GoToPage(string id)
     {
         NavigationManager.NavigateTo("/EventPage/" + Your.Id + "/" + id);
     }
-
-    void GoToEdit(string id)
-    {
-        NavigationManager.NavigateTo("/CreateEvent/" + id);
-    }
-
-    void GoToDelete(string id)
-    {
-        MeetupService.DeleteEventById(id);
-        events = MeetupService.GetYourEvents(Your.Id);
-        StateHasChanged();
-    }
+ 
 }

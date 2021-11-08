@@ -19,9 +19,11 @@ namespace BlazorMeetup.Data
         public virtual DbSet<TimesAllowed> TimesAlloweds { get; set; }
         public virtual DbSet<SuggestedDateAttendee> SuggestedDateAttendees { get; set; }
         public virtual DbSet<Team> Teams { get; set; }
+        public virtual DbSet<Server> Servers { get; set; }
         public virtual DbSet<TeamAttendee> TeamAttendees { get; set; }
         public virtual DbSet<AvatarSettings> AvatarSettings { get; set; }
         public virtual DbSet<TeamAvatarSettings> TeamAvatarSettings { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
