@@ -72,6 +72,7 @@ namespace BlazorMeetup
                         tokenProvider.RefreshToken = tokens.Where(x => x.Name == "refresh_token").ToList().First().Value;
                         var result = ctx.Identity.Claims.Where(x => x.Type == ClaimTypes.Email).ToList().FirstOrDefault();
                         Console.WriteLine("Name " + result.Value);
+                        StaticTokenHolder.loggedInStatus.TryAdd(result.Value, true);
                         StaticTokenHolder.tokens.TryAdd(result.Value, tokenProvider);
                         ctx.Properties.StoreTokens(tokens);
 
@@ -86,8 +87,6 @@ namespace BlazorMeetup
                         return Task.FromResult(0);
                     }
                 };
-
-
             }
 
             );

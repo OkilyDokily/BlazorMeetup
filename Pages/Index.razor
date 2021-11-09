@@ -32,7 +32,8 @@
 @code {
     ClaimsPrincipal User { get; set; }
     List<Claim> Claims { get; set; }
-    Attendee DbUser { get; set; }
+    [CascadingParameter]
+    public string DbUserId { get; set; }
     AvatarSettings asettings { get; set; }
 
     public void GoToEdit()
@@ -42,22 +43,18 @@
     protected async override Task OnInitializedAsync()
     {
         @* var accessToken = await HttpContext.GetTokenAsync("access_token");
-        var refreshToken = await HttpContext.GetTokenAsync("refresh_token");
-        var expiresAt = DateTimeOffset.Parse(await HttpContext.GetTokenAsync("expires_at")); *@
-
+            var refreshToken = await HttpContext.GetTokenAsync("refresh_token");
+            var expiresAt = DateTimeOffset.Parse(await HttpContext.GetTokenAsync("expires_at")); *@
+        Console.WriteLine(DbUserId + " DbUserId!!!!!!!!!!");
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
 
         User = authState.User;
 
         if (User.Identity.IsAuthenticated)
         {
-            @* GetDiscordServers(); *@
-            DbUser = await UserManager.GetUserAsync(User);
-            asettings = MeetupService.GetAvatarSettingsByUserId(DbUser.Id);
 
-    
 
-            if (DbUser != null && asettings == null)
+            if (DbUserId != null && asettings == null)
             {
 
                 if (User.FindFirstValue("urn:discord:avatar:url") != null)
@@ -65,7 +62,7 @@
                     string userURL = User.FindFirstValue("urn:discord:avatar:url");
                     MeetupService.AddAvatarSettings(new AvatarSettings
                     {
-                        AttendeeId = DbUser.Id,
+                        AttendeeId = DbUserId,
                         AvatarUrl = userURL,
                         Left = 0,
                         Top = 0,
@@ -76,7 +73,7 @@
                 {
                     MeetupService.AddAvatarSettings(new AvatarSettings
                     {
-                        AttendeeId = DbUser.Id,
+                        AttendeeId = DbUserId,
                         AvatarUrl = "/avatars/blank-profile.webp",
                         Left = 0,
                         Top = 0,
@@ -84,7 +81,7 @@
                     });
                 }
 
-                asettings = MeetupService.GetAvatarSettingsByUserId(DbUser.Id);
+                asettings = MeetupService.GetAvatarSettingsByUserId(DbUserId);
                 StateHasChanged();
             }
         }

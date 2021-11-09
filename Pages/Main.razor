@@ -26,8 +26,8 @@
 @code {
     [Parameter]
     public Event ParentEvent { get; set; }
-    [Parameter]
-    public IdentityUser DbUser { get; set; }
+    [CascadingParameter]
+    public string DbUserId { get; set; }
     [CascadingParameter]
     public CreateEvent CreateEventAcc { get; set; }
     [CascadingParameter]
@@ -35,7 +35,7 @@
 
     private void HandleValidSubmit()
     {
-        ParentEvent.AttendeeId = DbUser.Id;
+        ParentEvent.AttendeeId = DbUserId;
         MeetupService.CreateEvent(ParentEvent);
         CreateEventAcc.UpdateCreated();
 

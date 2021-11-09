@@ -2,8 +2,6 @@
 @page "/CreateEvent/{Id}"
 @attribute [Authorize]
 @inject MeetupService MeetupService
-@inject AuthenticationStateProvider AuthenticationStateProvider
-@inject UserManager<Attendee> UserManager
 
 @using BlazorMeetup.Data
 @using Microsoft.AspNetCore.Identity
@@ -13,7 +11,7 @@
 
     <TabControl @ref="@TabControlRef">
         <TabPage Text="Main >>">
-            <Main DbUser=@DbUser ParentEvent="@created" />
+            <Main ParentEvent="@created" />
         </TabPage>
 
         <TabPage Text="Date Range >>">
@@ -31,14 +29,14 @@
 
     private Event created = new();
     ClaimsPrincipal User { get; set; }
-    IdentityUser DbUser { get; set; }
+
 
     public TabControl TabControlRef;
     public string RestrictDateId { get; set; }
     [Parameter]
     public string Id { get; set; }
 
-    
+
     public void UpdateCreated()
     {
         created = MeetupService.GetEventById(created.Id);
@@ -67,8 +65,5 @@
     protected async override Task OnInitializedAsync()
     {
         created.DateAndTime = DateTime.Today;
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        User = authState.User;
-        DbUser = await UserManager.GetUserAsync(User);
     }
 }

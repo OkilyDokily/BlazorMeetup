@@ -3,14 +3,16 @@ using System;
 using BlazorMeetup.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BlazorMeetup.Migrations
 {
     [DbContext(typeof(BlazorMeetupContext))]
-    partial class BlazorMeetupContextModelSnapshot : ModelSnapshot
+    [Migration("20211108223811_next")]
+    partial class next
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,9 +129,6 @@ namespace BlazorMeetup.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("AttendeeId")
-                        .HasColumnType("varchar(255)");
-
                     b.Property<string>("Icon")
                         .HasColumnType("longtext");
 
@@ -146,8 +145,6 @@ namespace BlazorMeetup.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AttendeeId");
 
                     b.ToTable("Servers");
                 });
@@ -554,13 +551,6 @@ namespace BlazorMeetup.Migrations
                     b.Navigation("Event");
                 });
 
-            modelBuilder.Entity("BlazorMeetup.Data.Server", b =>
-                {
-                    b.HasOne("BlazorMeetup.Data.Attendee", null)
-                        .WithMany("Servers")
-                        .HasForeignKey("AttendeeId");
-                });
-
             modelBuilder.Entity("BlazorMeetup.Data.SuggestedDate", b =>
                 {
                     b.HasOne("BlazorMeetup.Data.Attendee", "Attendee")
@@ -728,8 +718,6 @@ namespace BlazorMeetup.Migrations
                     b.Navigation("Events");
 
                     b.Navigation("EventsOwned");
-
-                    b.Navigation("Servers");
 
                     b.Navigation("SuggestedDates");
 

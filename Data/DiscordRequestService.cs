@@ -2,6 +2,8 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using System.Linq;
 
 
 namespace BlazorMeetup.Data
@@ -18,28 +20,35 @@ namespace BlazorMeetup.Data
             this.tokenProvider = tokenProvider;
         }
 
-        public async Task<List<Server>> GetServersAsync()
+        public async Task GetServersAsync(string id, MeetupService meetupService)
         {
 
             string token = tokenProvider.AccessToken;
 
             Console.WriteLine(token + " token from get server async");
-            List<Server> servers = new();
+
             var request = new HttpRequestMessage(HttpMethod.Get,
-                "https://discord.com/api/v8/oauth2/users/@me/guilds");
+                "https://discord.com/api/v6/users/@me/guilds");
             request.Headers.Add("Authorization", $"Bearer {token}");
             var response = await http.SendAsync(request);
             try
             {
                 response.EnsureSuccessStatusCode();
-                Console.WriteLine("success");
-                Console.WriteLine(response.StatusCode.ToString());
             }
             catch
             {
                 Console.WriteLine("oof something went wrong");
+                return;
             }
-            return servers;
+            if (response.StatusCode.ToString() == "OK")
+            {
+
+                string jsonString = await response.Content.ReadAsStringAsync();
+                List<Server> servers = JsonConvert.DeserializeObject<List<Server>>(jsonString);
+                servers.ForEach(x => x.AttendeeId = id);
+                servers.ForEach(x => Console.WriteLine(x.Id));
+                meetupService.AddServers(servers, id);
+            }
         }
     }
 }

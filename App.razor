@@ -3,14 +3,17 @@
 @using System.Collections.Generic;
 @inject IHttpClientFactory clientFactory
 @inject UserManager<Attendee> UserManager
+@inject MeetupService MeetupService
 @code {
 
     ClaimsPrincipal User { get; set; }
     TokenProvider tokenProvider { get; set; }
+    Attendee DbUser { get; set; }
+    String DbUserId { get; set; }
 
     protected async override Task OnInitializedAsync()
     {
-
+        Console.WriteLine("apppp!!!!!!!!!!!!!!!!!");
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
 
         User = authState.User;
@@ -18,32 +21,42 @@
 
         if (User.Identity.IsAuthenticated)
         {
+            Console.WriteLine("Authenticated!!!!!!!!!!!!!!!!!");
+
+            string id = (await UserManager.GetUserAsync(User)).Id;
+
             var result = User.Claims.Where(x => x.Type == ClaimTypes.Email).ToList().FirstOrDefault();
-            //DbUser = await UserManager.GetUserAsync(User);
+
             Console.WriteLine(result.Value + " result value from user claims");
             if (!StaticTokenHolder.tokens.ContainsKey(result.Value)) return;
+            Console.WriteLine(!StaticTokenHolder.loggedInStatus[result.Value]);
+            if (!StaticTokenHolder.loggedInStatus[result.Value]) return;
+
+            StaticTokenHolder.loggedInStatus[result.Value] = false;
             TokenProvider tokenProvider = StaticTokenHolder.tokens[result.Value];
             if (tokenProvider.AccessToken != "" && tokenProvider.AccessToken != null)
             {
+                Console.WriteLine("a b c");
                 Console.WriteLine(tokenProvider.AccessToken != "" && tokenProvider != null);
                 Console.WriteLine(tokenProvider.AccessToken + " token from onintializedasync");
-                @* DiscordRequestService drs = new DiscordRequestService(clientFactory, tokenProvider);
-                    List<Server> servers = await drs.GetServersAsync(); *@
+                DiscordRequestService drs = new DiscordRequestService(clientFactory, tokenProvider);
+                await drs.GetServersAsync(id, MeetupService);
             }
         }
     }
 }
 
-
-<CascadingAuthenticationState>
-    <Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
-        <Found Context="routeData">
-            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-        </Found>
-        <NotFound>
-            <LayoutView Layout="@typeof(MainLayout)">
-                <p>Sorry, there's nothing at this address.</p>
-            </LayoutView>
-        </NotFound>
-    </Router>
-</CascadingAuthenticationState>
+<CascadingValue Value=@DbUserId Name="DbUserId">
+    <CascadingAuthenticationState>
+        <Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
+            <Found Context="routeData">
+                <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+            </Found>
+            <NotFound>
+                <LayoutView Layout="@typeof(MainLayout)">
+                    <p>Sorry, there's nothing at this address.</p>
+                </LayoutView>
+            </NotFound>
+        </Router>
+    </CascadingAuthenticationState>
+</CascadingValue>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,18 @@ namespace BlazorMeetup.Data
         {
             _dbContextFactory = factory;
         }
+
+        public void AddServers(List<Server> servers, string AttendeeId)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                List<Server> serversFromDb = ctx.Servers.Where(x => x.AttendeeId == AttendeeId).ToList();
+                List<Server> narrowedList = servers.Where(x => !serversFromDb.Any(x => x.AttendeeId == AttendeeId)).ToList();
+                ctx.Servers.AddRange(narrowedList);
+                ctx.SaveChanges();
+            }
+        }
+
 
         public AvatarSettings GetAvatarSettingsByUserId(string id)
         {

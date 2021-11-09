@@ -1,6 +1,5 @@
 ﻿@inject MeetupService MeetupService
-@inject AuthenticationStateProvider AuthenticationStateProvider
-@inject UserManager<Attendee> UserManager
+
 @page "/EditAvatar"
 
 <form>
@@ -34,9 +33,11 @@
 
     [Parameter]
     public string TeamId { get; set; }
+    [CascadingParameter]
+    public string DbUserId { get; set; }
     public AvatarSettings avatarSettings { get; set; } = new();
     public TeamAvatarSettings teamAvatarSettings { get; set; } = new();
-    public Attendee DbUser { get; set; }
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -45,9 +46,8 @@
             teamAvatarSettings = MeetupService.GetAvatarSettingsByTeamId(TeamId);
             return;
         }
-        AuthenticationState user = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        DbUser = await UserManager.GetUserAsync(user.User);
-        avatarSettings = MeetupService.GetAvatarSettingsByUserId(DbUser.Id);
+
+        avatarSettings = MeetupService.GetAvatarSettingsByUserId(DbUserId);
     }
 
 
