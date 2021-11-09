@@ -32,7 +32,7 @@
 @code {
     ClaimsPrincipal User { get; set; }
     List<Claim> Claims { get; set; }
-    [CascadingParameter]
+     [CascadingParameter(Name = "DbUserId")]
     public string DbUserId { get; set; }
     AvatarSettings asettings { get; set; }
 

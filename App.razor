@@ -23,8 +23,8 @@
         {
             Console.WriteLine("Authenticated!!!!!!!!!!!!!!!!!");
 
-            string id = (await UserManager.GetUserAsync(User)).Id;
-
+            DbUserId = (await UserManager.GetUserAsync(User)).Id;
+            Console.WriteLine("DbUserId is " + DbUserId);
             var result = User.Claims.Where(x => x.Type == ClaimTypes.Email).ToList().FirstOrDefault();
 
             Console.WriteLine(result.Value + " result value from user claims");
@@ -40,7 +40,7 @@
                 Console.WriteLine(tokenProvider.AccessToken != "" && tokenProvider != null);
                 Console.WriteLine(tokenProvider.AccessToken + " token from onintializedasync");
                 DiscordRequestService drs = new DiscordRequestService(clientFactory, tokenProvider);
-                await drs.GetServersAsync(id, MeetupService);
+                await drs.GetServersAsync(DbUserId, MeetupService);
             }
         }
     }

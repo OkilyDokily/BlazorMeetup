@@ -33,7 +33,7 @@
 
     [Parameter]
     public string TeamId { get; set; }
-    [CascadingParameter]
+    [CascadingParameter(Name = "DbUserId")]
     public string DbUserId { get; set; }
     public AvatarSettings avatarSettings { get; set; } = new();
     public TeamAvatarSettings teamAvatarSettings { get; set; } = new();

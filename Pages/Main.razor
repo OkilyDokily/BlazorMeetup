@@ -26,7 +26,7 @@
 @code {
     [Parameter]
     public Event ParentEvent { get; set; }
-    [CascadingParameter]
+      [CascadingParameter(Name = "DbUserId")]
     public string DbUserId { get; set; }
     [CascadingParameter]
     public CreateEvent CreateEventAcc { get; set; }

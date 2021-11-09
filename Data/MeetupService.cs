@@ -26,6 +26,16 @@ namespace BlazorMeetup.Data
             }
         }
 
+        public List<Server> GetServersByUserId(string id)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                List<Server> serversFromDb = ctx.Servers.Where(x => x.AttendeeId == id).ToList();
+
+                return serversFromDb;
+            }
+        }
+
 
         public AvatarSettings GetAvatarSettingsByUserId(string id)
         {

@@ -1,11 +1,8 @@
 @page "/YourServers"
 @attribute [Authorize]
 @inject MeetupService MeetupService
-@inject AuthenticationStateProvider AuthenticationStateProvider
-@inject UserManager<Attendee> UserManager
 @inject NavigationManager NavigationManager
 @using BlazorMeetup.Data
-@using Microsoft.AspNetCore.Identity
 
 
 <h3>Sorted By Most Recent</h3>
@@ -28,19 +25,20 @@
 
 @code
 {
+    [CascadingParameter(Name = "DbUserId")]
+    public string DbUserId { get; set; }
     List<Server> Servers = new();
-    Attendee Your { get; set; }
 
     protected async override Task OnInitializedAsync()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        Your = await UserManager.GetUserAsync(authState.User);
-        @* servers = MeetupService.GetYourServers(Your.Id); *@
+        Console.WriteLine("Servers " + DbUserId);
+        Servers = MeetupService.GetServersByUserId(DbUserId);
+        StateHasChanged();
     }
 
     void GoToPage(string id)
     {
-        NavigationManager.NavigateTo("/EventPage/" + Your.Id + "/" + id);
+        NavigationManager.NavigateTo("/ServerPage/" + id);
     }
- 
+
 }
