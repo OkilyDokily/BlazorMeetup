@@ -20,18 +20,34 @@
         <label>Date of Event</label>
         <InputDate @bind-Value="ParentEvent.DateAndTime" />
     </div>
+    <div>
+        <InputSelect @bind-Value="ParentEvent.ServerId">
+            @foreach (Server s in servers)
+            {
+                <option value=@s.Id>@s.Name</option>
+            }
+        </InputSelect>
+    </div>
 
     <button>Create Event</button>
 </EditForm>
 @code {
     [Parameter]
     public Event ParentEvent { get; set; }
-      [CascadingParameter(Name = "DbUserId")]
+    [CascadingParameter(Name = "DbUserId")]
     public string DbUserId { get; set; }
     [CascadingParameter]
     public CreateEvent CreateEventAcc { get; set; }
     [CascadingParameter]
     private TabControl TabControlAcc { get; set; }
+    public List<Server> servers { get; set; }
+
+    protected override void OnInitialized()
+    {
+        servers = MeetupService.GetServersByUserId(DbUserId);
+        StateHasChanged();
+    }
+
 
     private void HandleValidSubmit()
     {

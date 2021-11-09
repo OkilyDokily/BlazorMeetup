@@ -36,6 +36,15 @@ namespace BlazorMeetup.Data
             }
         }
 
+        public List<Event> GetEventsByServerId(string id)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                List<Event> eventsFromDb = ctx.Events.Where(x => x.ServerId == id).ToList();
+
+                return eventsFromDb;
+            }
+        }
 
         public AvatarSettings GetAvatarSettingsByUserId(string id)
         {
