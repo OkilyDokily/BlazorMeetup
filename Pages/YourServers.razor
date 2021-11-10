@@ -38,7 +38,7 @@
                 </ul>
             </tr>
         }
-        <hr>
+        <hr class="border">
         @foreach (string serverId in serverIdsWithEventsNoUser)
         {
             <tr @onclick='() => ToggleEvents(serverId)'>
@@ -59,6 +59,7 @@
                 </ul>
             </tr>
         }
+        <hr class="border">
         @foreach (string serverId in serverIdsWithoutEvents)
         {
             <tr>
@@ -112,18 +113,16 @@
     public void GetOrderedServerIds()
     {
         List<Event> Events = MeetupService.GetYourEvents(DbUserId);
+        serverIdsWithUserEvents = Events.GroupBy(x => x.Server.Id).Select(x => x.Key).ToList();
 
-
-        List<string> serverIdsWithoutUserEvent = Servers.Select(x => x.Id).Where(x => !serverIdsWithUserEvents.Any(y => x ==
-        y)).ToList();
 
         serverIdsWithEventsNoUser = Servers.Where(x => !serverIdsWithUserEvents.Any(y => x.Id ==
         y)).Where(x => x.Events.Count > 0).Select(x => x.Id).ToList();
 
-        List<string> serverIdsWithEvents = Servers.Where(x => x.Events.Count > 0).Select(x => x.Id).ToList();
+
         serverIdsWithoutEvents = Servers.Where(x => x.Events.Count == 0).Select(x => x.Id).ToList();
 
-        serverIdsWithUserEvents = Events.GroupBy(x => x.Server.Id).Select(x => x.Key).ToList();
+
     }
 
     public class InternalHelperClass
