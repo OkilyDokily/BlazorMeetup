@@ -11,7 +11,7 @@
 <table>
     <thead>
         <tr>
-            <th>Server</th>
+            <th>Servers</th>
         </tr>
     </thead>
     <tbody>
@@ -50,10 +50,7 @@
                         {
                             serverEventDictionary[serverId].AddEvents(serverId);
                         }
-                        @foreach (Event ev in serverEventDictionary[serverId].EventsInServerWithUser)
-                        {
-                            <li @onclick='()=> GoToEventPage(ev.Id)'>@ev.Description</li>
-                        }
+
                         @foreach (Event ev in serverEventDictionary[serverId].EventsInServerWithoutUser)
                         {
                             <li @onclick='()=> GoToEventPage(ev.Id)'>@ev.Description</li>
@@ -81,6 +78,7 @@
     public Dictionary<string, InternalHelperClass> serverEventDictionary = new();
 
     List<string> serverIdsWithUserEvents = new();
+    List<string> serverIdsWithEventsNoUser = new();
     List<string> serverIdsWithoutEvents = new();
 
     protected async override Task OnInitializedAsync()
@@ -89,14 +87,16 @@
 
         InternalHelperClass.MeetupService = MeetupService;
         InternalHelperClass.DbUserId = DbUserId;
+
         foreach (var server in Servers)
         {
             serverEventDictionary.Add(server.Id, new InternalHelperClass(server));
         }
+        GetOrderedServerIds();
         StateHasChanged();
     }
 
-    List<string> serverIdsWithEventsNoUser = new();
+
 
 
     public void GoToEventPage(string id)
@@ -117,7 +117,7 @@
         List<string> serverIdsWithoutUserEvent = Servers.Select(x => x.Id).Where(x => !serverIdsWithUserEvents.Any(y => x ==
         y)).ToList();
 
-        List<string> serverIdsWithEventsNoUser = Servers.Where(x => !serverIdsWithUserEvents.Any(y => x.Id ==
+        serverIdsWithEventsNoUser = Servers.Where(x => !serverIdsWithUserEvents.Any(y => x.Id ==
         y)).Where(x => x.Events.Count > 0).Select(x => x.Id).ToList();
 
         List<string> serverIdsWithEvents = Servers.Where(x => x.Events.Count > 0).Select(x => x.Id).ToList();
@@ -148,7 +148,7 @@
 
         public void AddEvents(string serverId)
         {
-            List<Event> eventsInServer = MeetupService.GetEventsByServerId(serverId);
+            List<Event> eventsInServer = Server.Events.ToList();
             EventsInServerWithUser = eventsInServer.Where(x => x.AttendeeId == DbUserId).ToList();
             EventsInServerWithoutUser = eventsInServer.Where(x => !(x.AttendeeId == DbUserId)).ToList();
         }

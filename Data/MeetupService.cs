@@ -30,7 +30,7 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                List<Server> serversFromDb = ctx.Servers.Where(x => x.AttendeeId == id).ToList();
+                List<Server> serversFromDb = ctx.Servers.Where(x => x.AttendeeId == id).Include(x => x.Events).ThenInclude(x => x.Attendee).ToList();
 
                 return serversFromDb;
             }
@@ -310,7 +310,7 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                // if(ctx.Events.Include(x=>x.Attendees))
+
                 Event e = ctx.Events.Include(x => x.Attendees).ThenInclude(x => x.Attendee).ThenInclude(x => x.AvatarSettings).FirstOrDefault(x => x.Id == eventId);
 
                 List<Attendee> a = e.Attendees.Select(x => x.Attendee).ToList();
@@ -342,7 +342,7 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                return ctx.Events.Where(x => x.AttendeeId == id).ToList();
+                return ctx.Events.Where(x => x.AttendeeId == id).Include(x => x.Server).ToList();
             }
         }
 
