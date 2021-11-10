@@ -1,4 +1,4 @@
-﻿@page "/EventPage/{userId}/{id}"
+﻿@page "/EventPage/{id}"
 @using BlazorMeetup.Data
 @inject UserManager<Attendee> UserManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -70,7 +70,7 @@
                 {
                     <button @onclick="() => JoinEvent()">I'm Interested</button>
                 }
-                <div class="font-light" @onclick="() => GoBack()">Go back to user's list</div>
+
             </div>
         </TabPage>
 
@@ -111,11 +111,6 @@
     {
         var auth = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         LoggedInUser = await UserManager.GetUserAsync(auth.User);
-    }
-
-    void GoBack()
-    {
-        NavigationManager.NavigateTo("/UserEvents/" + UserId);
     }
 
     void JoinEvent()

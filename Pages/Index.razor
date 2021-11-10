@@ -24,7 +24,15 @@
                 @(@asettings.Left + "%") @(@asettings.Top + "%");'>
                 </div>
             }
+            <TabControl>
+                <TabPage Text="Create Event">
+                    <CreateEvent />
+                </TabPage>
 
+                <TabPage Text="Your Servers">
+                    <YourServers />
+                </TabPage>
+            </TabControl>
         </Authorized>
     </AuthorizeView>
 </div>
@@ -32,7 +40,7 @@
 @code {
     ClaimsPrincipal User { get; set; }
     List<Claim> Claims { get; set; }
-     [CascadingParameter(Name = "DbUserId")]
+    [CascadingParameter(Name = "DbUserId")]
     public string DbUserId { get; set; }
     AvatarSettings asettings { get; set; }
 

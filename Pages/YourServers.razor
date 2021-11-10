@@ -3,6 +3,7 @@
 @inject MeetupService MeetupService
 @inject NavigationManager NavigationManager
 @using BlazorMeetup.Data
+@using System.Linq
 
 
 <h3>Sorted By Most Recent</h3>
@@ -14,12 +15,60 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (Server server in Servers)
+        @foreach (string serverId in serverIdsWithUserEvents)
         {
-            <tr @onclick='() => GoToPage(server.Id)'>
-                <td>@server.Name</td>
+            <tr @onclick='() => ToggleEvents(serverId)'>
+                <td>@serverEventDictionary[serverId].Server.Name</td>
+                <ul class="block">
+                    @if (serverEventDictionary[serverId].EventsShown)
+                    {
+                        @if (!serverEventDictionary[serverId].EventsLoaded)
+                        {
+                            serverEventDictionary[serverId].AddEvents(serverId);
+                        }
+                        @foreach (Event ev in serverEventDictionary[serverId].EventsInServerWithUser)
+                        {
+                            <li @onclick='()=> GoToEventPage(ev.Id)'>@ev.Description</li>
+                        }
+                        @foreach (Event ev in serverEventDictionary[serverId].EventsInServerWithoutUser)
+                        {
+                            <li @onclick='()=> GoToEventPage(ev.Id)'>@ev.Description</li>
+                        }
+                    }
+                </ul>
             </tr>
         }
+        <hr>
+        @foreach (string serverId in serverIdsWithEventsNoUser)
+        {
+            <tr @onclick='() => ToggleEvents(serverId)'>
+                <td>@serverEventDictionary[serverId].Server.Name</td>
+                <ul class="block">
+                    @if (serverEventDictionary[serverId].EventsShown)
+                    {
+                        @if (!serverEventDictionary[serverId].EventsLoaded)
+                        {
+                            serverEventDictionary[serverId].AddEvents(serverId);
+                        }
+                        @foreach (Event ev in serverEventDictionary[serverId].EventsInServerWithUser)
+                        {
+                            <li @onclick='()=> GoToEventPage(ev.Id)'>@ev.Description</li>
+                        }
+                        @foreach (Event ev in serverEventDictionary[serverId].EventsInServerWithoutUser)
+                        {
+                            <li @onclick='()=> GoToEventPage(ev.Id)'>@ev.Description</li>
+                        }
+                    }
+                </ul>
+            </tr>
+        }
+        @foreach (string serverId in serverIdsWithoutEvents)
+        {
+            <tr>
+                <td>@serverEventDictionary[serverId].Server.Name</td>
+            </tr>
+        }
+        <hr>
     </tbody>
 </table>
 
@@ -29,16 +78,79 @@
     public string DbUserId { get; set; }
     List<Server> Servers = new();
 
+    public Dictionary<string, InternalHelperClass> serverEventDictionary = new();
+
+    List<string> serverIdsWithUserEvents = new();
+    List<string> serverIdsWithoutEvents = new();
+
     protected async override Task OnInitializedAsync()
     {
-        Console.WriteLine("Servers " + DbUserId);
         Servers = MeetupService.GetServersByUserId(DbUserId);
+
+        InternalHelperClass.MeetupService = MeetupService;
+        InternalHelperClass.DbUserId = DbUserId;
+        foreach (var server in Servers)
+        {
+            serverEventDictionary.Add(server.Id, new InternalHelperClass(server));
+        }
         StateHasChanged();
     }
 
-    void GoToPage(string id)
+    List<string> serverIdsWithEventsNoUser = new();
+
+
+    public void GoToEventPage(string id)
     {
-        NavigationManager.NavigateTo("/ServerPage/" + id);
+        NavigationManager.NavigateTo("/EventPage/" + id);
+    }
+    void ToggleEvents(string id)
+    {
+
+        serverEventDictionary[id].EventsShown = !serverEventDictionary[id].EventsShown;
     }
 
+    public void GetOrderedServerIds()
+    {
+        List<Event> Events = MeetupService.GetYourEvents(DbUserId);
+
+
+        List<string> serverIdsWithoutUserEvent = Servers.Select(x => x.Id).Where(x => !serverIdsWithUserEvents.Any(y => x ==
+        y)).ToList();
+
+        List<string> serverIdsWithEventsNoUser = Servers.Where(x => !serverIdsWithUserEvents.Any(y => x.Id ==
+        y)).Where(x => x.Events.Count > 0).Select(x => x.Id).ToList();
+
+        List<string> serverIdsWithEvents = Servers.Where(x => x.Events.Count > 0).Select(x => x.Id).ToList();
+        serverIdsWithoutEvents = Servers.Where(x => x.Events.Count == 0).Select(x => x.Id).ToList();
+
+        serverIdsWithUserEvents = Events.GroupBy(x => x.Server.Id).Select(x => x.Key).ToList();
+    }
+
+    public class InternalHelperClass
+    {
+        public static string DbUserId { get; set; }
+        public static MeetupService MeetupService { get; set; }
+        public Server Server { get; }
+        public bool EventsLoaded { get; set; } = false;
+        public bool EventsShown { get; set; } = false;
+
+        public List<Event> EventsInServerWithUser { get; set; }
+        public List<Event> EventsInServerWithoutUser { get; set; }
+
+        public void OrderEvents()
+        {
+
+        }
+        public InternalHelperClass(Server s)
+        {
+            Server = s;
+        }
+
+        public void AddEvents(string serverId)
+        {
+            List<Event> eventsInServer = MeetupService.GetEventsByServerId(serverId);
+            EventsInServerWithUser = eventsInServer.Where(x => x.AttendeeId == DbUserId).ToList();
+            EventsInServerWithoutUser = eventsInServer.Where(x => !(x.AttendeeId == DbUserId)).ToList();
+        }
+    }
 }
