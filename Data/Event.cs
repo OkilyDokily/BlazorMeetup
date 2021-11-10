@@ -12,6 +12,7 @@ namespace BlazorMeetup.Data
         public string Description { get; set; }
         public int MaximumAttendees { get; set; }
         public int MinimumAttendees { get; set; }
+        [Required]
         public string ServerId { get; set; }
         public virtual Server Server { get; set; }
         public virtual ICollection<AttendeeEvent> Attendees { get; set; }

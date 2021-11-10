@@ -153,8 +153,6 @@
 
     
         avatarSettings.AvatarUrl = "/avatars/" + avatarSettings.AvatarIdentification + Path.GetExtension(selectedFile.Name);
-        Console.WriteLine("avatar team");
-       
 
         MeetupService.UpdateAvatarSettings(avatarSettings);
         this.StateHasChanged();

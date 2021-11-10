@@ -1,11 +1,8 @@
-﻿@page "/CreateEvent/"
-@page "/CreateEvent/{Id}"
-@attribute [Authorize]
+﻿@attribute [Authorize]
 @inject MeetupService MeetupService
-
 @using BlazorMeetup.Data
-@using Microsoft.AspNetCore.Identity
 @using System.Security.Claims
+
 <CascadingValue Value="this">
     <h3>Create Event</h3>
 
@@ -29,7 +26,6 @@
 
     private Event created = new();
     ClaimsPrincipal User { get; set; }
-
 
     public TabControl TabControlRef;
     public string RestrictDateId { get; set; }

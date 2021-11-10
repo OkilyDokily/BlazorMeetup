@@ -25,8 +25,6 @@ namespace BlazorMeetup.Data
 
             string token = tokenProvider.AccessToken;
 
-            Console.WriteLine(token + " token from get server async");
-
             var request = new HttpRequestMessage(HttpMethod.Get,
                 "https://discord.com/api/v6/users/@me/guilds");
             request.Headers.Add("Authorization", $"Bearer {token}");
@@ -46,7 +44,6 @@ namespace BlazorMeetup.Data
                 string jsonString = await response.Content.ReadAsStringAsync();
                 List<Server> servers = JsonConvert.DeserializeObject<List<Server>>(jsonString);
                 servers.ForEach(x => x.AttendeeId = id);
-                servers.ForEach(x => Console.WriteLine(x.Id));
                 meetupService.AddServers(servers, id);
             }
         }

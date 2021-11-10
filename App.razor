@@ -13,7 +13,6 @@
 
     protected async override Task OnInitializedAsync()
     {
-        Console.WriteLine("apppp!!!!!!!!!!!!!!!!!");
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
 
         User = authState.User;
@@ -21,24 +20,16 @@
 
         if (User.Identity.IsAuthenticated)
         {
-            Console.WriteLine("Authenticated!!!!!!!!!!!!!!!!!");
-
             DbUserId = (await UserManager.GetUserAsync(User)).Id;
-            Console.WriteLine("DbUserId is " + DbUserId);
             var result = User.Claims.Where(x => x.Type == ClaimTypes.Email).ToList().FirstOrDefault();
 
-            Console.WriteLine(result.Value + " result value from user claims");
             if (!StaticTokenHolder.tokens.ContainsKey(result.Value)) return;
-            Console.WriteLine(!StaticTokenHolder.loggedInStatus[result.Value]);
             if (!StaticTokenHolder.loggedInStatus[result.Value]) return;
 
             StaticTokenHolder.loggedInStatus[result.Value] = false;
             TokenProvider tokenProvider = StaticTokenHolder.tokens[result.Value];
             if (tokenProvider.AccessToken != "" && tokenProvider.AccessToken != null)
             {
-                Console.WriteLine("a b c");
-                Console.WriteLine(tokenProvider.AccessToken != "" && tokenProvider != null);
-                Console.WriteLine(tokenProvider.AccessToken + " token from onintializedasync");
                 DiscordRequestService drs = new DiscordRequestService(clientFactory, tokenProvider);
                 await drs.GetServersAsync(DbUserId, MeetupService);
             }

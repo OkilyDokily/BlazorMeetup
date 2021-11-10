@@ -22,10 +22,6 @@
                 <ul class="block">
                     @if (serverEventDictionary[serverId].EventsShown)
                     {
-                        @if (!serverEventDictionary[serverId].EventsLoaded)
-                        {
-                            serverEventDictionary[serverId].AddEvents();
-                        }
                         @foreach (Event ev in serverEventDictionary[serverId].EventsInServerWithUser)
                         {
                             <li @onclick='()=> GoToEventPage(ev.Id)'>@ev.Description</li>
@@ -46,11 +42,6 @@
                 <ul class="block">
                     @if (serverEventDictionary[serverId].EventsShown)
                     {
-                        @if (!serverEventDictionary[serverId].EventsLoaded)
-                        {
-                            serverEventDictionary[serverId].AddEvents();
-                        }
-
                         @foreach (Event ev in serverEventDictionary[serverId].EventsInServerWithoutUser)
                         {
                             <li @onclick='()=> GoToEventPage(ev.Id)'>@ev.Description</li>
@@ -92,12 +83,11 @@
         foreach (var server in Servers)
         {
             serverEventDictionary.Add(server.Id, new InternalHelperClass(server));
+            serverEventDictionary[server.Id].AddEvents();
         }
         GetOrderedServerIds();
         StateHasChanged();
     }
-
-
 
 
     public void GoToEventPage(string id)
@@ -106,7 +96,6 @@
     }
     void ToggleEvents(string id)
     {
-
         serverEventDictionary[id].EventsShown = !serverEventDictionary[id].EventsShown;
     }
 
@@ -118,8 +107,6 @@
         serverIdsWithEventsNoUser = Servers.Where(x => !serverIdsWithUserEvents.Any(y => x.Id ==
         y)).Where(x => x.Events.Count > 0).Select(x => x.Id).ToList();
         serverIdsWithoutEvents = Servers.Where(x => x.Events.Count == 0).Select(x => x.Id).ToList();
-
-
     }
 
     public class InternalHelperClass
