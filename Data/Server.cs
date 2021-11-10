@@ -6,6 +6,7 @@ namespace BlazorMeetup.Data
     {
         public string Id { get; set; }
         public string AttendeeId { get; set; }
+        public virtual Attendee Attendee { get; set; }
         public virtual ICollection<Event> Events { get; set; }
         public string Name { get; set; }
         public string Icon { get; set; }

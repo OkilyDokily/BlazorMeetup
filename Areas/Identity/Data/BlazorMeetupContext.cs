@@ -27,6 +27,8 @@ namespace BlazorMeetup.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
+            builder.Entity<Server>().HasOne(x => x.Attendee).WithMany(x => x.Servers).OnDelete(DeleteBehavior.Cascade);
+
             builder.Entity<AvatarSettings>().HasOne<Attendee>().WithOne(x => x.AvatarSettings).OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<TeamAvatarSettings>().HasOne<Team>().WithOne(x => x.TeamAvatarSettings).OnDelete(DeleteBehavior.Cascade);

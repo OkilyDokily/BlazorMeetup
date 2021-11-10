@@ -24,7 +24,7 @@
                     {
                         @if (!serverEventDictionary[serverId].EventsLoaded)
                         {
-                            serverEventDictionary[serverId].AddEvents(serverId);
+                            serverEventDictionary[serverId].AddEvents();
                         }
                         @foreach (Event ev in serverEventDictionary[serverId].EventsInServerWithUser)
                         {
@@ -48,7 +48,7 @@
                     {
                         @if (!serverEventDictionary[serverId].EventsLoaded)
                         {
-                            serverEventDictionary[serverId].AddEvents(serverId);
+                            serverEventDictionary[serverId].AddEvents();
                         }
 
                         @foreach (Event ev in serverEventDictionary[serverId].EventsInServerWithoutUser)
@@ -113,13 +113,10 @@
     public void GetOrderedServerIds()
     {
         List<Event> Events = MeetupService.GetYourEvents(DbUserId);
+
         serverIdsWithUserEvents = Events.GroupBy(x => x.Server.Id).Select(x => x.Key).ToList();
-
-
         serverIdsWithEventsNoUser = Servers.Where(x => !serverIdsWithUserEvents.Any(y => x.Id ==
         y)).Where(x => x.Events.Count > 0).Select(x => x.Id).ToList();
-
-
         serverIdsWithoutEvents = Servers.Where(x => x.Events.Count == 0).Select(x => x.Id).ToList();
 
 
@@ -136,16 +133,12 @@
         public List<Event> EventsInServerWithUser { get; set; }
         public List<Event> EventsInServerWithoutUser { get; set; }
 
-        public void OrderEvents()
-        {
-
-        }
         public InternalHelperClass(Server s)
         {
             Server = s;
         }
 
-        public void AddEvents(string serverId)
+        public void AddEvents()
         {
             List<Event> eventsInServer = Server.Events.ToList();
             EventsInServerWithUser = eventsInServer.Where(x => x.AttendeeId == DbUserId).ToList();
