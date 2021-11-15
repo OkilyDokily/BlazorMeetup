@@ -20,9 +20,10 @@
 
         if (User.Identity.IsAuthenticated)
         {
+
             DbUserId = (await UserManager.GetUserAsync(User)).Id;
             var result = User.Claims.Where(x => x.Type == ClaimTypes.Email).ToList().FirstOrDefault();
-
+     
             if (!StaticTokenHolder.tokens.ContainsKey(result.Value)) return;
             if (!StaticTokenHolder.loggedInStatus[result.Value]) return;
 
@@ -30,10 +31,12 @@
             TokenProvider tokenProvider = StaticTokenHolder.tokens[result.Value];
             if (tokenProvider.AccessToken != "" && tokenProvider.AccessToken != null)
             {
+
                 DiscordRequestService drs = new DiscordRequestService(clientFactory, tokenProvider);
                 await drs.GetServersAsync(DbUserId, MeetupService);
             }
         }
+
     }
 }
 

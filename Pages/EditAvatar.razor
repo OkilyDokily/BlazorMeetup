@@ -39,7 +39,7 @@
     public TeamAvatarSettings teamAvatarSettings { get; set; } = new();
 
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         if (TeamId != null)
         {

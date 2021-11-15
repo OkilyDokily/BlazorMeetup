@@ -48,8 +48,17 @@
     {
         NavigationManager.NavigateTo("/EditAvatar");
     }
-    protected async override Task OnInitializedAsync()
+
+    protected async override Task OnParametersSetAsync()
     {
+        if (DbUserId != null)
+        {
+            asettings = MeetupService.GetAvatarSettingsByUserId(DbUserId);
+            if (asettings != null)
+            {
+                return;
+            }
+        }
 
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
 
@@ -58,10 +67,8 @@
         if (User.Identity.IsAuthenticated)
         {
 
-
             if (DbUserId != null && asettings == null)
             {
-
                 if (User.FindFirstValue("urn:discord:avatar:url") != null)
                 {
                     string userURL = User.FindFirstValue("urn:discord:avatar:url");
@@ -85,10 +92,10 @@
                         Size = 100
                     });
                 }
-
                 asettings = MeetupService.GetAvatarSettingsByUserId(DbUserId);
-                StateHasChanged();
             }
         }
     }
+
+
 }

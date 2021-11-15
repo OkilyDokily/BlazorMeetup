@@ -29,9 +29,6 @@ namespace BlazorMeetup
 
         public IConfiguration Configuration { get; }
 
-
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
 
@@ -63,6 +60,7 @@ namespace BlazorMeetup
                         tokenProvider.RefreshToken = tokens.Where(x => x.Name == "refresh_token").ToList().First().Value;
                         var result = ctx.Identity.Claims.Where(x => x.Type == ClaimTypes.Email).ToList().FirstOrDefault();
                         StaticTokenHolder.loggedInStatus.TryAdd(result.Value, true);
+                        Console.WriteLine("tray add in startup" + result.Value);
                         StaticTokenHolder.tokens.TryAdd(result.Value, tokenProvider);
                         ctx.Properties.StoreTokens(tokens);
 
@@ -101,7 +99,6 @@ namespace BlazorMeetup
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, CreateUsers cu)
         {
-
 
             if (env.IsDevelopment())
             {

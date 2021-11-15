@@ -32,6 +32,7 @@
     <button>Create Event</button>
 </EditForm>
 @code {
+
     [Parameter]
     public Event ParentEvent { get; set; }
     [CascadingParameter(Name = "DbUserId")]
@@ -42,10 +43,18 @@
     private TabControl TabControlAcc { get; set; }
     public List<Server> servers { get; set; }
 
-    protected override void OnInitialized()
+
+
+    protected override void OnParametersSet()
     {
+
         servers = MeetupService.GetServersByUserId(DbUserId);
+        if (servers.Count > 0)
+        {
+            ParentEvent.ServerId = servers.FirstOrDefault().Id;
+        }
         StateHasChanged();
+        base.OnParametersSet();
     }
 
 

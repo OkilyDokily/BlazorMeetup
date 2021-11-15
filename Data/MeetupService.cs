@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +22,7 @@ namespace BlazorMeetup.Data
                 List<Server> narrowedList = servers.Where(x => !serversFromDb.Any(x => x.AttendeeId == AttendeeId)).ToList();
                 ctx.Servers.AddRange(narrowedList);
                 ctx.SaveChanges();
+                Console.WriteLine("added servers");
             }
         }
 
@@ -31,7 +31,6 @@ namespace BlazorMeetup.Data
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
                 List<Server> serversFromDb = ctx.Servers.Where(x => x.AttendeeId == id).Include(x => x.Events).ThenInclude(x => x.Attendee).ToList();
-
                 return serversFromDb;
             }
         }
@@ -51,8 +50,8 @@ namespace BlazorMeetup.Data
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
 
-                Attendee a = ctx.Attendees.Include(x => x.AvatarSettings).Where(x => x.Id == id).First();
-                return a.AvatarSettings;
+                AvatarSettings a = ctx.AvatarSettings.Where(x => x.AttendeeId == id).FirstOrDefault();
+                return a;
             }
         }
 

@@ -140,7 +140,7 @@
         }
         else
         {
-    RemovePreviousAvatarFromFileSystem();
+        RemovePreviousAvatarFromFileSystem();
         avatarSettings.AvatarIdentification = Guid.NewGuid().ToString();
         string path = $"{env.WebRootPath}\\avatars\\{avatarSettings.AvatarIdentification + Path.GetExtension(selectedFile.Name)}";
         FileStream fs = File.Create(path);
@@ -151,7 +151,6 @@
 
         Message = $"a file has been uploaded on server";
 
-    
         avatarSettings.AvatarUrl = "/avatars/" + avatarSettings.AvatarIdentification + Path.GetExtension(selectedFile.Name);
 
         MeetupService.UpdateAvatarSettings(avatarSettings);
