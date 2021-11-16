@@ -1,8 +1,9 @@
 ﻿@inject MeetupService MeetupService
+@inject IJSRuntime IJSRunTime
 
 @page "/EditAvatar"
 
-<form>
+<EditForm Model="@avatarSettings">
     <div class="form-item">
         @*https://stackoverflow.com/questions/58222480/change-variable-value-on-input-key-press-on-blazor*@
         <label>Adjust image left or right</label>
@@ -27,7 +28,7 @@
 
     </div>
     <button @onclick="SubmitAvatarSettings">Submit Avatar Settings</button>
-</form>
+</EditForm>
 @code {
 
 
@@ -35,24 +36,43 @@
     public string TeamId { get; set; }
     [CascadingParameter(Name = "DbUserId")]
     public string DbUserId { get; set; }
-    public AvatarSettings avatarSettings { get; set; } = new();
-    public TeamAvatarSettings teamAvatarSettings { get; set; } = new();
+    public AvatarSettings avatarSettings { get; set; }
+    public TeamAvatarSettings teamAvatarSettings { get; set; }
+
+
+
+
+
+    protected override void OnParametersSet()
+    {
+        if (DbUserId == null) return;
+
+        if (avatarSettings == null)
+        {
+            avatarSettings = MeetupService.GetAvatarSettingsByUserId(DbUserId);
+        }
+        if (TeamId == null) return;
+        if (teamAvatarSettings == null)
+        {
+            teamAvatarSettings = MeetupService.GetAvatarSettingsByTeamId(TeamId);
+
+        }
+        base.OnParametersSet();
+    }
 
 
     protected override void OnInitialized()
     {
-        if (TeamId != null)
-        {
-            teamAvatarSettings = MeetupService.GetAvatarSettingsByTeamId(TeamId);
-            return;
-        }
 
-        avatarSettings = MeetupService.GetAvatarSettingsByUserId(DbUserId);
     }
-
 
     public void SubmitAvatarSettings()
     {
-        MeetupService.UpdateAvatarSettings(avatarSettings);
+        if (avatarSettings != null)
+        {
+            MeetupService.UpdateAvatarSettings(avatarSettings);
+            IJSRunTime.CreateMessage("You've successfully updated an avatar");
+        }
+
     }
 }
