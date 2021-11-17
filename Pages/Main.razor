@@ -44,10 +44,8 @@
     public List<Server> servers { get; set; }
 
 
-
     protected override void OnParametersSet()
     {
-
         servers = MeetupService.GetServersByUserId(DbUserId);
         if (servers.Count > 0)
         {

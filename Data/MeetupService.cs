@@ -136,13 +136,6 @@ namespace BlazorMeetup.Data
             {
                 ctx.Update(eventerino);
                 ctx.SaveChanges();
-                List<AttendeeEvent> aes = eventerino.Attendees.ToList();
-                foreach (AttendeeEvent a in aes)
-                {
-                    a.CanAttendProposedDate = false;
-                    ctx.Update(a);
-                    ctx.SaveChanges();
-                }
             }
         }
 
@@ -350,17 +343,6 @@ namespace BlazorMeetup.Data
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
                 return ctx.Events.Include(x => x.Attendee).ThenInclude(x => x.AvatarSettings).Include(x => x.Attendees).Where(x => x.DateAndTime >= DateTime.Today).ToList();
-            }
-        }
-
-        public void ChangeCanAttendInitialDate(string id)
-        {
-            using (var ctx = _dbContextFactory.CreateDbContext())
-            {
-                AttendeeEvent ae = ctx.AttendeeEvents.FirstOrDefault(x => x.Id == id);
-                ae.CanAttendProposedDate = !ae.CanAttendProposedDate;
-                ctx.SaveChanges();
-
             }
         }
 

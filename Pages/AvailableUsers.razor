@@ -7,6 +7,7 @@
 
 
 <h3>Available Users</h3>
+
 <ul>
     @foreach (Attendee iu in iul)
     {
@@ -40,6 +41,6 @@
     public void GoBack()
     {
         string EventId = MeetupService.GetSuggestedDateById(id).EventId;
-        NavigationManager.NavigateTo("/EventPage/" + sd.AttendeeId + "/" + EventId);
+        NavigationManager.NavigateTo("/EventPage/" + EventId);
     }
 }

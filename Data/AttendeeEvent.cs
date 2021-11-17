@@ -13,8 +13,6 @@ namespace BlazorMeetup.Data
         public string EventId { get; set; }
         public virtual Attendee Attendee { get; set; }
         public virtual Event Event { get; set; }
-        public bool CanAttendProposedDate { get; set; }
 
-       
     }
 }
