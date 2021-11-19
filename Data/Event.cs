@@ -16,7 +16,6 @@ namespace BlazorMeetup.Data
         public string ServerId { get; set; }
         public virtual Server Server { get; set; }
         public virtual ICollection<AttendeeEvent> Attendees { get; set; }
-        public virtual ICollection<SuggestedDate> SuggestedDates { get; set; }
         public virtual Attendee Attendee { get; set; }
         public virtual ICollection<RestrictDate> RestrictDates { get; set; }
 
@@ -24,10 +23,8 @@ namespace BlazorMeetup.Data
         public DateTime DateAndTime { get; set; }
         public Event()
         {
-            this.SuggestedDates = new HashSet<SuggestedDate>();
             this.Attendees = new HashSet<AttendeeEvent>();
             this.RestrictDates = new HashSet<RestrictDate>();
         }
-
     }
 }

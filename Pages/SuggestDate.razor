@@ -79,7 +79,7 @@
 
     public void SeeAvailableUser(SuggestedDate sd)
     {
-        NavigationManager.NavigateTo("/AvailableUsers/" + sd.Id);
+        NavigationManager.NavigateTo("/AvailableUsers/" + eventPage.CurrentEvent.Id + "/" + sd.Id);
     }
 
     public void RemoveSuggestedDateFromAttendee(SuggestedDate sd)
@@ -95,8 +95,6 @@
     protected override void OnInitialized()
     {
 
-
-
     }
 
     public void SuggestADate(string restrictDateId)
@@ -104,7 +102,6 @@
         Console.WriteLine(DbUserId + " DbUserId called on suggestadate method in suggestdate.razor");
 
         SuggestedDate suggested = new SuggestedDate();
-        suggested.EventId = eventPage.CurrentEvent.Id;
         suggested.AttendeeId = DbUserId;
         DateTime d = timeMakeDictionary[restrictDateId].MakeTime();
         suggested.DateTime = d;

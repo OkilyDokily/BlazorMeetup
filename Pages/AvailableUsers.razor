@@ -1,4 +1,4 @@
-﻿@page "/AvailableUsers/{id}"
+﻿@page "/AvailableUsers/{eventId}/{id}"
 @inject MeetupService MeetupService
 @inject NavigationManager NavigationManager
 @inject MeetupService MeetupService
@@ -30,6 +30,8 @@
 {
     [Parameter]
     public string id { get; set; }
+    [Parameter]
+    public string eventId { get; set; }
     public List<Attendee> iul = null;
     SuggestedDate sd { get; set; }
     protected override void OnInitialized()
@@ -40,7 +42,7 @@
 
     public void GoBack()
     {
-        string EventId = MeetupService.GetSuggestedDateById(id).EventId;
-        NavigationManager.NavigateTo("/EventPage/" + EventId);
+
+        NavigationManager.NavigateTo("/EventPage/" + eventId);
     }
 }

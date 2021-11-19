@@ -234,8 +234,9 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                Event eventToRemove = ctx.Events.Include(x => x.Attendees).Include(x => x.RestrictDates).Include(x => x.SuggestedDates).Include(x => x.Attendee).ToList().FirstOrDefault(x => x.Id == id);
-                ctx.Events.Remove(eventToRemove);
+                Event eventToRemove = ctx.Events.FirstOrDefault(x => x.Id == id);
+                // Event eventToRemove = ctx.Events.Include(x => x.Attendees).Include(x => x.RestrictDates).ThenInclude(x => x.SuggestedDates).Include(x => x.Attendee).ToList().FirstOrDefault(x => x.Id == id);
+                // ctx.Events.Remove(eventToRemove);
                 ctx.SaveChanges();
             }
         }
