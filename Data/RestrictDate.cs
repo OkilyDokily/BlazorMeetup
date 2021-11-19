@@ -12,9 +12,11 @@ namespace BlazorMeetup.Data
         public DateTime Date { get; set; }
         public virtual Event Event { get; set; }
         public virtual ICollection<TimesAllowed> TimesAlloweds { get; set; }
+        public virtual ICollection<SuggestedDate> SuggestedDates { get; set; }
 
         public RestrictDate()
         {
+            this.SuggestedDates = new HashSet<SuggestedDate>();
             this.TimesAlloweds = new HashSet<TimesAllowed>();
         }
 

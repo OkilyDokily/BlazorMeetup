@@ -826,6 +826,11 @@ select {
   vertical-align: middle;
 }
 
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
 .font-medium {
   font-weight: 500;
 }

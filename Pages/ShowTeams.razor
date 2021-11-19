@@ -74,7 +74,7 @@
             this.UpDateAttendeesWithoutTeams();
             this.StateHasChanged();
         });
-        TeamsUpdateService.AddEvent(eventPage.pageEvent.Id, myDelegate);
+        TeamsUpdateService.AddEvent(eventPage.CurrentEvent.Id, myDelegate);
 
         UpdateTeamsWithMeetupService();
         UpDateAttendeesWithoutTeams();
@@ -85,7 +85,7 @@
     {
         try
         {
-            AttendeesWithoutTeams = MeetupService.GetAttendeesWithoutTeams(eventPage.pageEvent.Id);
+            AttendeesWithoutTeams = MeetupService.GetAttendeesWithoutTeams(eventPage.CurrentEvent.Id);
         }
         catch
         {
@@ -95,11 +95,11 @@
 
     void UpdateTeamsWithMeetupService()
     {
-        Teams = MeetupService.GetTeamsByEventId(eventPage.pageEvent.Id);
+        Teams = MeetupService.GetTeamsByEventId(eventPage.CurrentEvent.Id);
     }
 
     public void Dispose()
     {
-        TeamsUpdateService.RemoveDelegate(eventPage.pageEvent.Id, myDelegate);
+        TeamsUpdateService.RemoveDelegate(eventPage.CurrentEvent.Id, myDelegate);
     }
 }

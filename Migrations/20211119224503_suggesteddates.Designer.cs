@@ -3,14 +3,16 @@ using System;
 using BlazorMeetup.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BlazorMeetup.Migrations
 {
     [DbContext(typeof(BlazorMeetupContext))]
-    partial class BlazorMeetupContextModelSnapshot : ModelSnapshot
+    [Migration("20211119224503_suggesteddates")]
+    partial class suggesteddates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -164,16 +166,11 @@ namespace BlazorMeetup.Migrations
                     b.Property<string>("EventId")
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("RestrictDateId")
-                        .HasColumnType("varchar(255)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AttendeeId");
 
                     b.HasIndex("EventId");
-
-                    b.HasIndex("RestrictDateId");
 
                     b.ToTable("SuggestedDates");
                 });
@@ -580,16 +577,9 @@ namespace BlazorMeetup.Migrations
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("BlazorMeetup.Data.RestrictDate", "RestrictDate")
-                        .WithMany("SuggestedDates")
-                        .HasForeignKey("RestrictDateId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.Navigation("Attendee");
 
                     b.Navigation("Event");
-
-                    b.Navigation("RestrictDate");
                 });
 
             modelBuilder.Entity("BlazorMeetup.Data.SuggestedDateAttendee", b =>
@@ -718,8 +708,6 @@ namespace BlazorMeetup.Migrations
 
             modelBuilder.Entity("BlazorMeetup.Data.RestrictDate", b =>
                 {
-                    b.Navigation("SuggestedDates");
-
                     b.Navigation("TimesAlloweds");
                 });
 

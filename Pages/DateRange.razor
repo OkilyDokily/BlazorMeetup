@@ -12,9 +12,9 @@
 
 @foreach (RestrictDate rd in ParentEvent.RestrictDates)
 {
-    <div>@rd.Date</div>
-    <button @onclick="()=>AddTimesToDate(rd.Id)">Add Times to this date</button>
-    <button @onclick="()=>DeleteThisRestrictDate(rd.Id)">Delete this date</button>
+    <div class="flex">@rd.Date <div class="text-xs" @onclick="()=>AddTimesToDate(rd.Id)">Add Times to this date</div>
+        <div class="text-xs" @onclick="()=>DeleteThisRestrictDate(rd.Id)">Delete this date</div>
+    </div>
 }
 
 @code {

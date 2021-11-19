@@ -59,7 +59,6 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-
                 Team t = ctx.Teams.Include(x => x.TeamAvatarSettings).Where(x => x.Id == id).First();
                 return t.TeamAvatarSettings;
             }
@@ -161,7 +160,6 @@ namespace BlazorMeetup.Data
             {
                 if (GetSuggestedDateAttendee(sd, loggedInId) == null)
                 {
-
                     SuggestedDateAttendee sdae = new SuggestedDateAttendee()
                     {
                         Id = Guid.NewGuid().ToString(),
@@ -183,7 +181,6 @@ namespace BlazorMeetup.Data
                 SuggestedDateAttendee sdae = ctx.SuggestedDateAttendees.FirstOrDefault(x => x.AttendeeId == a.Id && x.SuggestedDateId == sd.Id);
                 return sdae;
             }
-
         }
 
         public void RemoveSuggestedDateFromAttendees(SuggestedDate sd, string loggedInId)
@@ -195,7 +192,6 @@ namespace BlazorMeetup.Data
                 ctx.SuggestedDateAttendees.Remove(sdae);
                 ctx.SaveChanges();
             }
-
         }
 
         public void SuggestDate(SuggestedDate s)
@@ -385,7 +381,7 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                return ctx.Events.Include(x => x.SuggestedDates).Include(x => x.RestrictDates).Include(x => x.Attendee).ThenInclude(x => x.AvatarSettings).Include(x => x.Attendees).ThenInclude(x => x.Attendee).ThenInclude(x => x.AvatarSettings).FirstOrDefault(x => x.Id == id);
+                return ctx.Events.Include(x => x.RestrictDates).ThenInclude(x => x.SuggestedDates).Include(x => x.Attendee).ThenInclude(x => x.AvatarSettings).Include(x => x.Attendees).ThenInclude(x => x.Attendee).ThenInclude(x => x.AvatarSettings).FirstOrDefault(x => x.Id == id);
             }
         }
 

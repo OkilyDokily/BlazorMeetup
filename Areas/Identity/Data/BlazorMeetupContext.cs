@@ -26,6 +26,7 @@ namespace BlazorMeetup.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<SuggestedDate>().HasOne(x => x.RestrictDate).WithMany(x => x.SuggestedDates).OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Server>().HasOne(x => x.Attendee).WithMany(x => x.Servers).OnDelete(DeleteBehavior.Cascade);
 
@@ -35,7 +36,12 @@ namespace BlazorMeetup.Data
 
             builder.Entity<Event>().HasOne(x => x.Attendee).WithMany(x => x.EventsOwned).OnDelete(DeleteBehavior.Cascade);
 
+            builder.Entity<SuggestedDateAttendee>().HasOne(x => x.Attendee).WithMany(x => x.SuggestedDates).OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<SuggestedDateAttendee>().HasOne(x => x.SuggestedDate).WithMany(x => x.Attendees).OnDelete(DeleteBehavior.Cascade);
+
             builder.Entity<SuggestedDate>().HasOne(x => x.Event).WithMany(x => x.SuggestedDates).OnDelete(DeleteBehavior.Cascade);
+
             builder.Entity<TimesAllowed>().HasOne(x => x.RestrictDate).WithMany(x => x.TimesAlloweds).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<RestrictDate>().HasOne(x => x.Event).WithMany(x => x.RestrictDates).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<Team>().HasOne(x => x.Event).WithMany(x => x.Teams).OnDelete(DeleteBehavior.Cascade);

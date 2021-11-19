@@ -3,74 +3,77 @@
 @inject IJSRuntime IJSRunTime
 @inject NavigationManager NavigationManager
 
+@if (eventPage.CurrentEvent.RestrictDates == null || eventPage.CurrentEvent.RestrictDates.Count == 0)
+{
+    @* var tm = new TimeMaker();
+        <InputDate class="mx-1" @bind-Value="@tm.Date" /> *@
+}
+@foreach (RestrictDate restrictDate in eventPage.CurrentEvent.RestrictDates)
+{
+    timeMakeDictionary.TryAdd(restrictDate.Id, new TimeMaker());
+    <EditForm Model=@timeMakeDictionary[@restrictDate.Id] OnValidSubmit="() => SuggestADate(restrictDate.Id)">
+
+        <div>@restrictDate.Date.ToString()</div>
 
 
-<EditForm Model=@tm OnValidSubmit="@SuggestADate">
-    @if (eventPage.pageEvent.RestrictDates == null || eventPage.pageEvent.RestrictDates.Count == 0)
-    {
-        <InputDate class="mx-1" @bind-Value="@tm.Date" />
-    }
-    else
-    {
-        <select @bind="@RestrictDateId">
-            @foreach (RestrictDate rd in eventPage.pageEvent.RestrictDates)
+        <select @bind="@timeMakeDictionary[@restrictDate.Id].Hours">
+            @foreach (int num in
+           @timeMakeDictionary[@restrictDate.Id].GetHours(MeetupService.GetRestrictDateById(restrictDate.Id)?.TimesAlloweds?.ToList()))
             {
-                <option value="@rd.Id">@rd.Date.ToString()</option>
+                <option value="@num">@(num == 0 ? "12AM" : (num == 12) ? "12PM" : (num - 12) < 0 ? num + "AM" : (num -12) +
+            "PM")</option>
             }
         </select>
-    }
+        <select @bind="@timeMakeDictionary[@restrictDate.Id].Minutes">
+            @foreach (int i in @timeMakeDictionary[@restrictDate.Id].GetMinutes(@timeMakeDictionary[@restrictDate.Id].Hours,
+           MeetupService.GetRestrictDateById(restrictDate.Id)?.TimesAlloweds?.ToList()))
+            {
+                <option value="@i">@(i == 0 ? "00" : i)</option>
+            }
+        </select>
+        <button>Suggest a time for this date</button>
+    </EditForm>
 
-    <select @bind="@tm.Hours">
-        @foreach (int num in tm.GetHours(MeetupService.GetRestrictDateById(RestrictDateId)?.TimesAlloweds?.ToList()))
-        {
-            <option value="@num">@(num == 0 ? "12AM" : (num == 12) ? "12PM" : (num - 12) < 0 ? num + "AM" : (num -12) +
-            "PM")</option>
-        }
-    </select>
-    <select @bind="@tm.Minutes">
-        @foreach (int i in tm.GetMinutes(tm.Hours,
-        MeetupService.GetRestrictDateById(RestrictDateId)?.TimesAlloweds?.ToList()))
-        {
-            <option value="@i">@(i == 0 ? "00" : i)</option>
-        }
-    </select>
-    <button>Suggest a time for this date</button>
-</EditForm>
-
-
-@foreach (SuggestedDate sd in eventPage.pageEvent.SuggestedDates)
-{
-    @if (CanAttend(sd))
+    if (DbUserId != null)
     {
-        <div @onclick="()=>SeeAvailableUser(sd)" @key="sd.Id">@sd.DateTime @sd.Attendee.UserName <input type="checkbox"
-        @onclick:stopPropagation="true" checked @onchange="() => RemoveSuggestedDateFromAttendee(sd)"></div>
-    }
-    else
-    {
-        <div @onclick="()=>SeeAvailableUser(sd)" @key="sd.Id">@sd.DateTime @sd.Attendee.UserName <input type="checkbox"
-        @onclick:stopPropagation="true" @onchange="() => AddSuggestedDateToAttendee(sd)"></div>
+        @foreach (SuggestedDate sd in restrictDate.SuggestedDates)
+        {
+            Console.WriteLine(sd.Id + " id in suggest dates in suggestdate.razor");
+            @if (CanAttend(sd))
+            {
+                <div @onclick="()=>SeeAvailableUser(sd)" @key="@("suggest" + sd.Id)">@sd.DateTime @sd.Attendee.UserName <input
+        type="checkbox" @onclick:stopPropagation="true" checked @onchange="() => RemoveSuggestedDateFromAttendee(sd)">
+                </div>
+            }
+            else
+            {
+                <div @onclick="()=>SeeAvailableUser(sd)" @key="@("suggest" + sd.Id + "end")">@sd.DateTime
+                    @sd.Attendee.UserName <input type="checkbox" @onclick:stopPropagation="true"
+        @onchange="() => AddSuggestedDateToAttendee(sd)"></div>
+            }
+        }
     }
 }
+
 
 @code {
     [CascadingParameter]
     EventPage eventPage { get; set; }
 
-    [Parameter]
-    public string LoggedInId { get; set; }
+    [CascadingParameter(Name = "DbUserId")]
+    public string DbUserId { get; set; }
 
-    SuggestedDate suggested = new SuggestedDate();
+
     [Parameter]
     public string Id { get; set; }
 
-    TimeMaker tm = new TimeMaker();
 
-    string RestrictDateId;
-
+    public Dictionary<string, TimeMaker> timeMakeDictionary = new();
 
     bool CanAttend(SuggestedDate sd)
     {
-        bool b = MeetupService.CanAttend(sd, LoggedInId);
+        Console.WriteLine(DbUserId + " DbUserId can attend");
+        bool b = MeetupService.CanAttend(sd, DbUserId);
         return b;
     }
 
@@ -81,40 +84,40 @@
 
     public void RemoveSuggestedDateFromAttendee(SuggestedDate sd)
     {
-        MeetupService.RemoveSuggestedDateFromAttendees(sd, LoggedInId);
+        MeetupService.RemoveSuggestedDateFromAttendees(sd, DbUserId);
     }
 
     public void AddSuggestedDateToAttendee(SuggestedDate sd)
     {
-        MeetupService.AddSuggestedDateToAttendees(sd, LoggedInId);
+        MeetupService.AddSuggestedDateToAttendees(sd, DbUserId);
     }
 
     protected override void OnInitialized()
     {
-        suggested.EventId = eventPage.pageEvent.Id;
-        suggested.AttendeeId = LoggedInId;
-        if (eventPage.pageEvent.RestrictDates.Count != 0 && eventPage.pageEvent.RestrictDates != null)
-        {
-            RestrictDateId = eventPage.pageEvent.RestrictDates.First().Id;
-            tm.Hours = tm.GetHours(MeetupService.GetRestrictDateById(RestrictDateId).TimesAlloweds.ToList()).FirstOrDefault();
-            tm.Minutes = tm.GetMinutes(tm.Hours,
-            MeetupService.GetRestrictDateById(RestrictDateId).TimesAlloweds.ToList()).FirstOrDefault();
-        }
-        else
-        {
-            tm.Hours = 0;
-        }
+
+
+
     }
 
-    public void SuggestADate()
+    public void SuggestADate(string restrictDateId)
     {
-        DateTime d = tm.MakeTime();
+        Console.WriteLine(DbUserId + " DbUserId called on suggestadate method in suggestdate.razor");
+
+        SuggestedDate suggested = new SuggestedDate();
+        suggested.EventId = eventPage.CurrentEvent.Id;
+        suggested.AttendeeId = DbUserId;
+        DateTime d = timeMakeDictionary[restrictDateId].MakeTime();
         suggested.DateTime = d;
+        suggested.RestrictDateId = restrictDateId;
         MeetupService.SuggestDate(suggested);
         IJSRunTime.CreateMessage("You've successfully suggested a new date.");
-        eventPage.pageEvent = MeetupService.GetEventById(eventPage.pageEvent.Id);
-        tm = new TimeMaker();
+        eventPage.CurrentEvent = MeetupService.GetEventById(eventPage.CurrentEvent.Id);
+
         StateHasChanged();
     }
 
+    public string StripTimeFromRestictDate(DateTime dateTime)
+    {
+        return "";
+    }
 }

@@ -1,4 +1,4 @@
-﻿@page "/EventPage/{id}"
+﻿@page "/EventPage/{EventId}"
 @using BlazorMeetup.Data
 @inject UserManager<Attendee> UserManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -11,13 +11,13 @@
     <TabControl>
         <TabPage Text="Main">
             <h3 class="mx-2">Event Details</h3>
-            @pageEvent.DateAndTime
+            @CurrentEvent.DateAndTime
             <h3 class="mt-4 font-medium">Attendees</h3>
-            @foreach (AttendeeEvent ae in pageEvent.Attendees)
+            @foreach (AttendeeEvent ae in CurrentEvent.Attendees)
             {
                 if (ae.Attendee.AvatarSettings != null)
                 {
-                    @if (ae.AttendeeId == LoggedInUser.Id)
+                    @if (ae.AttendeeId == DbUserId)
                     {
 
                         <div class="attendees" @key="ae.Id">
@@ -42,7 +42,7 @@
                 }
             }
             <div class="mt-7">
-                @if (!MeetupService.AttendeeEventExists(LoggedInUser.Id, Id))
+                @if (!MeetupService.AttendeeEventExists(DbUserId, EventId))
                 {
                     <button @onclick="() => JoinEvent()">I'll go at this date and time</button>
                 }
@@ -51,13 +51,13 @@
         </TabPage>
 
         <TabPage Text="Suggest a time for available dates">
-            <SuggestDate LoggedInId="@LoggedInUser.Id" />
+            <SuggestDate />
         </TabPage>
 
-        @if (LoggedInUser.Id == UserId)
+        @if (DbUserId == CurrentEvent.AttendeeId)
         {
             <TabPage Text="Assign User To Teams">
-                <AssignTeams EventId=@Id />
+                <AssignTeams EventId=@EventId />
             </TabPage>
         }
         else
@@ -71,35 +71,30 @@
 @code {
 
 
+    [CascadingParameter(Name = "DbUserId")]
+    public string DbUserId { get; set; }
     [Parameter]
-    public string UserId { get; set; }
-    [Parameter]
-    public string Id { get; set; }
-    public Event pageEvent { get; set; }
-    Attendee LoggedInUser { get; set; }
+    public string EventId { get; set; }
+    public Event CurrentEvent { get; set; }
+
 
     protected override void OnParametersSet()
     {
-        pageEvent = MeetupService.GetEventById(Id);
+        CurrentEvent = MeetupService.GetEventById(EventId);
     }
 
-    protected override async Task OnInitializedAsync()
-    {
-        var auth = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        LoggedInUser = await UserManager.GetUserAsync(auth.User);
-    }
 
     void JoinEvent()
     {
-        MeetupService.JoinEvent(LoggedInUser.Id, Id);
-        pageEvent = MeetupService.GetEventById(Id);
+        MeetupService.JoinEvent(DbUserId, EventId);
+        CurrentEvent = MeetupService.GetEventById(EventId);
         StateHasChanged();
     }
 
     void Leave()
     {
-        MeetupService.LeaveEvent(LoggedInUser.Id, Id);
-        pageEvent = MeetupService.GetEventById(Id);
+        MeetupService.LeaveEvent(DbUserId, EventId);
+        CurrentEvent = MeetupService.GetEventById(EventId);
         StateHasChanged();
     }
 
