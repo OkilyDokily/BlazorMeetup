@@ -395,6 +395,18 @@ namespace BlazorMeetup.Data
             }
         }
 
+        public void DeleteSuggestedDateById(string id)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                SuggestedDate sd = ctx.SuggestedDates.FirstOrDefault(x => x.Id == id);
+                ctx.SuggestedDates.Remove(sd);
+                ctx.SaveChanges();
+            }
+        }
+
+
+
         public RestrictDate GetRestrictDateById(string id)
         {
             using (var ctx = _dbContextFactory.CreateDbContext())

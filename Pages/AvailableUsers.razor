@@ -7,37 +7,54 @@
 
 
 <h3>Available Users</h3>
-
-<ul>
-    @foreach (Attendee iu in iul)
-    {
-        if (iu.AvatarSettings != null)
+@if (DbUserId != null)
+{
+    <ul>
+        @foreach (Attendee iu in iul)
         {
-            <li @key="iu.Id">
-                <div class="avatar"
+            if (iu.AvatarSettings != null)
+            {
+                <li @key="iu.Id">
+                    <div class="avatar"
             style='background-image: url(@iu.AvatarSettings.AvatarUrl); background-size: @(iu.AvatarSettings.Size + "%"); background-position: @(iu.AvatarSettings.Left + "%") @(iu.AvatarSettings.Top + "%");'>
-                </div>
-                <div>@iu.UserName</div>
-            </li>
+                    </div>
+                    <div>@iu.UserName</div>
+                </li>
+            }
+
         }
-
+    </ul>
+    @if (DbUserId == sd.AttendeeId)
+    {
+        <button @onclick="()=>DeleteSuggestedDate(sd.Id)">Delete Suggest Date</button>
     }
-</ul>
+    <button @onclick="GoBack">Go Back</button>
+}
 
-<button @onclick="GoBack">Go Back</button>
 
 @code
 {
+    [CascadingParameter(Name = "DbUserId")]
+    public string DbUserId { get; set; }
+
     [Parameter]
     public string id { get; set; }
     [Parameter]
     public string eventId { get; set; }
     public List<Attendee> iul = null;
     SuggestedDate sd { get; set; }
+
+
     protected override void OnInitialized()
     {
         sd = MeetupService.GetSuggestedDateById(id);
         iul = MeetupService.GetAvailableUsers(id);
+    }
+
+    public void DeleteSuggestedDate(string id)
+    {
+        MeetupService.DeleteSuggestedDateById(id);
+        NavigationManager.NavigateTo("/EventPage/" + eventId);
     }
 
     public void GoBack()
