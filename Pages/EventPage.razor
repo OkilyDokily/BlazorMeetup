@@ -1,5 +1,4 @@
-﻿@page "/EventPage/{EventId}"
-@using BlazorMeetup.Data
+﻿@using BlazorMeetup.Data
 @inject UserManager<Attendee> UserManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject MeetupService MeetupService
@@ -8,7 +7,7 @@
 
 
 <CascadingValue Value="this">
-    <TabControl>
+    <TabControl IsActiveControl=@EventPageIsActive>
         <TabPage Text="Main">
             <h3 class="mx-2">Event Details</h3>
             @CurrentEvent.DateAndTime
@@ -75,6 +74,8 @@
     public string DbUserId { get; set; }
     [Parameter]
     public string EventId { get; set; }
+    [Parameter]
+    public bool EventPageIsActive { get; set; } = true;
     public Event CurrentEvent { get; set; }
 
 

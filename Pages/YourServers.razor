@@ -15,52 +15,55 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (string serverId in serverIdsWithUserEvents)
+        @if (IndexPage != null)
         {
-            <tr @onclick='() => ToggleEvents(serverId)'>
-                <td>@serverEventDictionary[serverId].Server.Name
-                    <ul class="ml-5">
-                        @if (serverEventDictionary[serverId].EventsShown)
-                        {
-                            @foreach (Event ev in serverEventDictionary[serverId].EventsInServerWithUser)
+            @foreach (string serverId in serverIdsWithUserEvents)
+            {
+                <tr @onclick='() => ToggleEvents(serverId)'>
+                    <td>@serverEventDictionary[serverId].Server.Name
+                        <ul class="ml-5">
+                            @if (serverEventDictionary[serverId].EventsShown)
                             {
-                                <li @onclick='()=> GoToEventPage(ev.Id)'>@ev.Description</li>
+                                @foreach (Event ev in serverEventDictionary[serverId].EventsInServerWithUser)
+                                {
+                                    <li @onclick='()=> GoToEventPage(ev.Id)'>@ev.Description</li>
+                                }
+                                @foreach (Event ev in serverEventDictionary[serverId].EventsInServerWithoutUser)
+                                {
+                                    <li @onclick='()=> GoToEventPage(ev.Id)'>@ev.Description</li>
+                                }
                             }
-                            @foreach (Event ev in serverEventDictionary[serverId].EventsInServerWithoutUser)
+                        </ul>
+                    </td>
+                </tr>
+            }
+            <hr class="border">
+            @foreach (string serverId in serverIdsWithEventsNoUser)
+            {
+                <tr @onclick='() => ToggleEvents(serverId)'>
+                    <td>@serverEventDictionary[serverId].Server.Name
+                        <ul class="ml-5">
+                            @if (serverEventDictionary[serverId].EventsShown)
                             {
-                                <li @onclick='()=> GoToEventPage(ev.Id)'>@ev.Description</li>
+                                @foreach (Event ev in serverEventDictionary[serverId].EventsInServerWithoutUser)
+                                {
+                                    <li @onclick='()=> GoToEventPage(ev.Id)'>@ev.Description</li>
+                                }
                             }
-                        }
-                    </ul>
-                </td>
-            </tr>
+                        </ul>
+                    </td>
+                </tr>
+            }
+            <hr class="border">
+            @foreach (string serverId in serverIdsWithoutEvents)
+            {
+                <tr>
+                    <td>@serverEventDictionary[serverId].Server.Name</td>
+                </tr>
+            }
+            <hr>
         }
-        <hr class="border">
-        @foreach (string serverId in serverIdsWithEventsNoUser)
-        {
-            <tr @onclick='() => ToggleEvents(serverId)'>
-                <td>@serverEventDictionary[serverId].Server.Name
-                    <ul class="ml-5">
-                        @if (serverEventDictionary[serverId].EventsShown)
-                        {
-                            @foreach (Event ev in serverEventDictionary[serverId].EventsInServerWithoutUser)
-                            {
-                                <li @onclick='()=> GoToEventPage(ev.Id)'>@ev.Description</li>
-                            }
-                        }
-                    </ul>
-                </td>
 
-            </tr>
-        }
-        <hr class="border">
-        @foreach (string serverId in serverIdsWithoutEvents)
-        {
-            <tr>
-                <td>@serverEventDictionary[serverId].Server.Name</td>
-            </tr>
-        }
-        <hr>
     </tbody>
 </table>
 
@@ -68,6 +71,8 @@
 {
     [CascadingParameter(Name = "DbUserId")]
     public string DbUserId { get; set; }
+    [CascadingParameter(Name = "IndexPage")]
+    public Index IndexPage { get; set; }
     List<Server> Servers = new();
 
     public Dictionary<string, InternalHelperClass> serverEventDictionary = new();
@@ -95,7 +100,8 @@
 
     public void GoToEventPage(string id)
     {
-        NavigationManager.NavigateTo("/EventPage/" + id);
+        IndexPage.UpdateEventId(id);
+        StateHasChanged();
     }
     void ToggleEvents(string id)
     {

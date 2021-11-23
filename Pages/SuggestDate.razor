@@ -41,7 +41,7 @@
         {
             @foreach (SuggestedDate sd in restrictDate.SuggestedDates)
             {
-                Console.WriteLine(sd.Id + " id in suggest dates in suggestdate.razor");
+
                 @if (CanAttend(sd))
                 {
                     <div @onclick="()=>SeeAvailableUser(sd)" @key="@("suggest" + sd.Id)">@sd.DateTime.ToString("hh:mm tt")

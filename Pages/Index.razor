@@ -18,21 +18,30 @@
 
             @if (asettings != null)
             {
+      
                 <div @onclick=GoToEdit class="lg-avatar" style='background-image: url(@asettings.AvatarUrl); background-size:
                 @(asettings.Size
                 + "%"); background-position:
                 @(@asettings.Left + "%") @(@asettings.Top + "%");'>
                 </div>
             }
-            <TabControl>
-                <TabPage Text="Create Event">
-                    <CreateEvent />
-                </TabPage>
 
-                <TabPage Text="Your Servers">
-                    <YourServers />
-                </TabPage>
-            </TabControl>
+            <CascadingValue Value=@this Name="IndexPage">
+                <TabControl IsActiveControl=@IsIndexActive>
+                    <TabPage Text="Create Event">
+                        <CreateEvent CreateEventIsActive=@CreateEventIsActive />
+                    </TabPage>
+
+                    <TabPage Text="Your Servers">
+                        <YourServers />
+                    </TabPage>
+                </TabControl>
+            </CascadingValue>
+            @if (EventId != null)
+            {
+                <EventPage EventPageIsActive=@IsEventPageActive EventId=@EventId />
+            }
+
         </Authorized>
     </AuthorizeView>
 </div>
@@ -43,14 +52,26 @@
     [CascadingParameter(Name = "DbUserId")]
     public string DbUserId { get; set; }
     AvatarSettings asettings { get; set; }
+    public string EventId { get; set; }
+    public bool IsIndexActive { get; set; } = true;
+    public bool IsEventPageActive { get; set; } = true;
+    public bool CreateEventIsActive { get; set; } = true;
 
     public void GoToEdit()
     {
         NavigationManager.NavigateTo("/EditAvatar");
     }
 
+    public void UpdateEventId(string id)
+    {
+        EventId = id;
+        IsIndexActive = false;
+        StateHasChanged();
+    }
+
     protected async override Task OnParametersSetAsync()
     {
+        if (DbUserId == null) return;
         if (DbUserId != null)
         {
             asettings = MeetupService.GetAvatarSettingsByUserId(DbUserId);

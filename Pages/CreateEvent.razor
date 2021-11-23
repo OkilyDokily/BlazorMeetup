@@ -6,7 +6,7 @@
 <CascadingValue Value="this">
     <h3>Create Event</h3>
 
-    <TabControl @ref="@TabControlRef">
+    <TabControl @ref="@TabControlRef" IsActiveControl=@CreateEventIsActive>
         <TabPage Text="Main >>">
             <Main ParentEvent="@created" />
         </TabPage>
@@ -32,7 +32,8 @@
     [Parameter]
     public string Id { get; set; }
 
-
+    [Parameter]
+    public bool CreateEventIsActive { get; set; }
     public void UpdateCreated()
     {
         created = MeetupService.GetEventById(created.Id);
