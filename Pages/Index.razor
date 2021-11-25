@@ -37,10 +37,7 @@
                     </TabPage>
                 </TabControl>
             </CascadingValue>
-            @if (EventId != null)
-            {
-                <EventPage EventPageIsActive=@IsEventPageActive EventId=@EventId />
-            }
+          
 
         </Authorized>
     </AuthorizeView>
@@ -52,9 +49,8 @@
     [CascadingParameter(Name = "DbUserId")]
     public string DbUserId { get; set; }
     AvatarSettings asettings { get; set; }
-    public string EventId { get; set; }
     public bool IsIndexActive { get; set; } = true;
-    public bool IsEventPageActive { get; set; } = true;
+    
     public bool CreateEventIsActive { get; set; } = true;
 
     public void GoToEdit()
@@ -62,12 +58,7 @@
         NavigationManager.NavigateTo("/EditAvatar");
     }
 
-    public void UpdateEventId(string id)
-    {
-        EventId = id;
-        IsIndexActive = false;
-        StateHasChanged();
-    }
+
 
     protected async override Task OnParametersSetAsync()
     {

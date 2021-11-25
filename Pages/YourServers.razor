@@ -6,17 +6,16 @@
 @using System.Linq
 
 
-<h3>Sorted By Most Recent</h3>
 
-<table>
-    <thead>
-        <tr>
-            <th>Servers</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (IndexPage != null)
-        {
+@if (EventId == "")
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Servers</th>
+            </tr>
+        </thead>
+        <tbody>
             @foreach (string serverId in serverIdsWithUserEvents)
             {
                 <tr @onclick='() => ToggleEvents(serverId)'>
@@ -62,27 +61,36 @@
                 </tr>
             }
             <hr>
-        }
 
-    </tbody>
-</table>
+
+
+        </tbody>
+    </table>
+
+}
+<EventPage EventPageIsActive=true EventId=@EventId />
+
+
+
 
 @code
 {
     [CascadingParameter(Name = "DbUserId")]
     public string DbUserId { get; set; }
-    [CascadingParameter(Name = "IndexPage")]
-    public Index IndexPage { get; set; }
-    List<Server> Servers = new();
+
+    public List<Server> Servers { get; set; }
 
     public Dictionary<string, InternalHelperClass> serverEventDictionary = new();
-
+    public string EventId { get; set; } = "";
+    public bool IsEventPageActive { get; set; } = true;
     List<string> serverIdsWithUserEvents = new();
     List<string> serverIdsWithEventsNoUser = new();
     List<string> serverIdsWithoutEvents = new();
 
-    protected override void OnInitialized()
+    protected override void OnParametersSet()
     {
+        if (DbUserId == null) return;
+        if (Servers != null) return;
         Servers = MeetupService.GetServersByUserId(DbUserId);
 
         InternalHelperClass.MeetupService = MeetupService;
@@ -100,8 +108,9 @@
 
     public void GoToEventPage(string id)
     {
-        IndexPage.UpdateEventId(id);
+        EventId = id;
         StateHasChanged();
+
     }
     void ToggleEvents(string id)
     {

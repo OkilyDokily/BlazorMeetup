@@ -5,55 +5,19 @@
 @inject UserManager<Attendee> UserManager
 @inject NavigationManager NavigationManager
 
+@if (EventId != "" && EventId != null)
+{
+    <CascadingValue Value="this">
+        <TabControl IsActiveControl=@EventPageIsActive>
+            <TabPage Text="Main">
+                <MainEvent CurrentEvent=@CurrentEvent />
+            </TabPage>
 
-<CascadingValue Value="this">
-    <TabControl IsActiveControl=@EventPageIsActive>
-        <TabPage Text="Main">
-            <h3 class="mx-2">Event Details</h3>
-            @CurrentEvent.DateAndTime
-            <h3 class="mt-4 font-medium">Attendees</h3>
-            @foreach (AttendeeEvent ae in CurrentEvent.Attendees)
-            {
-                if (ae.Attendee.AvatarSettings != null)
-                {
-                    @if (ae.AttendeeId == DbUserId)
-                    {
+            <TabPage Text="Suggest a time for available dates">
+                <SuggestDate />
+            </TabPage>
 
-                        <div class="attendees" @key="ae.Id">
-                            <div class="avatar"
-                    style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">
-                            </div>
-                            <div>@ae.Attendee.UserName</div>
-                            <div style="display:inline" @onclick="Leave">leave</div>
-                        </div>
-
-                    }
-                    else
-                    {
-                        <div class="attendees" @key="ae.Id">
-                            <div class="avatar"
-                    style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">
-                            </div>
-                            <div>@ae.Attendee.UserName</div>
-                        </div>
-
-                    }
-                }
-            }
-            <div class="mt-7">
-                @if (!MeetupService.AttendeeEventExists(DbUserId, EventId))
-                {
-                    <button @onclick="() => JoinEvent()">I'll go at this date and time</button>
-                }
-
-            </div>
-        </TabPage>
-
-        <TabPage Text="Suggest a time for available dates">
-            <SuggestDate />
-        </TabPage>
-
-        @if (DbUserId == CurrentEvent.AttendeeId)
+            @if (DbUserId != null && CurrentEvent != null && DbUserId == CurrentEvent.AttendeeId)
         {
             <TabPage Text="Assign User To Teams">
                 <AssignTeams EventId=@EventId />
@@ -67,6 +31,8 @@
         }
     </TabControl>
 </CascadingValue>
+}
+
 @code {
 
 
@@ -82,20 +48,6 @@
     protected override void OnParametersSet()
     {
         CurrentEvent = MeetupService.GetEventById(EventId);
-    }
-
-    void JoinEvent()
-    {
-        MeetupService.JoinEvent(DbUserId, EventId);
-        CurrentEvent = MeetupService.GetEventById(EventId);
-        StateHasChanged();
-    }
-
-    void Leave()
-    {
-        MeetupService.LeaveEvent(DbUserId, EventId);
-        CurrentEvent = MeetupService.GetEventById(EventId);
-        StateHasChanged();
     }
 
 }

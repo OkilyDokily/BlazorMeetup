@@ -1,0 +1,63 @@
+@using BlazorMeetup.Data
+@inject MeetupService MeetupService;
+
+<h3 class="mx-2">Event Details</h3>
+@CurrentEvent.DateAndTime
+<h3 class="mt-4 font-medium">Attendees</h3>
+@foreach (AttendeeEvent ae in CurrentEvent.Attendees)
+{
+    if (ae.Attendee.AvatarSettings != null)
+    {
+        @if (ae.AttendeeId == DbUserId)
+        {
+
+            <div class="attendees" @key="ae.Id">
+                <div class="avatar"
+        style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">
+                </div>
+                <div>@ae.Attendee.UserName</div>
+                <div style="display:inline" @onclick="Leave">leave</div>
+            </div>
+
+        }
+        else
+        {
+            <div class="attendees" @key="ae.Id">
+                <div class="avatar"
+        style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">
+                </div>
+                <div>@ae.Attendee.UserName</div>
+            </div>
+
+        }
+    }
+}
+<div class="mt-7">
+    @if (!MeetupService.AttendeeEventExists(DbUserId, CurrentEvent.Id))
+    {
+        <button @onclick="() => JoinEvent()">I'll go at this date and time</button>
+    }
+
+</div>
+@code {
+    [Parameter]
+    public Event CurrentEvent { get; set; }
+    [CascadingParameter(Name = "DbUserId")]
+    public string DbUserId { get; set; }
+
+    void Leave()
+    {
+        MeetupService.LeaveEvent(DbUserId, CurrentEvent.Id);
+        CurrentEvent = MeetupService.GetEventById(CurrentEvent.Id);
+        StateHasChanged();
+    }
+
+    void JoinEvent()
+    {
+        MeetupService.JoinEvent(DbUserId, CurrentEvent.Id);
+        CurrentEvent = MeetupService.GetEventById(CurrentEvent.Id);
+        StateHasChanged();
+    }
+
+
+}
