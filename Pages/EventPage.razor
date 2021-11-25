@@ -8,7 +8,7 @@
 @if (EventId != "" && EventId != null)
 {
     <CascadingValue Value="this">
-        <TabControl IsActiveControl=@EventPageIsActive>
+        <TabControl >
             <TabPage Text="Main">
                 <MainEvent CurrentEvent=@CurrentEvent />
             </TabPage>
@@ -40,8 +40,7 @@
     public string DbUserId { get; set; }
     [Parameter]
     public string EventId { get; set; }
-    [Parameter]
-    public bool EventPageIsActive { get; set; } = true;
+
     public Event CurrentEvent { get; set; }
 
 

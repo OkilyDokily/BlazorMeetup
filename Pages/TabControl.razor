@@ -14,9 +14,9 @@
     [Parameter]
     public RenderFragment ChildContent { get; set; }
 
+
     public TabPage ActivePage { get; set; }
-    [Parameter]
-    public bool IsActiveControl { get; set; }
+
     public List<TabPage> Pages = new List<TabPage>();
     internal void AddPage(TabPage tabPage)
     {
@@ -67,16 +67,14 @@
             return () =>
             {
                 ActivatePage(tabPage);
-                IsActiveControl = true;
+                
                 StateHasChanged();
-
             };
         }
         else
         {
             return () =>
             {
-                IsActiveControl = true;
                 StateHasChanged();
             };
         }

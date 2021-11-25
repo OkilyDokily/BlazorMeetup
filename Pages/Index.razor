@@ -18,7 +18,7 @@
 
             @if (asettings != null)
             {
-      
+
                 <div @onclick=GoToEdit class="lg-avatar" style='background-image: url(@asettings.AvatarUrl); background-size:
                 @(asettings.Size
                 + "%"); background-position:
@@ -27,17 +27,25 @@
             }
 
             <CascadingValue Value=@this Name="IndexPage">
-                <TabControl IsActiveControl=@IsIndexActive>
+                <TabControl>
                     <TabPage Text="Create Event">
-                        <CreateEvent CreateEventIsActive=@CreateEventIsActive />
+                        <CreateEvent />
                     </TabPage>
 
                     <TabPage Text="Your Servers">
                         <YourServers />
                     </TabPage>
+
+                    @if (EventId != "")
+                    {
+                        <TabPage Text="Event">
+                            <EventPage EventId=@EventId />
+                        </TabPage>
+                    }
+
                 </TabControl>
             </CascadingValue>
-          
+
 
         </Authorized>
     </AuthorizeView>
@@ -49,9 +57,7 @@
     [CascadingParameter(Name = "DbUserId")]
     public string DbUserId { get; set; }
     AvatarSettings asettings { get; set; }
-    public bool IsIndexActive { get; set; } = true;
-    
-    public bool CreateEventIsActive { get; set; } = true;
+    public string EventId { get; set; } = "";
 
     public void GoToEdit()
     {
@@ -59,6 +65,12 @@
     }
 
 
+
+    public void SetEventId(string id)
+    {
+        EventId = id;
+        StateHasChanged();
+    }
 
     protected async override Task OnParametersSetAsync()
     {
