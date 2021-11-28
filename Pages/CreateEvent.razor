@@ -6,9 +6,17 @@
 <CascadingValue Value="this">
     <h3>Create Event</h3>
 
-    <TabControl @ref="@TabControlRef" >
+    <TabControl @ref="@TabControlRef">
+        @* @if(EditMode)
+        {
+
+        }
+        else
+        {
+
+        } *@
         <TabPage Text="Main >>">
-            <Main ParentEvent="@created" />
+            <Main ParentEvent="@created" TabControlAcc=@TabControlRef />
         </TabPage>
 
         <TabPage Text="Date Range >>">

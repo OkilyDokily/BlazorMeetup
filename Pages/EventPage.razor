@@ -5,19 +5,18 @@
 @inject UserManager<Attendee> UserManager
 @inject NavigationManager NavigationManager
 
-@if (EventId != "" && EventId != null)
-{
-    <CascadingValue Value="this">
-        <TabControl >
-            <TabPage Text="Main">
-                <MainEvent CurrentEvent=@CurrentEvent />
-            </TabPage>
 
-            <TabPage Text="Suggest a time for available dates">
-                <SuggestDate />
-            </TabPage>
+<CascadingValue Value="this">
+    <TabControl>
+        <TabPage Text="Main">
+            <MainEvent CurrentEvent=@CurrentEvent />
+        </TabPage>
 
-            @if (DbUserId != null && CurrentEvent != null && DbUserId == CurrentEvent.AttendeeId)
+        <TabPage Text="Suggest a time for available dates">
+            <SuggestDate />
+        </TabPage>
+
+        @if (DbUserId != null && CurrentEvent != null && DbUserId == CurrentEvent.AttendeeId)
         {
             <TabPage Text="Assign User To Teams">
                 <AssignTeams EventId=@EventId />
@@ -31,7 +30,7 @@
         }
     </TabControl>
 </CascadingValue>
-}
+
 
 @code {
 
@@ -42,11 +41,21 @@
     public string EventId { get; set; }
 
     public Event CurrentEvent { get; set; }
-
+    [CascadingParameter(Name = "Parent")]
+    private TabControl Parent { get; set; }
 
     protected override void OnParametersSet()
     {
         CurrentEvent = MeetupService.GetEventById(EventId);
+
+    }
+
+
+
+
+    protected override void OnInitialized()
+    {
+        Parent.ActivatePageByText("Event");
     }
 
 }

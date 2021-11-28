@@ -39,8 +39,8 @@
     public string DbUserId { get; set; }
     [CascadingParameter]
     public CreateEvent CreateEventAcc { get; set; }
-    [CascadingParameter]
-    private TabControl TabControlAcc { get; set; }
+    [Parameter]
+    public TabControl TabControlAcc { get; set; }
     public List<Server> servers { get; set; }
 
 

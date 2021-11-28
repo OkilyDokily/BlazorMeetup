@@ -3,7 +3,7 @@
     @ChildContent
 }
 @code {
-    [CascadingParameter]
+    [CascadingParameter(Name = "Parent")]
     private TabControl Parent { get; set; }
     [Parameter]
     public RenderFragment ChildContent { get; set; }

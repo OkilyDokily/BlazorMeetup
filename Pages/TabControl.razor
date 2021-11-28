@@ -1,4 +1,4 @@
-<CascadingValue Value="this">
+<CascadingValue Value="this" Name="Parent">
     <div class="divide-x-2 mb-2" role="group">
         @foreach (TabPage tabPage in Pages)
         {
@@ -55,8 +55,7 @@
     public void ActivatePageByText(string text)
     {
         TabPage page = Pages.FirstOrDefault(x => x.Text == text);
-        ActivePage = page;
-        StateHasChanged();
+        ActivatePage(page);
     }
 
     public Action Clickable(TabPage tabPage)
@@ -67,7 +66,7 @@
             return () =>
             {
                 ActivatePage(tabPage);
-                
+
                 StateHasChanged();
             };
         }
