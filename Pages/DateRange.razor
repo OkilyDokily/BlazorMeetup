@@ -24,11 +24,11 @@
     [Parameter]
     public Event ParentEvent { get; set; }
     RestrictDate rd { get; set; }
-    [CascadingParameter]
+    [CascadingParameter(Name="CreateEventAcc")]
     public CreateEvent CreateEventAcc { get; set; }
 
-    [CascadingParameter]
-    private TabControl TabControlAcc { get; set; }
+    [Parameter]
+    public TabControl TabControlAcc { get; set; }
 
     protected override void OnInitialized()
     {
@@ -47,6 +47,7 @@
     public void AddTimesToDate(string id)
     {
         CreateEventAcc.RestrictDateId = id;
+        Console.WriteLine("blababab");
         TabControlAcc.ActivatePageByText("Time Range");
         TabControlAcc.EnableClickByString("Date Range >>");
         StateHasChanged();

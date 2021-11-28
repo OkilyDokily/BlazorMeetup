@@ -34,10 +34,12 @@
 @code {
 
     [Parameter]
+    public bool EditMode { get; set; }
+    [Parameter]
     public Event ParentEvent { get; set; }
     [CascadingParameter(Name = "DbUserId")]
     public string DbUserId { get; set; }
-    [CascadingParameter]
+    [CascadingParameter(Name = "CreateEventAcc")]
     public CreateEvent CreateEventAcc { get; set; }
     [Parameter]
     public TabControl TabControlAcc { get; set; }
@@ -58,14 +60,26 @@
 
     private void HandleValidSubmit()
     {
-        ParentEvent.AttendeeId = DbUserId;
+
         MeetupService.CreateEvent(ParentEvent);
+        if (EditMode = true)
+        {
+            IJSRunTime.CreateMessage("You've successfully created a new event.");
+        }
+        else
+        {
+            IJSRunTime.CreateMessage("You've successfully edited an event.");
+        }
+
+        CreateEventAcc.EditMode = true;
         CreateEventAcc.UpdateCreated();
 
         TabControlAcc.ActivatePageByText("Date Range >>");
         TabControlAcc.EnableClickByString("Main >>");
         TabControlAcc.EnableClickByString("Date Range >>");
         StateHasChanged();
-        IJSRunTime.CreateMessage("You've successfully created a new event.");
+
+
+
     }
 }

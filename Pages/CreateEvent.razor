@@ -3,28 +3,21 @@
 @using BlazorMeetup.Data
 @using System.Security.Claims
 
-<CascadingValue Value="this">
+<CascadingValue Value="this" Name="CreateEventAcc">
     <h3>Create Event</h3>
 
     <TabControl @ref="@TabControlRef">
-        @* @if(EditMode)
-        {
 
-        }
-        else
-        {
-
-        } *@
-        <TabPage Text="Main >>">
-            <Main ParentEvent="@created" TabControlAcc=@TabControlRef />
+        <TabPage Text=@(EditMode ? "Edit >>" : "Main >>")>
+            <Main EditMode=@EditMode ParentEvent="@created" TabControlAcc=@TabControlRef />
         </TabPage>
 
         <TabPage Text="Date Range >>">
-            <DateRange ParentEvent="@created" />
+            <DateRange ParentEvent="@created" TabControlAcc=@TabControlRef />
         </TabPage>
 
         <TabPage Text="Time Range">
-            <TimeRange RestrictDateId="@RestrictDateId" />
+            <TimeRange RestrictDateId="@RestrictDateId" TabControlAcc=@TabControlRef />
         </TabPage>
     </TabControl>
 </CascadingValue>
@@ -40,11 +33,14 @@
     [Parameter]
     public string Id { get; set; }
 
+    public bool EditMode { get; set; }
+
     [Parameter]
     public bool CreateEventIsActive { get; set; }
     public void UpdateCreated()
     {
         created = MeetupService.GetEventById(created.Id);
+        Console.WriteLine("Edit mode from " + EditMode);
         StateHasChanged();
     }
 
@@ -60,7 +56,14 @@
                 {
                     created = e;
                     TabControlRef.EnableClickByString("Date Range >>");
-                    TabControlRef.EnableClickByString("Main >>");
+                    if (EditMode)
+                    {
+                        TabControlRef.EnableClickByString("Edit >>");
+                    }
+                    else
+                    {
+                        TabControlRef.EnableClickByString("Main >>");
+                    }
                 }
             }
             StateHasChanged();

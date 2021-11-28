@@ -230,6 +230,7 @@ namespace BlazorMeetup.Data
             }
         }
 
+
         public void DeleteEventById(string id)
         {
             using (var ctx = _dbContextFactory.CreateDbContext())

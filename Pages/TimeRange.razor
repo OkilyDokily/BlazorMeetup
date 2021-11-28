@@ -10,7 +10,8 @@
     <select @bind="@ta.BeginningHour">
         @foreach (int num in tm.GetHours())
         {
-            <option value="@num">@(num == 0 ? "12AM" : (num == 12) ? "12PM" : (num - 12) < 0  ? num + "AM" : (num -12) + "PM")</option>
+            <option value="@num">@(num == 0 ? "12AM" : (num == 12) ? "12PM" : (num - 12) < 0 ? num + "AM" : (num -12) +
+            "PM")</option>
         }
     </select>
     <select @bind="@ta.BeginningMinute">
@@ -23,7 +24,8 @@
     <select @bind="@ta.EndingHour">
         @foreach (int num in tm.GetHours())
         {
-            <option value="@num">@(num == 0 ? "12AM" : (num == 12) ? "12PM" : (num - 12) < 0  ? num + "AM" : (num -12) + "PM")</option>
+            <option value="@num">@(num == 0 ? "12AM" : (num == 12) ? "12PM" : (num - 12) < 0 ? num + "AM" : (num -12) +
+            "PM")</option>
         }
 
     </select>
@@ -41,10 +43,15 @@
 
 @foreach (TimesAllowed t in rd.TimesAlloweds)
 {
-    string BeginningAMPM =t.BeginningHour == 0 ? "AM" : (t.BeginningHour == 12) ? "PM" : (t.BeginningHour - 12) < 0  ? t.BeginningHour + "AM" : (t.BeginningHour -12) + "PM";
+    string BeginningAMPM = t.BeginningHour == 0 ? "AM" : (t.BeginningHour == 12) ? "PM" : (t.BeginningHour - 12) < 0 ?
+    t.BeginningHour + "AM" : (t.BeginningHour - 12) + "PM";
 
-    string EndingAMPM = t.EndingHour == 0 ? "AM" : (t.EndingHour == 12) ? "PM" : (t.EndingHour - 12) < 0 ? t.EndingHour + "AM" : (t.EndingHour - 12) + "PM";
-<div>Beginning @((t.BeginningHour == 0 ? "12" : (t.BeginningHour == 12) ? "12" : (t.BeginningHour - 12) < 0  ? t.BeginningHour : (t.BeginningHour -12))):@(t.BeginningMinute == 0 ? "00" : t.BeginningMinute)@BeginningAMPM End @((t.EndingHour == 0 ? "12" : (t.EndingHour == 12) ? "12" : (t.EndingHour - 12) < 0  ? t.EndingHour : (t.EndingHour -12)) ):@(t.EndingMinute == 0 ? "00" : t.EndingMinute)@EndingAMPM</div>
+    string EndingAMPM = t.EndingHour == 0 ? "AM" : (t.EndingHour == 12) ? "PM" : (t.EndingHour - 12) < 0 ? t.EndingHour +
+    "AM" : (t.EndingHour - 12) + "PM";
+    <div>Beginning @((t.BeginningHour == 0 ? "12" : (t.BeginningHour == 12) ? "12" : (t.BeginningHour - 12) < 0 ?
+    t.BeginningHour : (t.BeginningHour -12))):@(t.BeginningMinute == 0 ? "00" : t.BeginningMinute)@BeginningAMPM End
+        @((t.EndingHour == 0 ? "12" : (t.EndingHour == 12) ? "12" : (t.EndingHour - 12) < 0 ? t.EndingHour : (t.EndingHour
+    -12)) ):@(t.EndingMinute == 0 ? "00" : t.EndingMinute)@EndingAMPM</div>
     <p @onclick="() => delete(t.Id)">delete</p>
 }
 
@@ -56,10 +63,10 @@
     [Parameter]
     public string RestrictDateId { get; set; }
 
-    [CascadingParameter]
+    [CascadingParameter(Name = "CreateEventAcc")]
     public CreateEvent CreateEventAcc { get; set; }
-    [CascadingParameter]
-    private TabControl TabControlAcc { get; set; }
+    [Parameter]
+    public TabControl TabControlAcc { get; set; }
 
 
     public RestrictDate rd;
