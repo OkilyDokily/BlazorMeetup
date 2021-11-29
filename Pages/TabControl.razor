@@ -41,14 +41,11 @@
     public void EnableClickByString(string text)
     {
         TabPage page = Pages.FirstOrDefault(x => x.Text == text);
+        if (page == null)
+        {
+            return;
+        }
         page.IsClickable = true;
-        StateHasChanged();
-    }
-
-    public void DisableClickByString(string text)
-    {
-        TabPage page = Pages.FirstOrDefault(x => x.Text == text);
-        page.IsClickable = false;
         StateHasChanged();
     }
 

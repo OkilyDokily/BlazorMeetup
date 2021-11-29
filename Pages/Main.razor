@@ -62,20 +62,20 @@
     {
 
         MeetupService.CreateEvent(ParentEvent);
-        if (EditMode = true)
+        if (EditMode == true)
         {
-            IJSRunTime.CreateMessage("You've successfully created a new event.");
+            IJSRunTime.CreateMessage("You've successfully edited a new event.");
         }
         else
         {
-            IJSRunTime.CreateMessage("You've successfully edited an event.");
+            IJSRunTime.CreateMessage("You've successfully created an event.");
         }
 
         CreateEventAcc.EditMode = true;
         CreateEventAcc.UpdateCreated();
 
         TabControlAcc.ActivatePageByText("Date Range >>");
-        TabControlAcc.EnableClickByString("Main >>");
+        //TabControlAcc.EnableClickByString("Main >>");
         TabControlAcc.EnableClickByString("Date Range >>");
         StateHasChanged();
 

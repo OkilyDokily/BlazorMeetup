@@ -40,7 +40,6 @@
     public void UpdateCreated()
     {
         created = MeetupService.GetEventById(created.Id);
-        Console.WriteLine("Edit mode from " + EditMode);
         StateHasChanged();
     }
 
@@ -49,21 +48,20 @@
         if (firstRender)
         {
             TabControlRef.Pages.ForEach(x => x.IsClickable = false);
+
+            TabControlRef.EnableClickByString("Edit >>");
+            TabControlRef.EnableClickByString("Main >>");
+
             if (Id != null)
             {
                 Event e = MeetupService.GetEventById(Id);
+                Console.WriteLine(EditMode + "on after render createevent.razor");
+
                 if (e != null)
                 {
                     created = e;
                     TabControlRef.EnableClickByString("Date Range >>");
-                    if (EditMode)
-                    {
-                        TabControlRef.EnableClickByString("Edit >>");
-                    }
-                    else
-                    {
-                        TabControlRef.EnableClickByString("Main >>");
-                    }
+
                 }
             }
             StateHasChanged();
