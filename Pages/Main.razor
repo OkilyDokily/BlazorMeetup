@@ -4,6 +4,7 @@
 <EditForm Model="@ParentEvent" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
+
     <div class="form-item">
         <label>Description</label>
         <InputText @bind-Value="ParentEvent.Description" />
@@ -29,12 +30,10 @@
         </InputSelect>
     </div>
 
-    <button>Create Event</button>
+    <button>@(ParentEvent.Id != null ? "Edit Event" : "Create Event")</button>
 </EditForm>
 @code {
 
-    [Parameter]
-    public bool EditMode { get; set; }
     [Parameter]
     public Event ParentEvent { get; set; }
     [CascadingParameter(Name = "DbUserId")]
@@ -57,12 +56,11 @@
         base.OnParametersSet();
     }
 
-
     private void HandleValidSubmit()
     {
-
+        ParentEvent.AttendeeId = DbUserId;
         MeetupService.CreateEvent(ParentEvent);
-        if (EditMode == true)
+        if (ParentEvent.Id != null)
         {
             IJSRunTime.CreateMessage("You've successfully edited a new event.");
         }
@@ -71,11 +69,10 @@
             IJSRunTime.CreateMessage("You've successfully created an event.");
         }
 
-        CreateEventAcc.EditMode = true;
+
         CreateEventAcc.UpdateCreated();
 
         TabControlAcc.ActivatePageByText("Date Range >>");
-        //TabControlAcc.EnableClickByString("Main >>");
         TabControlAcc.EnableClickByString("Date Range >>");
         StateHasChanged();
 

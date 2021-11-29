@@ -29,7 +29,7 @@
             <CascadingValue Value=@this Name="IndexPage">
                 <TabControl @ref="@TabControlRef">
                     <TabPage Text="Create Event">
-                        <CreateEvent />
+                        <CreateEvent EventId=@EventId />
                     </TabPage>
 
                     <TabPage Text="Your Servers">
@@ -59,12 +59,11 @@
     AvatarSettings asettings { get; set; }
     public string EventId { get; set; } = "";
     public TabControl TabControlRef;
+    public CreateEvent CreateEventRef;
     public void GoToEdit()
     {
         NavigationManager.NavigateTo("/EditAvatar");
     }
-
-
 
     public void SetEventId(string id)
     {

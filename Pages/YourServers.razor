@@ -5,9 +5,6 @@
 @using BlazorMeetup.Data
 @using System.Linq
 
-
-
-
 <table>
     <thead>
         <tr>
@@ -60,9 +57,6 @@
             </tr>
         }
         <hr>
-
-
-
     </tbody>
 </table>
 
@@ -83,8 +77,6 @@
     List<string> serverIdsWithUserEvents = new();
     List<string> serverIdsWithEventsNoUser = new();
     List<string> serverIdsWithoutEvents = new();
-
-
 
     public override async Task SetParametersAsync(ParameterView parameters)
     {
@@ -112,24 +104,15 @@
         StateHasChanged();
     }
 
-
-
-
     public void GoToEventPage(string id)
     {
-        Console.WriteLine(id);
-
-        Console.WriteLine(IndexPage);
         IndexPage.SetEventId(id);
-
-
     }
+
     void ToggleEvents(string id)
     {
         serverEventDictionary[id].EventsShown = !serverEventDictionary[id].EventsShown;
     }
-
-
 
     public void GetOrderedServerIds()
     {

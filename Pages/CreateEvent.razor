@@ -8,12 +8,12 @@
 
     <TabControl @ref="@TabControlRef">
 
-        <TabPage Text=@(EditMode ? "Edit >>" : "Main >>")>
-            <Main EditMode=@EditMode ParentEvent="@created" TabControlAcc=@TabControlRef />
+        <TabPage Text=@((EventId == "") ? "Main >>" : "Edit >>")>
+            <Main ParentEvent="@Created" TabControlAcc=@TabControlRef />
         </TabPage>
 
         <TabPage Text="Date Range >>">
-            <DateRange ParentEvent="@created" TabControlAcc=@TabControlRef />
+            <DateRange ParentEvent="@Created" TabControlAcc=@TabControlRef />
         </TabPage>
 
         <TabPage Text="Time Range">
@@ -24,22 +24,21 @@
 
 
 @code {
-
-    private Event created = new();
+    [Parameter]
+    public string EventId { get; set; }
+    public Event Created { get; set; }
     ClaimsPrincipal User { get; set; }
 
     public TabControl TabControlRef;
     public string RestrictDateId { get; set; }
-    [Parameter]
-    public string Id { get; set; }
-
-    public bool EditMode { get; set; }
 
     [Parameter]
     public bool CreateEventIsActive { get; set; }
     public void UpdateCreated()
     {
-        created = MeetupService.GetEventById(created.Id);
+        EventId = Created.Id;
+     
+        Created = MeetupService.GetEventById(Created.Id);
         StateHasChanged();
     }
 
@@ -52,14 +51,13 @@
             TabControlRef.EnableClickByString("Edit >>");
             TabControlRef.EnableClickByString("Main >>");
 
-            if (Id != null)
+            if (EventId != "")
             {
-                Event e = MeetupService.GetEventById(Id);
-                Console.WriteLine(EditMode + "on after render createevent.razor");
+                Event e = MeetupService.GetEventById(EventId);
 
                 if (e != null)
                 {
-                    created = e;
+                    Created = e;
                     TabControlRef.EnableClickByString("Date Range >>");
 
                 }
@@ -70,6 +68,15 @@
 
     protected override void OnInitialized()
     {
-        created.DateAndTime = DateTime.Today;
+        if (EventId == "")
+        {
+            Created = new Event();
+
+        }
+        else
+        {
+            Created = MeetupService.GetEventById(EventId);
+        }
+        Created.DateAndTime = DateTime.Today;
     }
 }

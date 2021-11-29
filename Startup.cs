@@ -60,7 +60,6 @@ namespace BlazorMeetup
                         tokenProvider.RefreshToken = tokens.Where(x => x.Name == "refresh_token").ToList().First().Value;
                         var result = ctx.Identity.Claims.Where(x => x.Type == ClaimTypes.Email).ToList().FirstOrDefault();
                         StaticTokenHolder.loggedInStatus.TryAdd(result.Value, true);
-                        Console.WriteLine("tray add in startup" + result.Value);
                         StaticTokenHolder.tokens.TryAdd(result.Value, tokenProvider);
                         ctx.Properties.StoreTokens(tokens);
 

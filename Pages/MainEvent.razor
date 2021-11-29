@@ -37,6 +37,19 @@
     {
         <button @onclick="() => JoinEvent()">I'll go at this date and time</button>
     }
+    @{
+        Console.WriteLine(DbUserId + " dbuseride from MainEvent.razor");
+        Console.WriteLine(CurrentEvent.AttendeeId + "currentevent.AttendeeiD from MainEvent.razor");
+    }
+    @{
+        Console.WriteLine(DbUserId + "DbUser");
+        Console.WriteLine(CurrentEvent.AttendeeId + "Attendeeid");
+    }
+    @if (DbUserId == CurrentEvent.AttendeeId)
+    {
+
+        <button @onclick="() => EditEvent()">Edit this Event</button>
+    }
 
 </div>
 @code {
@@ -44,6 +57,8 @@
     public Event CurrentEvent { get; set; }
     [CascadingParameter(Name = "DbUserId")]
     public string DbUserId { get; set; }
+    [CascadingParameter(Name = "IndexPage")]
+    public Index IndexPage { get; set; }
 
     void Leave()
     {
@@ -57,6 +72,12 @@
         MeetupService.JoinEvent(DbUserId, CurrentEvent.Id);
         CurrentEvent = MeetupService.GetEventById(CurrentEvent.Id);
         StateHasChanged();
+    }
+
+    void EditEvent()
+    {
+        IndexPage.EventId = CurrentEvent.Id;
+        IndexPage.TabControlRef.ActivatePageByText("Create Event");
     }
 
 
