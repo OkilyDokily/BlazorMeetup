@@ -103,6 +103,10 @@
 
         StateHasChanged();
     }
+    protected override void OnInitialized()
+    {
+        IndexPage.SetEventId("");
+    }
 
     public void GoToEventPage(string id)
     {
