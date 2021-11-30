@@ -19,7 +19,7 @@
             @if (asettings != null)
             {
 
-                <div @onclick=GoToEdit class="lg-avatar" style='background-image: url(@asettings.AvatarUrl); background-size:
+                <div @onclick=GoToEditAvatar class="lg-avatar" style='background-image: url(@asettings.AvatarUrl); background-size:
                 @(asettings.Size
                 + "%"); background-position:
                 @(@asettings.Left + "%") @(@asettings.Top + "%");'>
@@ -29,7 +29,7 @@
             @if (EventId == "")
             {
                 <CascadingValue Value=@this Name="IndexPage">
-                    <TabControl @ref="@TabControlRef">
+                    <TabControl @ref="@TabControlRef" IndexPageParameter="this">
                         <TabPage Text="Create Event">
                             <CreateEvent EventId=@EventId />
                         </TabPage>
@@ -44,7 +44,7 @@
             else
             {
                 <CascadingValue Value=@this Name="IndexPage">
-                    <TabControl @ref="@TabControlRef">
+                    <TabControl @ref="@TabControlRef" IndexPageParameter="this">
                         <TabPage Text="Create Event">
                             <CreateEvent EventId=@EventId />
                         </TabPage>
@@ -59,7 +59,6 @@
                     </TabControl>
                 </CascadingValue>
             }
-
         </Authorized>
     </AuthorizeView>
 </div>
@@ -73,7 +72,9 @@
     public string EventId { get; set; } = "";
     public TabControl TabControlRef;
     public CreateEvent CreateEventRef;
-    public void GoToEdit()
+
+    public bool GoToEventPageBool { get; set; }
+    public void GoToEditAvatar()
     {
         NavigationManager.NavigateTo("/EditAvatar");
     }
@@ -81,6 +82,31 @@
     public void SetEventId(string id)
     {
         EventId = id;
+
+        StateHasChanged();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        Console.WriteLine("onafterrender");
+        if (GoToEventPageBool)
+        {
+            Console.WriteLine("called");
+            GoToEventPageBool = false;
+            this.TabControlRef.ActivatePageByText("Event");
+            StateHasChanged();
+        }
+    }
+
+    public void RefreshState()
+    {
+        this.StateHasChanged();
+    }
+
+    public void GoToEventPage(string id)
+    {
+        EventId = id;
+        GoToEventPageBool = true;
         StateHasChanged();
     }
 

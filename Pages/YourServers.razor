@@ -78,12 +78,7 @@
     List<string> serverIdsWithEventsNoUser = new();
     List<string> serverIdsWithoutEvents = new();
 
-    public override async Task SetParametersAsync(ParameterView parameters)
-    {
 
-        EventId = "";
-        await base.SetParametersAsync(parameters);
-    }
     protected override void OnParametersSet()
     {
         if (DbUserId == null) return;
@@ -103,14 +98,11 @@
 
         StateHasChanged();
     }
-    protected override void OnInitialized()
-    {
 
-    }
 
     public void GoToEventPage(string id)
     {
-        IndexPage.SetEventId(id);
+        IndexPage.GoToEventPage(id);
     }
 
     void ToggleEvents(string id)
