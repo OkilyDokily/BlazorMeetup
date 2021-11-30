@@ -31,12 +31,14 @@
     </TabControl>
 </CascadingValue>
 
-
+<p>I am herrreeeeee</p>
 @code {
 
 
     [CascadingParameter(Name = "DbUserId")]
     public string DbUserId { get; set; }
+    @* [CascadingParameter(Name = "IndexPage")]
+        public Index IndexPage { get; set; } *@
     [Parameter]
     public string EventId { get; set; }
 
@@ -51,6 +53,8 @@
 
     protected override void OnInitialized()
     {
+
+        Console.WriteLine("initialied eventpage" + EventId);
         Parent.ActivatePageByText("Event");
     }
 

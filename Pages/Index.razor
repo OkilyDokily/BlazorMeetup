@@ -26,26 +26,39 @@
                 </div>
             }
 
-            <CascadingValue Value=@this Name="IndexPage">
-                <TabControl @ref="@TabControlRef">
-                    <TabPage Text="Create Event">
-                        <CreateEvent EventId=@EventId />
-                    </TabPage>
+            @if (EventId == "")
+            {
+                <CascadingValue Value=@this Name="IndexPage">
+                    <TabControl @ref="@TabControlRef">
+                        <TabPage Text="Create Event">
+                            <CreateEvent EventId=@EventId />
+                        </TabPage>
 
-                    <TabPage Text="Your Servers">
-                        <YourServers />
-                    </TabPage>
+                        <TabPage Text="Your Servers">
+                            <YourServers />
+                        </TabPage>
+                    </TabControl>
 
-                    @if (EventId != "")
-                    {
+                </CascadingValue>
+            }
+            else
+            {
+                <CascadingValue Value=@this Name="IndexPage">
+                    <TabControl @ref="@TabControlRef">
+                        <TabPage Text="Create Event">
+                            <CreateEvent EventId=@EventId />
+                        </TabPage>
+
+                        <TabPage Text="Your Servers">
+                            <YourServers />
+                        </TabPage>
+
                         <TabPage Text="Event">
                             <EventPage EventId=@EventId />
                         </TabPage>
-                    }
-
-                </TabControl>
-            </CascadingValue>
-
+                    </TabControl>
+                </CascadingValue>
+            }
 
         </Authorized>
     </AuthorizeView>

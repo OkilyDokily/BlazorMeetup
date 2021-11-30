@@ -18,7 +18,7 @@
     public TabPage ActivePage { get; set; }
 
     public List<TabPage> Pages = new List<TabPage>();
-    internal void AddPage(TabPage tabPage)
+    public void AddPage(TabPage tabPage)
     {
         Pages.Add(tabPage);
         if (Pages.Count == 1)
@@ -35,6 +35,7 @@
     public void ActivatePage(TabPage page)
     {
         ActivePage = page;
+
         StateHasChanged();
     }
 

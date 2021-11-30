@@ -28,7 +28,6 @@
                 </div>
                 <div>@ae.Attendee.UserName</div>
             </div>
-
         }
     }
 }
@@ -37,14 +36,7 @@
     {
         <button @onclick="() => JoinEvent()">I'll go at this date and time</button>
     }
-    @{
-        Console.WriteLine(DbUserId + " dbuseride from MainEvent.razor");
-        Console.WriteLine(CurrentEvent.AttendeeId + "currentevent.AttendeeiD from MainEvent.razor");
-    }
-    @{
-        Console.WriteLine(DbUserId + "DbUser");
-        Console.WriteLine(CurrentEvent.AttendeeId + "Attendeeid");
-    }
+
     @if (DbUserId == CurrentEvent.AttendeeId)
     {
 

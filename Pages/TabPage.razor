@@ -17,7 +17,7 @@
     {
         if (Parent == null)
             throw new ArgumentNullException(nameof(Parent), "TabPage must exist within a TabControl");
-
+        if (Parent.Pages.Any(x => x.Text == this.Text)) { return; }
         Parent.AddPage(this);
     }
 }

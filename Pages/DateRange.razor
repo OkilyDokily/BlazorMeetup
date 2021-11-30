@@ -47,7 +47,6 @@
     public void AddTimesToDate(string id)
     {
         CreateEventAcc.RestrictDateId = id;
-        Console.WriteLine("blababab");
         TabControlAcc.ActivatePageByText("Time Range");
         TabControlAcc.EnableClickByString("Date Range >>");
         StateHasChanged();
