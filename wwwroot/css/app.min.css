@@ -658,6 +658,10 @@ select {
   margin-bottom: 2.5rem;
 }
 
+.ml-1 {
+  margin-left: 0.25rem;
+}
+
 .ml-5 {
   margin-left: 1.25rem;
 }
@@ -837,6 +841,10 @@ select {
 
 .font-medium {
   font-weight: 500;
+}
+
+.font-semibold {
+  font-weight: 600;
 }
 
 .text-gray-400 {

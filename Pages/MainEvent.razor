@@ -1,20 +1,28 @@
 @using BlazorMeetup.Data
+@using System.Globalization
 @inject MeetupService MeetupService;
 
 <h3 class="mx-2">Event Details</h3>
-<div>@CurrentEvent.DateAndTime.Date</div>
+
+
+
 <div>
-    <label>Length of Event</label>
-    <div>
-        <label>Hours</label>
-        <div>@CurrentEvent.Hours</div>
-    </div>
-    <div>
-        <label>Minutes</label>
-        <div>@CurrentEvent.Minutes</div>
-    </div>
+    <label class="font-semibold">Length of Event:</label>
+    @CurrentEvent.Hours &zwnj;<label>Hours</label> and @CurrentEvent.Minutes <label>Minutes</label>
 </div>
 
+
+@if (@CurrentEvent?.SuggestedDate?.DateTime != null && @CurrentEvent?.SuggestedDate?.RestrictDate != null)
+{
+
+
+    <div>
+        <label class="font-semibold">Official Time and date:</label>
+        @CurrentEvent.SuggestedDate.RestrictDate.Date.ToString("M/dd/yyyy", CultureInfo.InvariantCulture)
+        @CurrentEvent.SuggestedDate.DateTime.ToString("hh:mm", CultureInfo.InvariantCulture)
+    </div>
+
+}
 <h3 class="mt-4 font-medium">Attendees</h3>
 @foreach (AttendeeEvent ae in CurrentEvent.Attendees)
 {
@@ -52,7 +60,7 @@
     @if (DbUserId == CurrentEvent.AttendeeId)
     {
 
-        <button @onclick="() => EditEvent()">Edit this Event</button>
+        <p class="text-xs" @onclick="() => EditEvent()">Edit this Event</p>
     }
 
 </div>
@@ -83,6 +91,5 @@
         IndexPage.EventId = CurrentEvent.Id;
         IndexPage.TabControlRef.ActivatePageByText("Create Event");
     }
-
 
 }

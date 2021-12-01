@@ -10,6 +10,7 @@
         <input type="number" value=@avatarSettings.Left
             @oninput="(e) => avatarSettings.Left = Int32.Parse(e.Value.ToString())" />
     </div>
+
     <div class="form-item">
         <label>Adjust image top or bottom</label>
         <input type="number" value=@avatarSettings.Top
@@ -21,7 +22,6 @@
         <input type="number" value=@avatarSettings.Size
             @oninput="(e) => avatarSettings.Size = Int32.Parse(e.Value.ToString())" />
     </div>
-
 
     <div class="avatar my-2"
         style='width:60px; height:60px; background-image: url(@avatarSettings.AvatarUrl); background-size: @(avatarSettings.Size + "%"); background-position: @(avatarSettings.Left + "%") @(avatarSettings.Top + "%");'>
@@ -54,12 +54,6 @@
 
         }
         base.OnParametersSet();
-    }
-
-
-    protected override void OnInitialized()
-    {
-
     }
 
     public void SubmitAvatarSettings()

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazorMeetup.Migrations
 {
     [DbContext(typeof(BlazorMeetupContext))]
-    [Migration("20211201151025_first")]
+    [Migration("20211201213324_first")]
     partial class first
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -78,9 +78,6 @@ namespace BlazorMeetup.Migrations
                     b.Property<string>("AttendeeId")
                         .HasColumnType("varchar(255)");
 
-                    b.Property<DateTime>("DateAndTime")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -101,11 +98,16 @@ namespace BlazorMeetup.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
+                    b.Property<string>("SuggestedDateId")
+                        .HasColumnType("varchar(255)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AttendeeId");
 
                     b.HasIndex("ServerId");
+
+                    b.HasIndex("SuggestedDateId");
 
                     b.ToTable("Events");
                 });
@@ -547,9 +549,15 @@ namespace BlazorMeetup.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("BlazorMeetup.Data.SuggestedDate", "SuggestedDate")
+                        .WithMany()
+                        .HasForeignKey("SuggestedDateId");
+
                     b.Navigation("Attendee");
 
                     b.Navigation("Server");
+
+                    b.Navigation("SuggestedDate");
                 });
 
             modelBuilder.Entity("BlazorMeetup.Data.RestrictDate", b =>

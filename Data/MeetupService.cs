@@ -14,6 +14,16 @@ namespace BlazorMeetup.Data
             _dbContextFactory = factory;
         }
 
+        public void MakeSuggestedDateOfficial(string suggestDateId, Event eventObj)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                eventObj.SuggestedDateId = suggestDateId;
+                ctx.Events.Update(eventObj);
+                ctx.SaveChanges();
+            }
+        }
+
         public void AddServers(List<Server> servers, string AttendeeId)
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
@@ -334,13 +344,6 @@ namespace BlazorMeetup.Data
             }
         }
 
-        public List<Event> GetUpComingEvents()
-        {
-            using (var ctx = _dbContextFactory.CreateDbContext())
-            {
-                return ctx.Events.Include(x => x.Attendee).ThenInclude(x => x.AvatarSettings).Include(x => x.Attendees).Where(x => x.DateAndTime >= DateTime.Today).ToList();
-            }
-        }
 
         public void DeleteRestrictDate(string id)
         {
@@ -381,7 +384,7 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                return ctx.Events.Include(x => x.RestrictDates).ThenInclude(x => x.SuggestedDates).Include(x => x.Attendee).ThenInclude(x => x.AvatarSettings).Include(x => x.Attendees).ThenInclude(x => x.Attendee).ThenInclude(x => x.AvatarSettings).FirstOrDefault(x => x.Id == id);
+                return ctx.Events.Include(x => x.SuggestedDate).Include(x => x.RestrictDates).ThenInclude(x => x.SuggestedDates).Include(x => x.Attendee).ThenInclude(x => x.AvatarSettings).Include(x => x.Attendees).ThenInclude(x => x.Attendee).ThenInclude(x => x.AvatarSettings).FirstOrDefault(x => x.Id == id);
             }
         }
 

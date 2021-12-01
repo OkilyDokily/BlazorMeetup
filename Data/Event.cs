@@ -21,8 +21,10 @@ namespace BlazorMeetup.Data
         public virtual Attendee Attendee { get; set; }
         public virtual ICollection<RestrictDate> RestrictDates { get; set; }
 
+        public virtual SuggestedDate SuggestedDate { get; set; }
+        public string SuggestedDateId { get; set; }
         public virtual ICollection<Team> Teams { get; set; }
-        public DateTime DateAndTime { get; set; }
+
         public Event()
         {
             this.Attendees = new HashSet<AttendeeEvent>();

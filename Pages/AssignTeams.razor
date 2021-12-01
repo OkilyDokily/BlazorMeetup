@@ -18,7 +18,7 @@
                 @(@t.TeamAvatarSettings.Left + "%") @(@t.TeamAvatarSettings.Top + "%");'>
                     </div>
                     <div @onclick="()=>GoToTeamAvatar(t.Id)">@t.Name</div>
-                    <div @onclick="()=>DeleteTeam(t)">Delete Team</div>
+                    <p class="text-xs ml-1" @onclick="()=>DeleteTeam(t)"> Delete Team</p>
                 </div>
             }
         </TabPage>
