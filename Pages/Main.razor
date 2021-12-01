@@ -22,6 +22,21 @@
         <InputDate @bind-Value="ParentEvent.DateAndTime" />
     </div>
     <div>
+        <label>Length of Event</label>
+        <select @bind="@ParentEvent.Hours">
+            @foreach (int num in tm.GetHours())
+            {
+                <option value="@num">@num</option>
+            }
+        </select>
+        <select @bind="@ParentEvent.Minutes">
+            @foreach (int num in tm.GetMinutes())
+            {
+                <option value="@num">@num</option>
+            }
+        </select>
+    </div>
+    <div>
         <InputSelect @bind-Value="ParentEvent.ServerId">
             @foreach (Server s in servers)
             {
@@ -44,6 +59,9 @@
     public TabControl TabControlAcc { get; set; }
     public List<Server> servers { get; set; }
 
+    public TimesAllowed ta = new TimesAllowed();
+
+    public TimeMaker tm = new TimeMaker();
 
     protected override void OnParametersSet()
     {
@@ -69,14 +87,10 @@
             IJSRunTime.CreateMessage("You've successfully created an event.");
         }
 
-
         CreateEventAcc.UpdateCreated();
 
         TabControlAcc.ActivatePageByText("Date Range >>");
         TabControlAcc.EnableClickByString("Date Range >>");
         StateHasChanged();
-
-
-
     }
 }

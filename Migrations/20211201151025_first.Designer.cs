@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazorMeetup.Migrations
 {
     [DbContext(typeof(BlazorMeetupContext))]
-    [Migration("20211119232031_morestuff")]
-    partial class morestuff
+    [Migration("20211201151025_first")]
+    partial class first
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -85,10 +85,16 @@ namespace BlazorMeetup.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int>("Hours")
+                        .HasColumnType("int");
+
                     b.Property<int>("MaximumAttendees")
                         .HasColumnType("int");
 
                     b.Property<int>("MinimumAttendees")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Minutes")
                         .HasColumnType("int");
 
                     b.Property<string>("ServerId")
@@ -163,17 +169,12 @@ namespace BlazorMeetup.Migrations
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("EventId")
-                        .HasColumnType("varchar(255)");
-
                     b.Property<string>("RestrictDateId")
                         .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AttendeeId");
-
-                    b.HasIndex("EventId");
 
                     b.HasIndex("RestrictDateId");
 
@@ -577,19 +578,12 @@ namespace BlazorMeetup.Migrations
                         .WithMany()
                         .HasForeignKey("AttendeeId");
 
-                    b.HasOne("BlazorMeetup.Data.Event", "Event")
-                        .WithMany("SuggestedDates")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("BlazorMeetup.Data.RestrictDate", "RestrictDate")
                         .WithMany("SuggestedDates")
                         .HasForeignKey("RestrictDateId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Attendee");
-
-                    b.Navigation("Event");
 
                     b.Navigation("RestrictDate");
                 });
@@ -712,8 +706,6 @@ namespace BlazorMeetup.Migrations
                     b.Navigation("Attendees");
 
                     b.Navigation("RestrictDates");
-
-                    b.Navigation("SuggestedDates");
 
                     b.Navigation("Teams");
                 });

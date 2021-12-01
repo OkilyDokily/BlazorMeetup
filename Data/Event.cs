@@ -12,6 +12,8 @@ namespace BlazorMeetup.Data
         public string Description { get; set; }
         public int MaximumAttendees { get; set; }
         public int MinimumAttendees { get; set; }
+        public int Hours { get; set; }
+        public int Minutes { get; set; }
         [Required]
         public string ServerId { get; set; }
         public virtual Server Server { get; set; }

@@ -88,7 +88,6 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-
                 ctx.AvatarSettings.Update(asetting);
                 ctx.SaveChanges();
             }
@@ -187,7 +186,6 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-
                 SuggestedDateAttendee sdae = GetSuggestedDateAttendee(sd, loggedInId);
                 ctx.SuggestedDateAttendees.Remove(sdae);
                 ctx.SaveChanges();
@@ -405,8 +403,6 @@ namespace BlazorMeetup.Data
                 ctx.SaveChanges();
             }
         }
-
-
 
         public RestrictDate GetRestrictDateById(string id)
         {

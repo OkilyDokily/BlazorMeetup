@@ -2,7 +2,19 @@
 @inject MeetupService MeetupService;
 
 <h3 class="mx-2">Event Details</h3>
-@CurrentEvent.DateAndTime
+<div>@CurrentEvent.DateAndTime.Date</div>
+<div>
+    <label>Length of Event</label>
+    <div>
+        <label>Hours</label>
+        <div>@CurrentEvent.Hours</div>
+    </div>
+    <div>
+        <label>Minutes</label>
+        <div>@CurrentEvent.Minutes</div>
+    </div>
+</div>
+
 <h3 class="mt-4 font-medium">Attendees</h3>
 @foreach (AttendeeEvent ae in CurrentEvent.Attendees)
 {

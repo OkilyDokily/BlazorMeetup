@@ -38,7 +38,6 @@
                             <YourServers />
                         </TabPage>
                     </TabControl>
-
                 </CascadingValue>
             }
             else
@@ -88,10 +87,8 @@
 
     protected override void OnAfterRender(bool firstRender)
     {
-        Console.WriteLine("onafterrender");
         if (GoToEventPageBool)
         {
-            Console.WriteLine("called");
             GoToEventPageBool = false;
             this.TabControlRef.ActivatePageByText("Event");
             StateHasChanged();
@@ -158,6 +155,4 @@
             }
         }
     }
-
-
 }
