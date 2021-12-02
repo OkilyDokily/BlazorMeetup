@@ -14,12 +14,12 @@ namespace BlazorMeetup.Data
             _dbContextFactory = factory;
         }
 
-        public void MakeSuggestedDateOfficial(string suggestDateId, string eventObjId)
+        public void MakeSuggestedDateOfficial(string suggestDateId, string eventId)
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                Event eventObj = ctx.Events.Where(x => x.Id == eventObjId).FirstOrDefault();
-                eventObj.SuggestedDateId = suggestDateId;
+                SuggestedDate sd = ctx.SuggestedDates.Where(x => x.Id == suggestDateId).FirstOrDefault();
+                sd.EventId = eventId;
                 ctx.SaveChanges();
             }
         }

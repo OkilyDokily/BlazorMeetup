@@ -768,6 +768,10 @@ select {
   }
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 .flex-row-reverse {
   flex-direction: row-reverse;
 }

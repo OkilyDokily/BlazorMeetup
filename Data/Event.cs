@@ -22,7 +22,6 @@ namespace BlazorMeetup.Data
         public virtual ICollection<RestrictDate> RestrictDates { get; set; }
 
         public virtual SuggestedDate SuggestedDate { get; set; }
-        public string SuggestedDateId { get; set; }
         public virtual ICollection<Team> Teams { get; set; }
 
         public Event()

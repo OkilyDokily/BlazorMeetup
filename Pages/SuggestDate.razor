@@ -44,14 +44,16 @@
 
                 @if (CanAttend(sd))
                 {
-                    <div @onclick="()=>SeeAvailableUser(sd)" @key="@("suggest" + sd.Id)">@sd.DateTime.ToString("hh:mm tt")
+                    <div class="cursor-pointer" @onclick="()=>SeeAvailableUser(sd)" @key="@("suggest" + sd.Id)">
+                        @sd.DateTime.ToString("hh:mm tt")
                         @sd.Attendee.UserName <input type="checkbox" @onclick:stopPropagation="true" checked
             @onchange="() => RemoveSuggestedDateFromAttendee(sd)">
                     </div>
                 }
                 else
                 {
-                    <div @onclick="()=>SeeAvailableUser(sd)" @key="@("suggest" + sd.Id + "end")">@sd.DateTime.ToString("hh:mm tt")
+                    <div class="cursor-pointer" @onclick="()=>SeeAvailableUser(sd)" @key="@("suggest" + sd.Id + "end")">
+                        @sd.DateTime.ToString("hh:mm tt")
                         @sd.Attendee.UserName <input type="checkbox" @onclick:stopPropagation="true"
             @onchange="() => AddSuggestedDateToAttendee(sd)"></div>
                 }
@@ -93,11 +95,6 @@
     public void AddSuggestedDateToAttendee(SuggestedDate sd)
     {
         MeetupService.AddSuggestedDateToAttendees(sd, DbUserId);
-    }
-
-    protected override void OnInitialized()
-    {
-
     }
 
     public void SuggestADate(string restrictDateId)
