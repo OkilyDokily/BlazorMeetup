@@ -20,7 +20,6 @@ namespace BlazorMeetup.Data
             {
                 Event eventObj = ctx.Events.Where(x => x.Id == eventObjId).FirstOrDefault();
                 eventObj.SuggestedDateId = suggestDateId;
-
                 ctx.SaveChanges();
             }
         }
