@@ -252,6 +252,43 @@ namespace BlazorMeetup.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Events",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    AttendeeId = table.Column<string>(type: "varchar(255)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Description = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    MaximumAttendees = table.Column<int>(type: "int", nullable: false),
+                    MinimumAttendees = table.Column<int>(type: "int", nullable: false),
+                    Hours = table.Column<int>(type: "int", nullable: false),
+                    Minutes = table.Column<int>(type: "int", nullable: false),
+                    ServerId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    SuggestedDateId = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Events", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Events_AspNetUsers_AttendeeId",
+                        column: x => x.AttendeeId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Events_Servers_ServerId",
+                        column: x => x.ServerId,
+                        principalTable: "Servers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "AttendeeEvents",
                 columns: table => new
                 {
@@ -271,41 +308,10 @@ namespace BlazorMeetup.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Events",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    AttendeeId = table.Column<string>(type: "varchar(255)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Description = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    MaximumAttendees = table.Column<int>(type: "int", nullable: false),
-                    MinimumAttendees = table.Column<int>(type: "int", nullable: false),
-                    Hours = table.Column<int>(type: "int", nullable: false),
-                    Minutes = table.Column<int>(type: "int", nullable: false),
-                    ServerId = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    SuggestedDateId = table.Column<string>(type: "varchar(255)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Events", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Events_AspNetUsers_AttendeeId",
-                        column: x => x.AttendeeId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Events_Servers_ServerId",
-                        column: x => x.ServerId,
-                        principalTable: "Servers",
+                        name: "FK_AttendeeEvents_Events_EventId",
+                        column: x => x.EventId,
+                        principalTable: "Events",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -563,11 +569,6 @@ namespace BlazorMeetup.Migrations
                 column: "ServerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Events_SuggestedDateId",
-                table: "Events",
-                column: "SuggestedDateId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_RestrictDates_EventId",
                 table: "RestrictDates",
                 column: "EventId");
@@ -622,42 +623,10 @@ namespace BlazorMeetup.Migrations
                 name: "IX_TimesAlloweds_RestrictDateId",
                 table: "TimesAlloweds",
                 column: "RestrictDateId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_AttendeeEvents_Events_EventId",
-                table: "AttendeeEvents",
-                column: "EventId",
-                principalTable: "Events",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Events_SuggestedDates_SuggestedDateId",
-                table: "Events",
-                column: "SuggestedDateId",
-                principalTable: "SuggestedDates",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Events_AspNetUsers_AttendeeId",
-                table: "Events");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Servers_AspNetUsers_AttendeeId",
-                table: "Servers");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_SuggestedDates_AspNetUsers_AttendeeId",
-                table: "SuggestedDates");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_RestrictDates_Events_EventId",
-                table: "RestrictDates");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -695,10 +664,13 @@ namespace BlazorMeetup.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "SuggestedDates");
+
+            migrationBuilder.DropTable(
                 name: "Teams");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "RestrictDates");
 
             migrationBuilder.DropTable(
                 name: "Events");
@@ -707,10 +679,7 @@ namespace BlazorMeetup.Migrations
                 name: "Servers");
 
             migrationBuilder.DropTable(
-                name: "SuggestedDates");
-
-            migrationBuilder.DropTable(
-                name: "RestrictDates");
+                name: "AspNetUsers");
         }
     }
 }

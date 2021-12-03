@@ -96,6 +96,9 @@ namespace BlazorMeetup.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
+                    b.Property<string>("SuggestedDateId")
+                        .HasColumnType("longtext");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AttendeeId");
@@ -164,18 +167,12 @@ namespace BlazorMeetup.Migrations
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("EventId")
-                        .HasColumnType("varchar(255)");
-
                     b.Property<string>("RestrictDateId")
                         .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AttendeeId");
-
-                    b.HasIndex("EventId")
-                        .IsUnique();
 
                     b.HasIndex("RestrictDateId");
 
@@ -579,19 +576,12 @@ namespace BlazorMeetup.Migrations
                         .WithMany()
                         .HasForeignKey("AttendeeId");
 
-                    b.HasOne("BlazorMeetup.Data.Event", "Event")
-                        .WithOne("SuggestedDate")
-                        .HasForeignKey("BlazorMeetup.Data.SuggestedDate", "EventId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("BlazorMeetup.Data.RestrictDate", "RestrictDate")
                         .WithMany("SuggestedDates")
                         .HasForeignKey("RestrictDateId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Attendee");
-
-                    b.Navigation("Event");
 
                     b.Navigation("RestrictDate");
                 });
@@ -714,8 +704,6 @@ namespace BlazorMeetup.Migrations
                     b.Navigation("Attendees");
 
                     b.Navigation("RestrictDates");
-
-                    b.Navigation("SuggestedDate");
 
                     b.Navigation("Teams");
                 });

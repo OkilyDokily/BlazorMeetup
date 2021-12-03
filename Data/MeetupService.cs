@@ -14,12 +14,13 @@ namespace BlazorMeetup.Data
             _dbContextFactory = factory;
         }
 
-        public void MakeSuggestedDateOfficial(string suggestDateId, string eventId)
+        public void MakeSuggestedDateOfficial(string suggestedDateId, string eventId)
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                SuggestedDate sd = ctx.SuggestedDates.Where(x => x.Id == suggestDateId).FirstOrDefault();
-                sd.EventId = eventId;
+                Event eObj = ctx.Events.Where(x => x.Id == eventId).FirstOrDefault();
+
+                eObj.SuggestedDateId = suggestedDateId;
                 ctx.SaveChanges();
             }
         }
@@ -238,7 +239,6 @@ namespace BlazorMeetup.Data
             }
         }
 
-
         public void DeleteEventById(string id)
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
@@ -384,7 +384,7 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                return ctx.Events.Include(x => x.SuggestedDate).Include(x => x.RestrictDates).ThenInclude(x => x.SuggestedDates).Include(x => x.Attendee).ThenInclude(x => x.AvatarSettings).Include(x => x.Attendees).ThenInclude(x => x.Attendee).ThenInclude(x => x.AvatarSettings).FirstOrDefault(x => x.Id == id);
+                return ctx.Events.Include(x => x.RestrictDates).ThenInclude(x => x.SuggestedDates).Include(x => x.Attendee).ThenInclude(x => x.AvatarSettings).Include(x => x.Attendees).ThenInclude(x => x.Attendee).ThenInclude(x => x.AvatarSettings).FirstOrDefault(x => x.Id == id);
             }
         }
 
@@ -392,7 +392,7 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                SuggestedDate sd = ctx.SuggestedDates.FirstOrDefault(x => x.Id == id);
+                SuggestedDate sd = ctx.SuggestedDates.Include(x => x.RestrictDate).FirstOrDefault(x => x.Id == id);
                 return sd;
             }
         }

@@ -28,7 +28,6 @@ namespace BlazorMeetup.Data
         {
             builder.Entity<SuggestedDate>().HasOne(x => x.RestrictDate).WithMany(x => x.SuggestedDates).OnDelete(DeleteBehavior.Cascade);
 
-            builder.Entity<SuggestedDate>().HasOne(x => x.Event).WithOne(x => x.SuggestedDate).HasForeignKey<SuggestedDate>(x => x.EventId).OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Server>().HasOne(x => x.Attendee).WithMany(x => x.Servers).OnDelete(DeleteBehavior.Cascade);
 

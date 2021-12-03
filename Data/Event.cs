@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlazorMeetup.Data
 {
@@ -21,7 +22,8 @@ namespace BlazorMeetup.Data
         public virtual Attendee Attendee { get; set; }
         public virtual ICollection<RestrictDate> RestrictDates { get; set; }
 
-        public virtual SuggestedDate SuggestedDate { get; set; }
+        public string SuggestedDateId { get; set; }
+
         public virtual ICollection<Team> Teams { get; set; }
 
         public Event()

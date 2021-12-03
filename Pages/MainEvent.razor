@@ -10,12 +10,12 @@
 </div>
 
 
-@if (@CurrentEvent?.SuggestedDate?.DateTime != null && @CurrentEvent?.SuggestedDate?.RestrictDate != null)
+@if (@SuggestedDate?.DateTime != null && @SuggestedDate?.RestrictDate != null)
 {
     <div>
         <label class="font-semibold">Official Time and date:</label>
-        @CurrentEvent.SuggestedDate.RestrictDate.Date.ToString("M/dd/yyyy", CultureInfo.InvariantCulture)
-        @CurrentEvent.SuggestedDate.DateTime.ToString("hh:mm", CultureInfo.InvariantCulture)
+        @SuggestedDate.RestrictDate.Date.ToString("M/dd/yyyy", CultureInfo.InvariantCulture)
+        @SuggestedDate.DateTime.ToString("hh:mm", CultureInfo.InvariantCulture)
     </div>
 
 }
@@ -68,6 +68,13 @@
     [CascadingParameter(Name = "IndexPage")]
     public Index IndexPage { get; set; }
 
+    SuggestedDate SuggestedDate { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Console.WriteLine(CurrentEvent.SuggestedDateId);
+        SuggestedDate = MeetupService.GetSuggestedDateById(CurrentEvent.SuggestedDateId);
+    }
     void Leave()
     {
         MeetupService.LeaveEvent(DbUserId, CurrentEvent.Id);
