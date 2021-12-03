@@ -1,21 +1,21 @@
 ﻿@inject MeetupService MeetupService;
 @inject IJSRuntime IJSRunTime
 
-<EditForm Model="@ParentEvent" OnValidSubmit="@HandleValidSubmit">
+<EditForm Model="@ParentEvent" class="w-full" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
     <div class="form-item">
         <label>Description</label>
-        <InputText @bind-Value="ParentEvent.Description" />
+        <InputTextArea rows="5" @bind-Value="ParentEvent.Description" />
     </div>
     <div class="form-item">
         <label>Maximum Attendees</label>
-        <InputNumber @bind-Value="ParentEvent.MaximumAttendees" />
+        <InputNumber class="w-auto" @bind-Value="ParentEvent.MaximumAttendees" />
     </div>
     <div class="form-item">
         <label>Minimum Attendees</label>
-        <InputNumber @bind-Value="ParentEvent.MinimumAttendees" />
+        <InputNumber class="w-auto" @bind-Value="ParentEvent.MinimumAttendees" />
     </div>
 
     <div>

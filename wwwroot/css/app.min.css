@@ -662,6 +662,10 @@ select {
   margin-left: 0.25rem;
 }
 
+.ml-2 {
+  margin-left: 0.5rem;
+}
+
 .ml-5 {
   margin-left: 1.25rem;
 }
@@ -692,6 +696,10 @@ select {
 
 .w-96 {
   width: 24rem;
+}
+
+.w-auto {
+  width: auto;
 }
 
 .w-1\/4 {
@@ -884,12 +892,6 @@ table{
   table-layout: auto;
 }
 
-th{
-  min-width: 200px;
-  text-align: left;
-  margin-bottom: 0.5rem;
-}
-
 html{
   background-color: lightgray;
 }
@@ -1019,9 +1021,7 @@ button.tab-button{
 }
 
 .teams-collection{
-  display: flex;
   height: 100vh;
-  justify-content: flex-start;
 }
 
 .attendees{
@@ -1091,3 +1091,4 @@ form{
 
 @media (min-width: 1536px) {
 }
+

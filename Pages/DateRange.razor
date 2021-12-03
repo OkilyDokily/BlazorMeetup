@@ -1,8 +1,6 @@
 ﻿@using System.Globalization
 @inject MeetupService MeetupService
 
-<h3>DateRange</h3>
-
 <EditForm Model="@rd" OnValidSubmit="@OnSubmit">
     <div class="form-item">
         <label>Add Restricted Date</label>
@@ -24,7 +22,7 @@
     [Parameter]
     public Event ParentEvent { get; set; }
     RestrictDate rd { get; set; }
-    [CascadingParameter(Name="CreateEventAcc")]
+    [CascadingParameter(Name = "CreateEventAcc")]
     public CreateEvent CreateEventAcc { get; set; }
 
     [Parameter]

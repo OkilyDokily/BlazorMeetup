@@ -2,8 +2,6 @@
 @using System.Globalization
 @inject MeetupService MeetupService;
 
-<h3 class="mx-2">Event Details</h3>
-
 <div>
     <label class="font-semibold">Length of Event:</label>
     @CurrentEvent.Hours &zwnj;<label>Hours</label> and @CurrentEvent.Minutes <label>Minutes</label>
@@ -19,7 +17,7 @@
     </div>
 
 }
-<h3 class="mt-4 font-medium">Attendees</h3>
+<h3 class="mt-4 text-2xl font-medium">Attendees:</h3>
 @foreach (AttendeeEvent ae in CurrentEvent.Attendees)
 {
     if (ae.Attendee.AvatarSettings != null)
@@ -27,7 +25,7 @@
         @if (ae.AttendeeId == DbUserId)
         {
 
-            <div class="attendees" @key="ae.Id">
+            <div class="attendees ml-2" @key="ae.Id">
                 <div class="avatar"
         style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">
                 </div>
@@ -38,7 +36,7 @@
         }
         else
         {
-            <div class="attendees" @key="ae.Id">
+            <div class="attendees ml-2" @key="ae.Id">
                 <div class="avatar"
         style="background-image: url(@ae.Attendee.AvatarSettings.AvatarUrl); background-size: @(ae.Attendee.AvatarSettings.Size + "%"); background-position: @(ae.Attendee.AvatarSettings.Left + "%") @(ae.Attendee.AvatarSettings.Top + "%");">
                 </div>
@@ -56,7 +54,7 @@
     @if (DbUserId == CurrentEvent.AttendeeId)
     {
 
-        <p class="text-xs" @onclick="() => EditEvent()">Edit this Event</p>
+        <p class="text-xs ml-2 cursor-pointer" @onclick="() => EditEvent()">Edit this Event</p>
     }
 
 </div>
@@ -72,7 +70,6 @@
 
     protected override void OnInitialized()
     {
-        Console.WriteLine(CurrentEvent.SuggestedDateId);
         SuggestedDate = MeetupService.GetSuggestedDateById(CurrentEvent.SuggestedDateId);
     }
     void Leave()

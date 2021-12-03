@@ -6,58 +6,53 @@
 @using System.Linq
 
 <table>
-    <thead>
-        <tr>
-            <th>Servers</th>
+
+    @foreach (string serverId in serverIdsWithUserEvents)
+    {
+        <tr @onclick='() => ToggleEvents(serverId)'>
+            <td>@serverEventDictionary[serverId].Server.Name
+                <ul class="ml-5">
+                    @if (serverEventDictionary[serverId].EventsShown)
+                    {
+                        @foreach (Event ev in serverEventDictionary[serverId].EventsInServerWithUser)
+                        {
+                            <li @onclick='()=> GoToEventPage(ev.Id)'>@ev.Description</li>
+                        }
+                        @foreach (Event ev in serverEventDictionary[serverId].EventsInServerWithoutUser)
+                        {
+                            <li @onclick='()=> GoToEventPage(ev.Id)'>@ev.Description</li>
+                        }
+                    }
+                </ul>
+            </td>
         </tr>
-    </thead>
-    <tbody>
-        @foreach (string serverId in serverIdsWithUserEvents)
-        {
-            <tr @onclick='() => ToggleEvents(serverId)'>
-                <td>@serverEventDictionary[serverId].Server.Name
-                    <ul class="ml-5">
-                        @if (serverEventDictionary[serverId].EventsShown)
+    }
+    <hr class="border">
+    @foreach (string serverId in serverIdsWithEventsNoUser)
+    {
+        <tr @onclick='() => ToggleEvents(serverId)'>
+            <td>@serverEventDictionary[serverId].Server.Name
+                <ul class="ml-5">
+                    @if (serverEventDictionary[serverId].EventsShown)
+                    {
+                        @foreach (Event ev in serverEventDictionary[serverId].EventsInServerWithoutUser)
                         {
-                            @foreach (Event ev in serverEventDictionary[serverId].EventsInServerWithUser)
-                            {
-                                <li @onclick='()=> GoToEventPage(ev.Id)'>@ev.Description</li>
-                            }
-                            @foreach (Event ev in serverEventDictionary[serverId].EventsInServerWithoutUser)
-                            {
-                                <li @onclick='()=> GoToEventPage(ev.Id)'>@ev.Description</li>
-                            }
+                            <li @onclick='()=> GoToEventPage(ev.Id)'>@ev.Description</li>
                         }
-                    </ul>
-                </td>
-            </tr>
-        }
-        <hr class="border">
-        @foreach (string serverId in serverIdsWithEventsNoUser)
-        {
-            <tr @onclick='() => ToggleEvents(serverId)'>
-                <td>@serverEventDictionary[serverId].Server.Name
-                    <ul class="ml-5">
-                        @if (serverEventDictionary[serverId].EventsShown)
-                        {
-                            @foreach (Event ev in serverEventDictionary[serverId].EventsInServerWithoutUser)
-                            {
-                                <li @onclick='()=> GoToEventPage(ev.Id)'>@ev.Description</li>
-                            }
-                        }
-                    </ul>
-                </td>
-            </tr>
-        }
-        <hr class="border">
-        @foreach (string serverId in serverIdsWithoutEvents)
-        {
-            <tr>
-                <td>@serverEventDictionary[serverId].Server.Name</td>
-            </tr>
-        }
-        <hr>
-    </tbody>
+                    }
+                </ul>
+            </td>
+        </tr>
+    }
+    <hr class="border">
+    @foreach (string serverId in serverIdsWithoutEvents)
+    {
+        <tr>
+            <td>@serverEventDictionary[serverId].Server.Name</td>
+        </tr>
+    }
+    <hr>
+
 </table>
 
 

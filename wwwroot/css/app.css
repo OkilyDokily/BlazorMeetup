@@ -56,7 +56,7 @@ button.tab-button{
 }
 
 .teams-collection{
-    @apply flex h-screen justify-start;
+    @apply h-screen ;
 }
 
 .attendees{
@@ -94,3 +94,4 @@ tr{
 form{
     width: fit-content;
 }
+

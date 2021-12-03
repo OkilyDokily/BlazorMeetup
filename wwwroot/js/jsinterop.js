@@ -19,5 +19,4 @@ toastr.options = {
 
 window.callToastr = (message) => {
     toastr["success"](message);
-    console.log("acldslf");
 }

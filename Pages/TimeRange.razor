@@ -1,41 +1,43 @@
-﻿@inject MeetupService MeetupService
-
-<h3>TimeRange</h3>
+﻿@using System.Globalization
+@inject MeetupService MeetupService
 
 <EditForm Model="@ta" OnValidSubmit="@AddTimeAllowedToRestrictDate">
 
-    <p>@rd.Date</p>
+    <p class="">@rd.Date.ToString("M/dd/yyyy", CultureInfo.InvariantCulture)</p>
+    <div>
+        <p>Start</p>
+        <select @bind="@ta.BeginningHour">
+            @foreach (int num in tm.GetHours())
+            {
+                <option value="@num">@(num == 0 ? "12AM" : (num == 12) ? "12PM" : (num - 12) < 0 ? num + "AM" : (num -12) +
+                "PM")</option>
+            }
+        </select>
 
-    Start
-    <select @bind="@ta.BeginningHour">
-        @foreach (int num in tm.GetHours())
-        {
-            <option value="@num">@(num == 0 ? "12AM" : (num == 12) ? "12PM" : (num - 12) < 0 ? num + "AM" : (num -12) +
-            "PM")</option>
-        }
-    </select>
-    <select @bind="@ta.BeginningMinute">
-        @foreach (int i in tm.GetMinutes())
-        {
-            <option value="@i">@(i== 0 ? "00" : i)</option>
-        }
-    </select>
-    End
-    <select @bind="@ta.EndingHour">
-        @foreach (int num in tm.GetHours())
-        {
-            <option value="@num">@(num == 0 ? "12AM" : (num == 12) ? "12PM" : (num - 12) < 0 ? num + "AM" : (num -12) +
-            "PM")</option>
-        }
+        <select @bind="@ta.BeginningMinute">
+            @foreach (int i in tm.GetMinutes())
+            {
+                <option value="@i">@(i== 0 ? "00" : i)</option>
+            }
+        </select>
+    </div>
+    <div>
+        <p>End</p>
+        <select @bind="@ta.EndingHour">
+            @foreach (int num in tm.GetHours())
+            {
+                <option value="@num">@(num == 0 ? "12AM" : (num == 12) ? "12PM" : (num - 12) < 0 ? num + "AM" : (num -12) +
+                "PM")</option>
+            }
+        </select>
+        <select @bind="@ta.EndingMinute">
+            @foreach (int i in tm.GetMinutes())
+            {
+                <option value="@i">@(i== 0 ? "00" : i)</option>
 
-    </select>
-    <select @bind="@ta.EndingMinute">
-        @foreach (int i in tm.GetMinutes())
-        {
-            <option value="@i">@(i== 0 ? "00" : i)</option>
-
-        }
-    </select>
+            }
+        </select>
+    </div>
     <button>Add Time Range</button>
 </EditForm>
 
@@ -44,10 +46,11 @@
 @foreach (TimesAllowed t in rd.TimesAlloweds)
 {
     string BeginningAMPM = t.BeginningHour == 0 ? "AM" : (t.BeginningHour == 12) ? "PM" : (t.BeginningHour - 12) < 0 ?
-    t.BeginningHour + "AM" : (t.BeginningHour - 12) + "PM";
+    "AM" : "PM";
 
-    string EndingAMPM = t.EndingHour == 0 ? "AM" : (t.EndingHour == 12) ? "PM" : (t.EndingHour - 12) < 0 ? t.EndingHour +
-    "AM" : (t.EndingHour - 12) + "PM";
+    string EndingAMPM = t.EndingHour == 0 ? "AM" : (t.EndingHour == 12) ? "PM" : (t.EndingHour - 12) < 0 ?
+    "AM" : "PM";
+
     <div>Beginning @((t.BeginningHour == 0 ? "12" : (t.BeginningHour == 12) ? "12" : (t.BeginningHour - 12) < 0 ?
     t.BeginningHour : (t.BeginningHour -12))):@(t.BeginningMinute == 0 ? "00" : t.BeginningMinute)@BeginningAMPM End
         @((t.EndingHour == 0 ? "12" : (t.EndingHour == 12) ? "12" : (t.EndingHour - 12) < 0 ? t.EndingHour : (t.EndingHour
