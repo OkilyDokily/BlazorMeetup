@@ -29,7 +29,8 @@
             @if (EventId == "")
             {
                 <CascadingValue Value=@this Name="IndexPage">
-                    <TabControl @ref="@TabControlRef" IndexPageParameter="this">
+                    <TabControl @ref="@TabControlRef" IndexPageParameter="this" DefaultPage=@ClickedAwayTextString>
+
                         <TabPage Text="Create Event">
                             <CreateEvent EventId=@EventId />
                         </TabPage>
@@ -43,7 +44,7 @@
             else
             {
                 <CascadingValue Value=@this Name="IndexPage">
-                    <TabControl @ref="@TabControlRef" IndexPageParameter="this">
+                    <TabControl @ref="@TabControlRef" IndexPageParameter="this" DefaultPage=@ClickedAwayTextString>
                         <TabPage Text="Create Event">
                             <CreateEvent EventId=@EventId />
                         </TabPage>
@@ -71,17 +72,18 @@
     public string EventId { get; set; } = "";
     public TabControl TabControlRef;
     public CreateEvent CreateEventRef;
-
+    public bool ClickedAway;
+    public string ClickedAwayTextString { get; set; } = "";
     public bool GoToEventPageBool { get; set; }
     public void GoToEditAvatar()
     {
         NavigationManager.NavigateTo("/EditAvatar");
     }
 
-    public void SetEventId(string id)
+    public void SetEventId(string id, string text)
     {
         EventId = id;
-
+        ClickedAwayTextString = text;
         StateHasChanged();
     }
 
@@ -94,6 +96,7 @@
             StateHasChanged();
         }
     }
+
 
     public void RefreshState()
     {

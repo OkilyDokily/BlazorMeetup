@@ -13,7 +13,8 @@
 
     [Parameter]
     public RenderFragment ChildContent { get; set; }
-
+    [Parameter]
+    public string DefaultPage { get; set; }
 
     [Parameter]
     public Index IndexPageParameter { get; set; }
@@ -26,6 +27,9 @@
         Pages.Add(tabPage);
         if (Pages.Count == 1)
             ActivePage = tabPage;
+        if (tabPage.Text == DefaultPage)
+            ActivePage = tabPage;
+
         StateHasChanged();
 
 
@@ -69,7 +73,7 @@
             {
                 if (tabPage.Text != "Event" && IndexPageParameter != null)
                 {
-                    IndexPageParameter.SetEventId("");
+                    IndexPageParameter.SetEventId("", tabPage.Text);
                 }
 
                 ActivatePage(tabPage);
