@@ -13,8 +13,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
-using System;
-
 
 namespace BlazorMeetup
 {
@@ -89,14 +87,13 @@ namespace BlazorMeetup
             });
 
 
-            services.AddScoped<CreateUsers>();
             services.AddSingleton<TeamsUpdateService>();
             services.AddHttpClient();
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, CreateUsers cu)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
 
             if (env.IsDevelopment())
@@ -110,7 +107,7 @@ namespace BlazorMeetup
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            cu.InitializeUsers();
+       
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
