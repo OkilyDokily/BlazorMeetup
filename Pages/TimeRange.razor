@@ -7,7 +7,7 @@
     <div>
         <p>Start</p>
         <select @bind="@ta.BeginningHour">
-            @foreach (int num in tm.GetHours())
+            @foreach (int num in TimeMaker.GetHours())
             {
                 <option value="@num">@(num == 0 ? "12AM" : (num == 12) ? "12PM" : (num - 12) < 0 ? num + "AM" : (num -12) +
                 "PM")</option>
@@ -15,7 +15,7 @@
         </select>
 
         <select @bind="@ta.BeginningMinute">
-            @foreach (int i in tm.GetMinutes())
+            @foreach (int i in TimeMaker.GetMinutes())
             {
                 <option value="@i">@(i== 0 ? "00" : i)</option>
             }
@@ -24,14 +24,14 @@
     <div>
         <p>End</p>
         <select @bind="@ta.EndingHour">
-            @foreach (int num in tm.GetHours())
+            @foreach (int num in TimeMaker.GetHours())
             {
                 <option value="@num">@(num == 0 ? "12AM" : (num == 12) ? "12PM" : (num - 12) < 0 ? num + "AM" : (num -12) +
                 "PM")</option>
             }
         </select>
         <select @bind="@ta.EndingMinute">
-            @foreach (int i in tm.GetMinutes())
+            @foreach (int i in TimeMaker.GetMinutes())
             {
                 <option value="@i">@(i== 0 ? "00" : i)</option>
 

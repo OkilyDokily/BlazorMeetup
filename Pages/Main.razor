@@ -21,13 +21,13 @@
     <div>
         <label>Length of Event</label>
         <select @bind="@ParentEvent.Hours">
-            @foreach (int num in tm.GetHours())
+            @foreach (int num in TimeMaker.GetHours())
             {
                 <option value="@num">@num</option>
             }
         </select>
         <select @bind="@ParentEvent.Minutes">
-            @foreach (int num in tm.GetMinutes())
+            @foreach (int num in TimeMaker.GetMinutes())
             {
                 <option value="@num">@num</option>
             }

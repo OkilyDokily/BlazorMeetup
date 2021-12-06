@@ -9,29 +9,53 @@
 }
 @foreach (RestrictDate restrictDate in eventPage.CurrentEvent.RestrictDates)
 {
-    timeMakeDictionary.TryAdd(restrictDate.Id, new TimeMaker());
+
+    timeMakeDictionary.TryAdd(restrictDate.Id, new
+    TimeMaker());
     <div class="mb-10">
         <EditForm Model=@timeMakeDictionary[@restrictDate.Id] OnValidSubmit="() => SuggestADate(restrictDate.Id)">
 
             <div class="text-2xl">@restrictDate.Date.ToString("M/dd/yyyy", CultureInfo.InvariantCulture)</div>
+            @* Hours *@
 
+            @if (!FirstRender)
+            {
+                timeMakeDictionary[@restrictDate.Id].Hours
+                =
+                TimeMaker.GetHours(MeetupService.GetRestrictDateById(restrictDate.Id)?.TimesAlloweds?.ToList()).First();
+            }
 
             <select @bind="@timeMakeDictionary[@restrictDate.Id].Hours">
+                Console.WriteLine=
                 @foreach (int num in
-               @timeMakeDictionary[@restrictDate.Id].GetHours(MeetupService.GetRestrictDateById(restrictDate.Id)?.TimesAlloweds?.ToList()))
+               @TimeMaker.GetHours(MeetupService.GetRestrictDateById(restrictDate.Id)?.TimesAlloweds?.ToList()))
                 {
-                    <option value="@num">@(num == 0 ? "12AM" : (num == 12) ? "12PM" : (num - 12) < 0 ? num + "AM" : (num -12) +
+
+                    <option value="@num">@(num == 0 ? "12AM" : (num == 12) ? "12PM" : (num - 12) < 0 ? num + "AM" : (num - 12) +
                 "PM")</option>
+
                 }
             </select>
+            Minutes
+
+            @if (!FirstRender)
+            {
+                timeMakeDictionary[@restrictDate.Id].Minutes
+                =
+                TimeMaker.GetMinutes(@timeMakeDictionary[@restrictDate.Id].Hours,
+                MeetupService.GetRestrictDateById(restrictDate.Id)?.TimesAlloweds?.ToList()).First();
+            }
             <select @bind="@timeMakeDictionary[@restrictDate.Id].Minutes">
                 @foreach (int i in
-               @timeMakeDictionary[@restrictDate.Id].GetMinutes(@timeMakeDictionary[@restrictDate.Id].Hours,
+
+               @TimeMaker.GetMinutes(@timeMakeDictionary[@restrictDate.Id].Hours,
                MeetupService.GetRestrictDateById(restrictDate.Id)?.TimesAlloweds?.ToList()))
                 {
+
                     <option value="@i">@(i == 0 ? "00" : i)</option>
                 }
             </select>
+
             <button>Suggest a time for this date</button>
         </EditForm>
 
@@ -67,6 +91,7 @@
     [CascadingParameter(Name = "DbUserId")]
     public string DbUserId { get; set; }
 
+    public bool FirstRender { get; set; } = false;
 
     [Parameter]
     public string Id { get; set; }
@@ -107,6 +132,14 @@
         eventPage.CurrentEvent = MeetupService.GetEventById(eventPage.CurrentEvent.Id);
 
         StateHasChanged();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            FirstRender = true;
+        }
     }
 
 }
