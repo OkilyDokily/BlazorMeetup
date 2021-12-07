@@ -1,0 +1,5 @@
+{
+    "appService.preDeployTask": "publish-release",
+    "appService.deploySubpath": "bin\\Release\\net5.0\\publish",
+    "appService.defaultWebAppToDeploy": "/subscriptions/59e435e6-a7c9-4517-bc5b-9607c6868350/resourceGroups/BlazorMeetupResourceGroup/providers/Microsoft.Web/sites/blazormeetup"
+}

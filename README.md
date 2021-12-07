@@ -21,7 +21,7 @@ All users login via Discord and each event is associated with a Discord channel.
 Users may find created events by going to the Server tab and selecting a discord server. Most of the app exists in a single web route with an embedded heirarchy of tabs.
 
 --------------------
-
+![App](App.png)
 ## 🛠️ Technologies Used
 
 This project uses the following technologies:
@@ -35,10 +35,11 @@ This project uses the following technologies:
 - Docker
 - ClamAV Anti-Virus Scanner (As a docker container)
 - Tailwind (A CSS framework)
+- HTML 5 Drag and Drop API
 -------------------
 
 
-<summary>Blazor Meetup Implementation</summary>
+## 🔧 Blazor Meetup Implementation
 
 |Name| Function | Implementation |
 | :------------- | :------------- | :------------- |
@@ -46,28 +47,9 @@ This project uses the following technologies:
 | Discord Login | Identity, Login and Avatars are from Discord  | Oauth2 |
 | Styling | CSS Framework | Tailwind |
 | Avatars| Event creators can upload Team avatars  | ClamAV is used to detect viruses when a user uploads an image |
-|  |  |  |
+| Server Event Lists | Server Events Lists show each event available to a user  | Limit events to upcoming events  |
 |  |  |  |
 -------------------
-
-
-
-
-
-
-<details>
-<summary>🐛 Known Bugs</summary>
-
-| Error | Handled | Solution |
-| :------------- | :------------- | :------------- |
-|  |  | 
-|  |  | 
-|  |  | 
-|  |  | 
-|  |  | 
--------------------
-</details>
-
 
 ## ✅ Todo List
 
@@ -76,7 +58,8 @@ This project uses the following technologies:
 |Tabs | Let's users navigate the app | Change Color of Tab to indicate it's disabled |
 | List of who is available for a certain date | Identity, Login and Avatars are from Discord  |Suggested dates list should use avatars that show names on hover.|
 | Styling | CSS Framework | Tailwind |
-| Avatars| Event creators can upload Team avatars  | ClamAV is used to detect viruses when a user uploads an image |
+|Team Avatars| Event creators can upload Team avatars  | ClamAV is used to detect viruses when a user uploads an image |
+| Avatar Tabs|tab are used to navigate the app  | add a tab specifically for avatar uploading |
 | Server Avatars | Avatars used by a Discord server  |  Show avatar of server in the servers list. |
 | nix multiple restrict date | Restrict Dates are required so that users can suggest times for those dates  | make it so you can’t have multiple restrict dates for the same day. |
 -------------------
@@ -87,8 +70,9 @@ This project uses the following technologies:
 | :------------- | :------------- | :------------- |
 |Date ranges | Dates let users know when an event occurs | automatically supply available dates when given a range of dates
  |
-| Attendee Limit | Some event have a maximum capacity of users |Dont let more attendees attend after minimum attendees reached
+| Attendee Limit | Some event have a maximum or minimum capacity of users |Dont let more attendees attend after maximum attendees reached or dont enable event unless minimum attendees has been reached
 |
+
 | Styling | CSS Framework | Tailwind |
 | Avatars| Event creators can upload Team avatars  | ClamAV is used to detect viruses when a user uploads an image |
 | Server List   | Server lists help users find events related to a server they are a part of |Servers have an indicator that they can be searched such as a caret symbol that turns when clicked on.
@@ -103,10 +87,12 @@ This project uses the following technologies:
 - **ASP .NET Core :** You can check if you have .NET Core by running `dotnet --version` in the command line. If you do not have .NET Core please find more information and download [here](https://dotnet.microsoft.com/download/dotnet-core)
 - **Tailwind :**  https://tailwindcss.com/
 - **Docker :**  https://docs.docker.com/get-docker/
+- **ClamAV Docker Container :** https://hub.docker.com/r/clamav/clamav
 #### To Download:
 
-Go to my GitHub repository here, [https://github.com/OkilyDokily/BlazorMeetup](https://github.com/OkilyDokily/BlazorMeetup), and click on the green 'Code' button to clone the repository, Open with GitHub Desktop OR Download the ZIP file
 
+Go to my GitHub repository here, [https://github.com/OkilyDokily/BlazorMeetup](https://github.com/OkilyDokily/BlazorMeetup), and click on the green 'Code' button to clone the repository, Open with GitHub Desktop OR Download the ZIP file
+Alternatively, If you have Git Bash installed type the command `git clone https://github.com/OkilyDokily/BlazorMeetup` to download.
 
 #### Running/viewing application:
 
@@ -117,9 +103,22 @@ Go to my GitHub repository here, [https://github.com/OkilyDokily/BlazorMeetup](h
 
 ## 📫 Support and contact details
 
-If you run into any problems or have any questions please contact me via [email](mailto:ironbeach@gmail.com).
+For support or other issues contact me @ [email](mailto:ironbeach@gmail.com).
 
 ---------------------------
+
+## 🐛 Known Bugs
+<details>
+| Error | Handled | Solution |
+| :------------- | :------------- | :------------- |
+|  |  | 
+|  |  | 
+|  |  | 
+|  |  | 
+|  |  | 
+
+-------------------
+</details>
 
 ## 📘 License
 
