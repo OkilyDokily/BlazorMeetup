@@ -25,6 +25,7 @@ namespace BlazorMeetup.Data
         public virtual DbSet<TeamAvatarSettings> TeamAvatarSettings { get; set; }
         //new update 
         ///more update
+        //and again
         // protected override void OnModelCreating(ModelBuilder builder)
         // {
         //     builder.Entity<SuggestedDate>().HasOne(x => x.RestrictDate).WithMany(x => x.SuggestedDates).OnDelete(DeleteBehavior.Cascade);
