@@ -60,8 +60,8 @@ namespace BlazorMeetup.Data
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var serverVersion = new MySqlServerVersion(new Version(8, 0, 19));
-            optionsBuilder.UseMySql(serverVersion, p => p.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
+            //var serverVersion = new MySqlServerVersion(new Version(8, 0, 19));
+            optionsBuilder.UseSqlServer(p => p.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
             optionsBuilder.
                 ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning));
             optionsBuilder.
