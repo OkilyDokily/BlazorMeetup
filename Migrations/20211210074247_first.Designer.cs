@@ -4,14 +4,16 @@ using BlazorMeetup.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BlazorMeetup.Migrations
 {
     [DbContext(typeof(BlazorMeetupContext))]
-    partial class BlazorMeetupContextModelSnapshot : ModelSnapshot
+    [Migration("20211210074247_first")]
+    partial class first
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -519,13 +521,11 @@ namespace BlazorMeetup.Migrations
                 {
                     b.HasOne("BlazorMeetup.Data.Attendee", "Attendee")
                         .WithMany("Events")
-                        .HasForeignKey("AttendeeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AttendeeId");
 
                     b.HasOne("BlazorMeetup.Data.Event", "Event")
                         .WithMany("Attendees")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("EventId");
 
                     b.Navigation("Attendee");
 
@@ -536,16 +536,14 @@ namespace BlazorMeetup.Migrations
                 {
                     b.HasOne("BlazorMeetup.Data.Attendee", null)
                         .WithOne("AvatarSettings")
-                        .HasForeignKey("BlazorMeetup.Data.AvatarSettings", "AttendeeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("BlazorMeetup.Data.AvatarSettings", "AttendeeId");
                 });
 
             modelBuilder.Entity("BlazorMeetup.Data.Event", b =>
                 {
                     b.HasOne("BlazorMeetup.Data.Attendee", "Attendee")
                         .WithMany("EventsOwned")
-                        .HasForeignKey("AttendeeId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .HasForeignKey("AttendeeId");
 
                     b.HasOne("BlazorMeetup.Data.Server", "Server")
                         .WithMany("Events")
@@ -562,8 +560,7 @@ namespace BlazorMeetup.Migrations
                 {
                     b.HasOne("BlazorMeetup.Data.Event", "Event")
                         .WithMany("RestrictDates")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("EventId");
 
                     b.Navigation("Event");
                 });
@@ -572,8 +569,7 @@ namespace BlazorMeetup.Migrations
                 {
                     b.HasOne("BlazorMeetup.Data.Attendee", "Attendee")
                         .WithMany("Servers")
-                        .HasForeignKey("AttendeeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AttendeeId");
 
                     b.Navigation("Attendee");
                 });
@@ -586,8 +582,7 @@ namespace BlazorMeetup.Migrations
 
                     b.HasOne("BlazorMeetup.Data.RestrictDate", "RestrictDate")
                         .WithMany("SuggestedDates")
-                        .HasForeignKey("RestrictDateId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("RestrictDateId");
 
                     b.Navigation("Attendee");
 
@@ -598,13 +593,11 @@ namespace BlazorMeetup.Migrations
                 {
                     b.HasOne("BlazorMeetup.Data.Attendee", "Attendee")
                         .WithMany("SuggestedDates")
-                        .HasForeignKey("AttendeeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AttendeeId");
 
                     b.HasOne("BlazorMeetup.Data.SuggestedDate", "SuggestedDate")
                         .WithMany("Attendees")
-                        .HasForeignKey("SuggestedDateId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("SuggestedDateId");
 
                     b.Navigation("Attendee");
 
@@ -615,8 +608,7 @@ namespace BlazorMeetup.Migrations
                 {
                     b.HasOne("BlazorMeetup.Data.Event", "Event")
                         .WithMany("Teams")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("EventId");
 
                     b.Navigation("Event");
                 });
@@ -625,13 +617,11 @@ namespace BlazorMeetup.Migrations
                 {
                     b.HasOne("BlazorMeetup.Data.Attendee", "Attendee")
                         .WithMany("Teams")
-                        .HasForeignKey("AttendeeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AttendeeId");
 
                     b.HasOne("BlazorMeetup.Data.Team", "Team")
                         .WithMany("Attendees")
-                        .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("TeamId");
 
                     b.Navigation("Attendee");
 
@@ -642,16 +632,14 @@ namespace BlazorMeetup.Migrations
                 {
                     b.HasOne("BlazorMeetup.Data.Team", null)
                         .WithOne("TeamAvatarSettings")
-                        .HasForeignKey("BlazorMeetup.Data.TeamAvatarSettings", "TeamId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("BlazorMeetup.Data.TeamAvatarSettings", "TeamId");
                 });
 
             modelBuilder.Entity("BlazorMeetup.Data.TimesAllowed", b =>
                 {
                     b.HasOne("BlazorMeetup.Data.RestrictDate", "RestrictDate")
                         .WithMany("TimesAlloweds")
-                        .HasForeignKey("RestrictDateId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("RestrictDateId");
 
                     b.Navigation("RestrictDate");
                 });
