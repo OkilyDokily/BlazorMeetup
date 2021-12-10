@@ -23,7 +23,7 @@ namespace BlazorMeetup.Data
         public virtual DbSet<TeamAttendee> TeamAttendees { get; set; }
         public virtual DbSet<AvatarSettings> AvatarSettings { get; set; }
         public virtual DbSet<TeamAvatarSettings> TeamAvatarSettings { get; set; }
-
+        //new update
         // protected override void OnModelCreating(ModelBuilder builder)
         // {
         //     builder.Entity<SuggestedDate>().HasOne(x => x.RestrictDate).WithMany(x => x.SuggestedDates).OnDelete(DeleteBehavior.Cascade);
