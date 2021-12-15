@@ -32,7 +32,7 @@ namespace BlazorMeetup.Data
                 foreach (Server s in servers)
                 {
                     Server test = ctx.Servers.Where(x => s.Id == x.Id).FirstOrDefault();
-                    if (test != null)
+                    if (test == null)
                     {
                         ctx.Servers.Add(s);
                         ctx.SaveChanges();
@@ -47,9 +47,9 @@ namespace BlazorMeetup.Data
             {
                 foreach (Server s in servers)
                 {
-                    ServerAttendee sa = new ServerAttendee { Id = Guid.NewGuid().ToString(), AttendeeId = AttendeeId, ServerId = AttendeeId };
+                    ServerAttendee sa = new ServerAttendee { Id = Guid.NewGuid().ToString(), AttendeeId = AttendeeId, ServerId = s.Id };
                     ServerAttendee test = ctx.ServerAttendees.Where(x => x.AttendeeId == AttendeeId && x.ServerId == s.Id).FirstOrDefault();
-                    if (test != null)
+                    if (test == null)
                     {
                         ctx.ServerAttendees.Add(sa);
                         ctx.SaveChanges();
@@ -62,7 +62,7 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                List<ServerAttendee> serversFromDb = ctx.ServerAttendees.Where(x => x.AttendeeId == id).Include(x=>x.Server).ThenInclude(x => x.Events).ThenInclude(x => x.Attendee).ToList();
+                List<ServerAttendee> serversFromDb = ctx.ServerAttendees.Where(x => x.AttendeeId == id).Include(x => x.Server).ThenInclude(x => x.Events).ThenInclude(x => x.Attendee).ToList();
                 return serversFromDb;
             }
         }

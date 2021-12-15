@@ -1,5 +1,3 @@
-@page "/YourServers"
-@attribute [Authorize]
 @inject MeetupService MeetupService
 @inject NavigationManager NavigationManager
 @using BlazorMeetup.Data
@@ -63,7 +61,7 @@
     [CascadingParameter(Name = "IndexPage")]
     public Index IndexPage { get; set; }
 
-    public List<ServerAttendee> Servers { get; set; }
+    public List<ServerAttendee> ServerAttendees { get; set; }
 
     public Dictionary<string, InternalHelperClass> serverEventDictionary = new();
 
@@ -77,17 +75,17 @@
     protected override void OnParametersSet()
     {
         if (DbUserId == null) return;
-        if (Servers != null) return;
+        if (ServerAttendees != null) return;
 
-        Servers = MeetupService.GetServersByUserId(DbUserId);
+        ServerAttendees = MeetupService.GetServersByUserId(DbUserId);
 
         InternalHelperClass.MeetupService = MeetupService;
         InternalHelperClass.DbUserId = DbUserId;
 
-        foreach (var server in Servers)
+        foreach (var serverAttendee in ServerAttendees)
         {
-            serverEventDictionary.Add(server.Server.Id, new InternalHelperClass(server.Server));
-            serverEventDictionary[server.Id].AddEvents();
+            serverEventDictionary.Add(serverAttendee.Server.Id, new InternalHelperClass(serverAttendee.Server));
+            serverEventDictionary[serverAttendee.Server.Id].AddEvents();
         }
         GetOrderedServerIds();
 
@@ -110,9 +108,9 @@
         List<Event> Events = MeetupService.GetYourEvents(DbUserId);
 
         serverIdsWithUserEvents = Events.GroupBy(x => x.Server.Id).Select(x => x.Key).ToList();
-        serverIdsWithEventsNoUser = Servers.Where(x => !serverIdsWithUserEvents.Any(y => x.Id ==
-        y)).Where(x => x.Server.Events.Count > 0).Select(x => x.Id).ToList();
-        serverIdsWithoutEvents = Servers.Where(x => x.Server.Events.Count == 0).Select(x => x.Id).ToList();
+        serverIdsWithEventsNoUser = ServerAttendees.Where(x => !serverIdsWithUserEvents.Any(y => x.Server.Id ==
+        y)).Where(x => x.Server.Events.Count > 0).Select(x => x.Server.Id).ToList();
+        serverIdsWithoutEvents = ServerAttendees.Where(x => x.Server.Events.Count == 0).Select(x => x.Server.Id).ToList();
     }
 
     public class InternalHelperClass
