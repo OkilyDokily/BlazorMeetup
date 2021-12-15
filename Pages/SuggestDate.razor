@@ -63,6 +63,10 @@
         {
             @foreach (SuggestedDate sd in restrictDate.SuggestedDates)
             {
+                if (sd.Attendee == null)
+                {
+                    Console.WriteLine("itttss nullll");
+                }
 
                 @if (CanAttend(sd))
                 {
