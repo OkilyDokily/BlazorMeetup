@@ -63,7 +63,7 @@
     [CascadingParameter(Name = "IndexPage")]
     public Index IndexPage { get; set; }
 
-    public List<Server> Servers { get; set; }
+    public List<ServerAttendee> Servers { get; set; }
 
     public Dictionary<string, InternalHelperClass> serverEventDictionary = new();
 
@@ -86,7 +86,7 @@
 
         foreach (var server in Servers)
         {
-            serverEventDictionary.Add(server.Id, new InternalHelperClass(server));
+            serverEventDictionary.Add(server.Server.Id, new InternalHelperClass(server.Server));
             serverEventDictionary[server.Id].AddEvents();
         }
         GetOrderedServerIds();
@@ -111,8 +111,8 @@
 
         serverIdsWithUserEvents = Events.GroupBy(x => x.Server.Id).Select(x => x.Key).ToList();
         serverIdsWithEventsNoUser = Servers.Where(x => !serverIdsWithUserEvents.Any(y => x.Id ==
-        y)).Where(x => x.Events.Count > 0).Select(x => x.Id).ToList();
-        serverIdsWithoutEvents = Servers.Where(x => x.Events.Count == 0).Select(x => x.Id).ToList();
+        y)).Where(x => x.Server.Events.Count > 0).Select(x => x.Id).ToList();
+        serverIdsWithoutEvents = Servers.Where(x => x.Server.Events.Count == 0).Select(x => x.Id).ToList();
     }
 
     public class InternalHelperClass

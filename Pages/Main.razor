@@ -35,9 +35,9 @@
     </div>
     <div>
         <InputSelect @bind-Value="ParentEvent.ServerId">
-            @foreach (Server s in servers)
+            @foreach (ServerAttendee s in servers)
             {
-                <option value=@s.Id>@s.Name</option>
+                <option value=@s.Server.Id>@s.Server.Name</option>
             }
         </InputSelect>
     </div>
@@ -54,7 +54,7 @@
     public CreateEvent CreateEventAcc { get; set; }
     [Parameter]
     public TabControl TabControlAcc { get; set; }
-    public List<Server> servers { get; set; }
+    public List<ServerAttendee> servers { get; set; }
 
     public TimesAllowed ta = new TimesAllowed();
 

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazorMeetup.Migrations
 {
     [DbContext(typeof(BlazorMeetupContext))]
-    [Migration("20211210215522_again")]
-    partial class again
+    [Migration("20211215000043_first")]
+    partial class first
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -159,6 +159,26 @@ namespace BlazorMeetup.Migrations
                     b.HasIndex("AttendeeId");
 
                     b.ToTable("Servers");
+                });
+
+            modelBuilder.Entity("BlazorMeetup.Data.ServerAttendee", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AttendeeId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ServerId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AttendeeId");
+
+                    b.HasIndex("ServerId");
+
+                    b.ToTable("ServerAttendees");
                 });
 
             modelBuilder.Entity("BlazorMeetup.Data.SuggestedDate", b =>
@@ -521,13 +541,11 @@ namespace BlazorMeetup.Migrations
                 {
                     b.HasOne("BlazorMeetup.Data.Attendee", "Attendee")
                         .WithMany("Events")
-                        .HasForeignKey("AttendeeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AttendeeId");
 
                     b.HasOne("BlazorMeetup.Data.Event", "Event")
                         .WithMany("Attendees")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("EventId");
 
                     b.Navigation("Attendee");
 
@@ -538,16 +556,14 @@ namespace BlazorMeetup.Migrations
                 {
                     b.HasOne("BlazorMeetup.Data.Attendee", null)
                         .WithOne("AvatarSettings")
-                        .HasForeignKey("BlazorMeetup.Data.AvatarSettings", "AttendeeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("BlazorMeetup.Data.AvatarSettings", "AttendeeId");
                 });
 
             modelBuilder.Entity("BlazorMeetup.Data.Event", b =>
                 {
                     b.HasOne("BlazorMeetup.Data.Attendee", "Attendee")
                         .WithMany("EventsOwned")
-                        .HasForeignKey("AttendeeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AttendeeId");
 
                     b.HasOne("BlazorMeetup.Data.Server", "Server")
                         .WithMany("Events")
@@ -564,20 +580,31 @@ namespace BlazorMeetup.Migrations
                 {
                     b.HasOne("BlazorMeetup.Data.Event", "Event")
                         .WithMany("RestrictDates")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("EventId");
 
                     b.Navigation("Event");
                 });
 
             modelBuilder.Entity("BlazorMeetup.Data.Server", b =>
                 {
-                    b.HasOne("BlazorMeetup.Data.Attendee", "Attendee")
+                    b.HasOne("BlazorMeetup.Data.Attendee", null)
                         .WithMany("Servers")
-                        .HasForeignKey("AttendeeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AttendeeId");
+                });
+
+            modelBuilder.Entity("BlazorMeetup.Data.ServerAttendee", b =>
+                {
+                    b.HasOne("BlazorMeetup.Data.Attendee", "Attendee")
+                        .WithMany()
+                        .HasForeignKey("AttendeeId");
+
+                    b.HasOne("BlazorMeetup.Data.Server", "Server")
+                        .WithMany()
+                        .HasForeignKey("ServerId");
 
                     b.Navigation("Attendee");
+
+                    b.Navigation("Server");
                 });
 
             modelBuilder.Entity("BlazorMeetup.Data.SuggestedDate", b =>
@@ -588,8 +615,7 @@ namespace BlazorMeetup.Migrations
 
                     b.HasOne("BlazorMeetup.Data.RestrictDate", "RestrictDate")
                         .WithMany("SuggestedDates")
-                        .HasForeignKey("RestrictDateId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("RestrictDateId");
 
                     b.Navigation("Attendee");
 
@@ -600,13 +626,11 @@ namespace BlazorMeetup.Migrations
                 {
                     b.HasOne("BlazorMeetup.Data.Attendee", "Attendee")
                         .WithMany("SuggestedDates")
-                        .HasForeignKey("AttendeeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AttendeeId");
 
                     b.HasOne("BlazorMeetup.Data.SuggestedDate", "SuggestedDate")
                         .WithMany("Attendees")
-                        .HasForeignKey("SuggestedDateId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("SuggestedDateId");
 
                     b.Navigation("Attendee");
 
@@ -617,8 +641,7 @@ namespace BlazorMeetup.Migrations
                 {
                     b.HasOne("BlazorMeetup.Data.Event", "Event")
                         .WithMany("Teams")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("EventId");
 
                     b.Navigation("Event");
                 });
@@ -627,13 +650,11 @@ namespace BlazorMeetup.Migrations
                 {
                     b.HasOne("BlazorMeetup.Data.Attendee", "Attendee")
                         .WithMany("Teams")
-                        .HasForeignKey("AttendeeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AttendeeId");
 
                     b.HasOne("BlazorMeetup.Data.Team", "Team")
                         .WithMany("Attendees")
-                        .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("TeamId");
 
                     b.Navigation("Attendee");
 
@@ -644,16 +665,14 @@ namespace BlazorMeetup.Migrations
                 {
                     b.HasOne("BlazorMeetup.Data.Team", null)
                         .WithOne("TeamAvatarSettings")
-                        .HasForeignKey("BlazorMeetup.Data.TeamAvatarSettings", "TeamId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("BlazorMeetup.Data.TeamAvatarSettings", "TeamId");
                 });
 
             modelBuilder.Entity("BlazorMeetup.Data.TimesAllowed", b =>
                 {
                     b.HasOne("BlazorMeetup.Data.RestrictDate", "RestrictDate")
                         .WithMany("TimesAlloweds")
-                        .HasForeignKey("RestrictDateId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("RestrictDateId");
 
                     b.Navigation("RestrictDate");
                 });

@@ -39,11 +39,12 @@ namespace BlazorMeetup.Data
             }
             if (response.StatusCode.ToString() == "OK")
             {
-                
+
                 string jsonString = await response.Content.ReadAsStringAsync();
                 List<Server> servers = JsonConvert.DeserializeObject<List<Server>>(jsonString);
-                servers.ForEach(x => x.AttendeeId = id);
+                
                 meetupService.AddServers(servers, id);
+                meetupService.AddServersToUser(servers, id);
             }
         }
     }

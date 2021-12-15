@@ -29,19 +29,40 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                List<Server> serversFromDb = ctx.Servers.Where(x => x.AttendeeId == AttendeeId).ToList();
-                List<Server> narrowedList = servers.Where(x => !serversFromDb.Any(x => x.AttendeeId == AttendeeId)).ToList();
-                ctx.Servers.AddRange(narrowedList);
-                ctx.SaveChanges();
-                Console.WriteLine("added servers");
+                foreach (Server s in servers)
+                {
+                    Server test = ctx.Servers.Where(x => s.Id == x.Id).FirstOrDefault();
+                    if (test != null)
+                    {
+                        ctx.Servers.Add(s);
+                        ctx.SaveChanges();
+                    }
+                }
             }
         }
 
-        public List<Server> GetServersByUserId(string id)
+        public void AddServersToUser(List<Server> servers, string AttendeeId)
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                List<Server> serversFromDb = ctx.Servers.Where(x => x.AttendeeId == id).Include(x => x.Events).ThenInclude(x => x.Attendee).ToList();
+                foreach (Server s in servers)
+                {
+                    ServerAttendee sa = new ServerAttendee { Id = Guid.NewGuid().ToString(), AttendeeId = AttendeeId, ServerId = AttendeeId };
+                    ServerAttendee test = ctx.ServerAttendees.Where(x => x.AttendeeId == AttendeeId && x.ServerId == s.Id).FirstOrDefault();
+                    if (test != null)
+                    {
+                        ctx.ServerAttendees.Add(sa);
+                        ctx.SaveChanges();
+                    }
+                }
+            }
+        }
+
+        public List<ServerAttendee> GetServersByUserId(string id)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                List<ServerAttendee> serversFromDb = ctx.ServerAttendees.Where(x => x.AttendeeId == id).Include(x=>x.Server).ThenInclude(x => x.Events).ThenInclude(x => x.Attendee).ToList();
                 return serversFromDb;
             }
         }

@@ -1078,6 +1078,17 @@ form{
   width: 100%;
 }
 
+#not-authorized{
+  height: 100%;
+  width: 100%;
+}
+
+#body{
+  background-image: url("../splash.jpg");
+  width: 100%;
+  height: 100%;
+}
+
 @media (max-width: 640px) {
   #NavMenu-Div{
     display: none;
@@ -1099,10 +1110,6 @@ form{
   .form-item{
     display: flex;
     justify-content: flex-start;
-  }
-
-  div#application-name{
-    width: 0px;
   }
 }
 

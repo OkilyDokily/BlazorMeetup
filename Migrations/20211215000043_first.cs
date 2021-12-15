@@ -181,12 +181,12 @@ namespace BlazorMeetup.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    AttendeeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Icon = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Owner = table.Column<bool>(type: "bit", nullable: false),
                     Permissions = table.Column<int>(type: "int", nullable: false),
-                    Permissions_new = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Permissions_new = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AttendeeId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -228,6 +228,31 @@ namespace BlazorMeetup.Migrations
                         principalTable: "Servers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ServerAttendees",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ServerId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    AttendeeId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ServerAttendees", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ServerAttendees_AspNetUsers_AttendeeId",
+                        column: x => x.AttendeeId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ServerAttendees_Servers_ServerId",
+                        column: x => x.ServerId,
+                        principalTable: "Servers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -487,6 +512,16 @@ namespace BlazorMeetup.Migrations
                 column: "EventId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ServerAttendees_AttendeeId",
+                table: "ServerAttendees",
+                column: "AttendeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ServerAttendees_ServerId",
+                table: "ServerAttendees",
+                column: "ServerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Servers_AttendeeId",
                 table: "Servers",
                 column: "AttendeeId");
@@ -561,6 +596,9 @@ namespace BlazorMeetup.Migrations
 
             migrationBuilder.DropTable(
                 name: "AvatarSettings");
+
+            migrationBuilder.DropTable(
+                name: "ServerAttendees");
 
             migrationBuilder.DropTable(
                 name: "SuggestedDateAttendees");

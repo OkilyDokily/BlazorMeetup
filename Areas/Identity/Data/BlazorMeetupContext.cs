@@ -13,6 +13,7 @@ namespace BlazorMeetup.Data
         }
         public virtual DbSet<Attendee> Attendees { get; set; }
         public virtual DbSet<Event> Events { get; set; }
+        public virtual DbSet<ServerAttendee> ServerAttendees { get; set; }
         public virtual DbSet<AttendeeEvent> AttendeeEvents { get; set; }
         public virtual DbSet<SuggestedDate> SuggestedDates { get; set; }
         public virtual DbSet<RestrictDate> RestrictDates { get; set; }
