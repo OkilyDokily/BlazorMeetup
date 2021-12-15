@@ -1,6 +1,7 @@
 ﻿@inject MeetupService MeetupService;
 @inject IJSRuntime IJSRunTime
 
+
 <EditForm Model="@ParentEvent" class="w-full" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
@@ -34,12 +35,14 @@
         </select>
     </div>
     <div>
-        <InputSelect @bind-Value="ParentEvent.ServerId">
+        <select @bind="ParentEvent.ServerId">
+
             @foreach (ServerAttendee s in servers)
             {
                 <option value=@s.Server.Id>@s.Server.Name</option>
             }
-        </InputSelect>
+
+        </select>
     </div>
 
     <button>@(ParentEvent.Id != null ? "Edit Event" : "Create Event")</button>
@@ -63,10 +66,6 @@
     protected override void OnParametersSet()
     {
         servers = MeetupService.GetServersByUserId(DbUserId);
-        if (servers.Count > 0)
-        {
-            ParentEvent.ServerId = servers.FirstOrDefault().Id;
-        }
         StateHasChanged();
         base.OnParametersSet();
     }

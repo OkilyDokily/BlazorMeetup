@@ -405,7 +405,7 @@ namespace BlazorMeetup.Data
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-                return ctx.Events.Include(x => x.RestrictDates).ThenInclude(x => x.SuggestedDates).ThenInclude(x => x.Attendee).Include(x => x.Attendee).ThenInclude(x => x.AvatarSettings).Include(x => x.Attendees).ThenInclude(x => x.Attendee).ThenInclude(x => x.AvatarSettings).FirstOrDefault(x => x.Id == id);
+                return ctx.Events.Include(x => x.Server).Include(x => x.RestrictDates).ThenInclude(x => x.SuggestedDates).ThenInclude(x => x.Attendee).Include(x => x.Attendee).ThenInclude(x => x.AvatarSettings).Include(x => x.Attendees).ThenInclude(x => x.Attendee).ThenInclude(x => x.AvatarSettings).FirstOrDefault(x => x.Id == id);
             }
         }
 
