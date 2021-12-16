@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-
+using System.ComponentModel.DataAnnotations;
 namespace BlazorMeetup.Data
 {
     public class AttendeeEvent
@@ -11,7 +11,9 @@ namespace BlazorMeetup.Data
         public string Id { get; set; }
         public string AttendeeId { get; set; }
         public string EventId { get; set; }
+        [Required]
         public virtual Attendee Attendee { get; set; }
+
         public virtual Event Event { get; set; }
 
     }

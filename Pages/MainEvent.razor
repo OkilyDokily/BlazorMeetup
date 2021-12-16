@@ -55,6 +55,8 @@
     {
 
         <p class="text-xs ml-2 cursor-pointer" @onclick="() => EditEvent()">Edit this Event</p>
+        <hr>
+        <p class="text-xs ml-2 cursor-pointer" @onclick="() => DeleteEvent()">Delete this Event</p>
     }
 
 </div>
@@ -89,6 +91,12 @@
     void EditEvent()
     {
         IndexPage.EventId = CurrentEvent.Id;
+        IndexPage.TabControlRef.ActivatePageByText("Create Event");
+    }
+
+    void DeleteEvent()
+    {
+        MeetupService.DeleteEventById(CurrentEvent.Id);
         IndexPage.TabControlRef.ActivatePageByText("Create Event");
     }
 

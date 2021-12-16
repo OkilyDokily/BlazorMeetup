@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 namespace BlazorMeetup.Data
 {
     public class TeamAvatarSettings
@@ -11,6 +11,8 @@ namespace BlazorMeetup.Data
         public string AvatarUrl { get; set; }
         public string AvatarIdentification { get; set; }
         public string TeamId { get; set; }
+        [Required]
+        public virtual Team Team { get; set; }
         public int Size { get; set; } = 100;
         public int Left { get; set; } = 0;
         public int Top { get; set; } = 0;

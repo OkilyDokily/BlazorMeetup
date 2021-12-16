@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace BlazorMeetup.Data
 {
@@ -6,8 +7,10 @@ namespace BlazorMeetup.Data
     {
         public string Id { get; set; }
         public string EventId { get; set; }
+        [Required]
         public virtual Event Event { get; set; }
         public string Name { get; set; }
+
         public virtual TeamAvatarSettings TeamAvatarSettings { get; set; }
         public ICollection<TeamAttendee> Attendees { get; set; }
 

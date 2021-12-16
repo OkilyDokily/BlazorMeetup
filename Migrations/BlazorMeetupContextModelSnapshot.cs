@@ -25,6 +25,7 @@ namespace BlazorMeetup.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AttendeeId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("EventId")
@@ -45,6 +46,7 @@ namespace BlazorMeetup.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AttendeeId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AvatarIdentification")
@@ -65,8 +67,7 @@ namespace BlazorMeetup.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AttendeeId")
-                        .IsUnique()
-                        .HasFilter("[AttendeeId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("AvatarSettings");
                 });
@@ -77,10 +78,10 @@ namespace BlazorMeetup.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AttendeeId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Hours")
@@ -120,6 +121,7 @@ namespace BlazorMeetup.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EventId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -165,9 +167,11 @@ namespace BlazorMeetup.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AttendeeId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ServerId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -185,6 +189,7 @@ namespace BlazorMeetup.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AttendeeId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("DateTime")
@@ -208,6 +213,7 @@ namespace BlazorMeetup.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AttendeeId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("SuggestedDateId")
@@ -228,6 +234,7 @@ namespace BlazorMeetup.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("EventId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
@@ -249,7 +256,8 @@ namespace BlazorMeetup.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("EventId")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("TeamId")
                         .HasColumnType("nvarchar(450)");
@@ -257,6 +265,8 @@ namespace BlazorMeetup.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AttendeeId");
+
+                    b.HasIndex("EventId");
 
                     b.HasIndex("TeamId");
 
@@ -281,6 +291,7 @@ namespace BlazorMeetup.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("TeamId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Top")
@@ -289,8 +300,7 @@ namespace BlazorMeetup.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("TeamId")
-                        .IsUnique()
-                        .HasFilter("[TeamId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("TeamAvatarSettings");
                 });
@@ -313,6 +323,7 @@ namespace BlazorMeetup.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("RestrictDateId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -539,7 +550,9 @@ namespace BlazorMeetup.Migrations
                 {
                     b.HasOne("BlazorMeetup.Data.Attendee", "Attendee")
                         .WithMany("Events")
-                        .HasForeignKey("AttendeeId");
+                        .HasForeignKey("AttendeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BlazorMeetup.Data.Event", "Event")
                         .WithMany("Attendees")
@@ -552,16 +565,22 @@ namespace BlazorMeetup.Migrations
 
             modelBuilder.Entity("BlazorMeetup.Data.AvatarSettings", b =>
                 {
-                    b.HasOne("BlazorMeetup.Data.Attendee", null)
+                    b.HasOne("BlazorMeetup.Data.Attendee", "Attendee")
                         .WithOne("AvatarSettings")
-                        .HasForeignKey("BlazorMeetup.Data.AvatarSettings", "AttendeeId");
+                        .HasForeignKey("BlazorMeetup.Data.AvatarSettings", "AttendeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Attendee");
                 });
 
             modelBuilder.Entity("BlazorMeetup.Data.Event", b =>
                 {
                     b.HasOne("BlazorMeetup.Data.Attendee", "Attendee")
                         .WithMany("EventsOwned")
-                        .HasForeignKey("AttendeeId");
+                        .HasForeignKey("AttendeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BlazorMeetup.Data.Server", "Server")
                         .WithMany("Events")
@@ -578,7 +597,9 @@ namespace BlazorMeetup.Migrations
                 {
                     b.HasOne("BlazorMeetup.Data.Event", "Event")
                         .WithMany("RestrictDates")
-                        .HasForeignKey("EventId");
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Event");
                 });
@@ -594,11 +615,15 @@ namespace BlazorMeetup.Migrations
                 {
                     b.HasOne("BlazorMeetup.Data.Attendee", "Attendee")
                         .WithMany()
-                        .HasForeignKey("AttendeeId");
+                        .HasForeignKey("AttendeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BlazorMeetup.Data.Server", "Server")
                         .WithMany()
-                        .HasForeignKey("ServerId");
+                        .HasForeignKey("ServerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Attendee");
 
@@ -609,7 +634,9 @@ namespace BlazorMeetup.Migrations
                 {
                     b.HasOne("BlazorMeetup.Data.Attendee", "Attendee")
                         .WithMany()
-                        .HasForeignKey("AttendeeId");
+                        .HasForeignKey("AttendeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BlazorMeetup.Data.RestrictDate", "RestrictDate")
                         .WithMany("SuggestedDates")
@@ -624,7 +651,9 @@ namespace BlazorMeetup.Migrations
                 {
                     b.HasOne("BlazorMeetup.Data.Attendee", "Attendee")
                         .WithMany("SuggestedDates")
-                        .HasForeignKey("AttendeeId");
+                        .HasForeignKey("AttendeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BlazorMeetup.Data.SuggestedDate", "SuggestedDate")
                         .WithMany("Attendees")
@@ -639,7 +668,9 @@ namespace BlazorMeetup.Migrations
                 {
                     b.HasOne("BlazorMeetup.Data.Event", "Event")
                         .WithMany("Teams")
-                        .HasForeignKey("EventId");
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Event");
                 });
@@ -650,27 +681,41 @@ namespace BlazorMeetup.Migrations
                         .WithMany("Teams")
                         .HasForeignKey("AttendeeId");
 
+                    b.HasOne("BlazorMeetup.Data.Event", "Event")
+                        .WithMany()
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("BlazorMeetup.Data.Team", "Team")
                         .WithMany("Attendees")
                         .HasForeignKey("TeamId");
 
                     b.Navigation("Attendee");
 
+                    b.Navigation("Event");
+
                     b.Navigation("Team");
                 });
 
             modelBuilder.Entity("BlazorMeetup.Data.TeamAvatarSettings", b =>
                 {
-                    b.HasOne("BlazorMeetup.Data.Team", null)
+                    b.HasOne("BlazorMeetup.Data.Team", "Team")
                         .WithOne("TeamAvatarSettings")
-                        .HasForeignKey("BlazorMeetup.Data.TeamAvatarSettings", "TeamId");
+                        .HasForeignKey("BlazorMeetup.Data.TeamAvatarSettings", "TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Team");
                 });
 
             modelBuilder.Entity("BlazorMeetup.Data.TimesAllowed", b =>
                 {
                     b.HasOne("BlazorMeetup.Data.RestrictDate", "RestrictDate")
                         .WithMany("TimesAlloweds")
-                        .HasForeignKey("RestrictDateId");
+                        .HasForeignKey("RestrictDateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("RestrictDate");
                 });
