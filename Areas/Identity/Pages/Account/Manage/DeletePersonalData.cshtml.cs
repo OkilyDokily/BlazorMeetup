@@ -13,15 +13,17 @@ namespace BlazorMeetup.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<Attendee> _userManager;
         private readonly SignInManager<Attendee> _signInManager;
         private readonly ILogger<DeletePersonalDataModel> _logger;
-
+        private readonly MeetupService _meetupService;
         public DeletePersonalDataModel(
             UserManager<Attendee> userManager,
+            MeetupService meetupService,
             SignInManager<Attendee> signInManager,
             ILogger<DeletePersonalDataModel> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _meetupService = meetupService;
         }
 
         [BindProperty]
@@ -76,7 +78,8 @@ namespace BlazorMeetup.Areas.Identity.Pages.Account.Manage
             await _signInManager.SignOutAsync();
 
             _logger.LogInformation("User with ID '{UserId}' deleted themselves.", userId);
-
+            _meetupService.DeleteLoginInfoByUserId(userId);
+            _meetupService.DeleteServerAttendeesByAttendeeId(userId);
             return Redirect("~/");
         }
     }

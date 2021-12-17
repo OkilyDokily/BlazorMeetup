@@ -443,5 +443,25 @@ namespace BlazorMeetup.Data
                 }
             }
         }
+
+        public async void DeleteLoginInfoByUserId(string userId)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+
+                await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].AspNetUserLogins WHERE UserId='" + userId + "'");
+                await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].AspNetUserClaims WHERE UserId='" + userId + "'");
+
+            }
+        }
+        public void DeleteServerAttendeesByAttendeeId(string attendeeId)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                List<ServerAttendee> saList = ctx.ServerAttendees.Where(x => x.AttendeeId == attendeeId).ToList();
+                ctx.ServerAttendees.RemoveRange(saList);
+                ctx.SaveChanges();
+            }
+        }
     }
 }

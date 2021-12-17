@@ -136,9 +136,6 @@ namespace BlazorMeetup.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("AttendeeId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Icon")
                         .HasColumnType("nvarchar(max)");
 
@@ -155,8 +152,6 @@ namespace BlazorMeetup.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AttendeeId");
 
                     b.ToTable("Servers");
                 });
@@ -604,17 +599,10 @@ namespace BlazorMeetup.Migrations
                     b.Navigation("Event");
                 });
 
-            modelBuilder.Entity("BlazorMeetup.Data.Server", b =>
-                {
-                    b.HasOne("BlazorMeetup.Data.Attendee", null)
-                        .WithMany("Servers")
-                        .HasForeignKey("AttendeeId");
-                });
-
             modelBuilder.Entity("BlazorMeetup.Data.ServerAttendee", b =>
                 {
                     b.HasOne("BlazorMeetup.Data.Attendee", "Attendee")
-                        .WithMany()
+                        .WithMany("Servers")
                         .HasForeignKey("AttendeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
