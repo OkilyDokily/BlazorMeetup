@@ -13,7 +13,7 @@ namespace BlazorMeetup.Data
         public string SuggestedDateId { get; set; }
 
         public virtual SuggestedDate SuggestedDate { get; set; }
-        [Required]
+
 
         public virtual Attendee Attendee { get; set; }
 

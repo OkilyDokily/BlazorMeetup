@@ -17,10 +17,10 @@ namespace BlazorMeetup.Data
         public int Minutes { get; set; }
 
         public string ServerId { get; set; }
-        [Required]
+       
         public virtual Server Server { get; set; }
         public virtual ICollection<AttendeeEvent> Attendees { get; set; }
-        [Required]
+  
         public virtual Attendee Attendee { get; set; }
         public virtual ICollection<RestrictDate> RestrictDates { get; set; }
 

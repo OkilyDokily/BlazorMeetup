@@ -15,7 +15,7 @@ namespace BlazorMeetup.Data
 
         public virtual RestrictDate RestrictDate { get; set; }
         public string RestrictDateId { get; set; }
-        [Required]
+  
         public virtual Attendee Attendee { get; set; }
         public virtual ICollection<SuggestedDateAttendee> Attendees { get; set; }
 

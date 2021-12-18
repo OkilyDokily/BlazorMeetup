@@ -11,7 +11,7 @@ namespace BlazorMeetup.Data
         public string AvatarUrl { get; set; }
         public string AvatarIdentification { get; set; }
         public string TeamId { get; set; }
-        [Required]
+
         public virtual Team Team { get; set; }
         public int Size { get; set; } = 100;
         public int Left { get; set; } = 0;

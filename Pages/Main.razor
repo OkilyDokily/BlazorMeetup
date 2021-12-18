@@ -37,9 +37,9 @@
     <div>
         <select @bind="ParentEvent.ServerId">
 
-            @foreach (ServerAttendee s in servers)
+            @for (int index = 0; index < servers.Count; index++)
             {
-                <option value=@s.Server.Id>@s.Server.Name</option>
+                <option value=@servers[index].Server.Id>@servers[index].Server.Name</option>
             }
 
         </select>
@@ -73,6 +73,10 @@
     private void HandleValidSubmit()
     {
         ParentEvent.AttendeeId = DbUserId;
+        if (ParentEvent.ServerId == null)
+        {
+            ParentEvent.ServerId = servers[0].Server.Id;
+        }
         MeetupService.CreateEvent(ParentEvent);
         if (ParentEvent.Id != null)
         {

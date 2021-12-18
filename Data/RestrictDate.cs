@@ -12,7 +12,7 @@ namespace BlazorMeetup.Data
 
         public string EventId { get; set; }
         public DateTime Date { get; set; }
-        [Required]
+  
         public virtual Event Event { get; set; }
         public virtual ICollection<TimesAllowed> TimesAlloweds { get; set; }
         public virtual ICollection<SuggestedDate> SuggestedDates { get; set; }
