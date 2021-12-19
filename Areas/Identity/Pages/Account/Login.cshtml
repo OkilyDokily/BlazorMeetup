@@ -20,12 +20,14 @@
             {
                 <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
                     <div>
-                        <p>
+                        <p class="text-3xl">
                             @foreach (var provider in Model.ExternalLogins)
                             {
-                                <button type="submit" name="provider" value="@provider.Name"
+                                <button class="text-xl" type="submit" name="provider" value="@provider.Name"
                             title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+
                             }
+                            Login to Discord via Oauth2
                         </p>
                     </div>
                 </form>
