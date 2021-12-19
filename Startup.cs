@@ -31,7 +31,12 @@ namespace BlazorMeetup
         {
 
             services.AddRazorPages();
-            services.AddServerSideBlazor();
+            services.AddServerSideBlazor().AddCircuitOptions(o =>
+            {
+
+                o.DetailedErrors = true;
+
+            });
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<Attendee>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddSingleton<TokenProvider>();
@@ -107,7 +112,7 @@ namespace BlazorMeetup
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-       
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
