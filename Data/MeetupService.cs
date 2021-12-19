@@ -492,5 +492,39 @@ namespace BlazorMeetup.Data
 
             }
         }
+
+        public async void DeleteEventByEventId(string eventId)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                List<string> restrictDates = ctx.RestrictDates.Where(x => x.EventId == eventId).Select(x => x.Id).ToList();
+                List<string> teams = ctx.Teams.Where(x => x.EventId == eventId).Select(x => x.Id).ToList();
+                await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].Events WHERE Id='" + eventId + "'");
+
+                await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].AttendeeEvents WHERE EventId='" + eventId + "'");
+                await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].Teams WHERE EventId='" + eventId + "'");
+                await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].TeamAttendees WHERE EventId='" + eventId + "'");
+
+                foreach (string t in teams)
+                {
+                    await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].TeamAvatarSettings WHERE TeamId='" + t + "'");
+                }
+
+                await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].RestrictDates WHERE EventId='" + eventId + "'");
+                foreach (string rd in restrictDates)
+                {
+                    List<string> suggestedDates = ctx.SuggestedDates.Where(x => x.RestrictDateId == rd).Select(x => x.Id).ToList();
+
+                    await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].SuggestedDates WHERE RestrictDateId='" + rd + "'");
+
+                    foreach (string sd in suggestedDates)
+                    {
+                        await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].SuggestedDateAttendees WHERE SuggestedDateId='" + sd + "'");
+                    }
+                    await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].TimesAlloweds WHERE RestrictDateId='" + rd + "'");
+
+                }
+            }
+        }
     }
 }

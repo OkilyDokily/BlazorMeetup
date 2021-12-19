@@ -96,7 +96,9 @@
 
     void DeleteEvent()
     {
-        MeetupService.DeleteEventById(CurrentEvent.Id);
+        IndexPage.EventId = "";
+
+        MeetupService.DeleteEventByEventId(CurrentEvent.Id);
         IndexPage.TabControlRef.ActivatePageByText("Create Event");
     }
 
