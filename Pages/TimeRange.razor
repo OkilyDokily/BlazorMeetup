@@ -85,7 +85,7 @@
 
     public void delete(string id)
     {
-        MeetupService.DeleteTimeAllowed(id);
+        MeetupService.DeleteTimesAllowedById(id);
         rd = MeetupService.GetRestrictDateById(RestrictDateId);
         StateHasChanged();
     }

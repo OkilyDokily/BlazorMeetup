@@ -37,7 +37,7 @@
 
     public void DeleteThisRestrictDate(string id)
     {
-        MeetupService.DeleteRestrictDate(id);
+        MeetupService.DeleteRestrictDateById(id);
         CreateEventAcc.UpdateCreated();
         StateHasChanged();
     }

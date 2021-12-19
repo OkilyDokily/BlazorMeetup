@@ -526,5 +526,42 @@ namespace BlazorMeetup.Data
                 }
             }
         }
+
+        public async void DeleteRestrictDateById(string restrictDateId)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].RestrictDates WHERE Id='" + restrictDateId + "'");
+
+                List<string> suggestedDates = ctx.SuggestedDates.Where(x => x.RestrictDateId == restrictDateId).Select(x => x.Id).ToList();
+
+                await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].SuggestedDates WHERE RestrictDateId='" + restrictDateId + "'");
+
+                foreach (string sd in suggestedDates)
+                {
+                    await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].SuggestedDateAttendees WHERE SuggestedDateId='" + sd + "'");
+                }
+                await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].TimesAlloweds WHERE RestrictDateId='" + restrictDateId + "'");
+            }
+        }
+
+        public async void DeleteSuggestedDateBySuggestedDateId(string suggestedDateId)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].SuggestedDates WHERE Id='" + suggestedDateId + "'");
+                await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].SuggestedDateAttendees WHERE SuggestedDateId='" + suggestedDateId + "'");
+            }
+        }
+
+        public async void DeleteTimesAllowedById(string timesAllowedId)
+        {
+            using (var ctx = _dbContextFactory.CreateDbContext())
+            {
+                await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].TimesAlloweds WHERE Id='" + timesAllowedId + "'");
+
+            }
+        }
+
     }
 }
