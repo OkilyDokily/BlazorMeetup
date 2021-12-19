@@ -23,7 +23,7 @@
 
             DbUserId = (await UserManager.GetUserAsync(User)).Id;
             var result = User.Claims.Where(x => x.Type == ClaimTypes.Email).ToList().FirstOrDefault();
-     
+
             if (!StaticTokenHolder.tokens.ContainsKey(result.Value)) return;
             if (!StaticTokenHolder.loggedInStatus[result.Value]) return;
 
@@ -33,6 +33,7 @@
             {
 
                 DiscordRequestService drs = new DiscordRequestService(clientFactory, tokenProvider);
+                Console.WriteLine("get servers async");
                 await drs.GetServersAsync(DbUserId, MeetupService);
             }
         }

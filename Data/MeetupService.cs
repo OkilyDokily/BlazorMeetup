@@ -444,23 +444,52 @@ namespace BlazorMeetup.Data
             }
         }
 
-        public async void DeleteLoginInfoByUserId(string userId)
+
+        public async void DeleteUserByUserId(string userId)
         {
             using (var ctx = _dbContextFactory.CreateDbContext())
             {
-
                 await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].AspNetUserLogins WHERE UserId='" + userId + "'");
                 await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].AspNetUserClaims WHERE UserId='" + userId + "'");
+                await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].AvatarSettings WHERE AttendeeId='" + userId + "'");
+                await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].ServerAttendees WHERE AttendeeId='" + userId + "'");
 
-            }
-        }
-        public void DeleteServerAttendeesByAttendeeId(string attendeeId)
-        {
-            using (var ctx = _dbContextFactory.CreateDbContext())
-            {
-                List<ServerAttendee> saList = ctx.ServerAttendees.Where(x => x.AttendeeId == attendeeId).ToList();
-                ctx.ServerAttendees.RemoveRange(saList);
-                ctx.SaveChanges();
+                await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].AttendeeEvents WHERE AttendeeId='" + userId + "'");
+
+                List<string> events = ctx.Events.Where(x => x.AttendeeId == userId).Select(x => x.Id).ToList();
+                await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].Events WHERE AttendeeId='" + userId + "'");
+
+                foreach (string e in events)
+                {
+                    List<string> restrictDates = ctx.RestrictDates.Where(x => x.EventId == e).Select(x => x.Id).ToList();
+                    List<string> teams = ctx.Teams.Where(x => x.EventId == e).Select(x => x.Id).ToList();
+
+                    await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].AttendeeEvents WHERE EventId='" + e + "'");
+                    await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].Teams WHERE EventId='" + e + "'");
+                    await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].TeamAttendees WHERE EventId='" + e + "'");
+
+                    foreach (string t in teams)
+                    {
+                        await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].TeamAvatarSettings WHERE TeamId='" + t + "'");
+                    }
+
+                    await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].RestrictDates WHERE EventId='" + e + "'");
+                    foreach (string rd in restrictDates)
+                    {
+                        List<string> suggestedDates = ctx.SuggestedDates.Where(x => x.RestrictDateId == rd).Select(x => x.Id).ToList();
+
+                        await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].SuggestedDates WHERE RestrictDateId='" + rd + "'");
+
+                        foreach (string sd in suggestedDates)
+                        {
+                            await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].SuggestedDateAttendees WHERE SuggestedDateId='" + sd + "'");
+                        }
+                        await ctx.Database.ExecuteSqlRawAsync("DELETE FROM [dbo].TimesAlloweds WHERE RestrictDateId='" + rd + "'");
+
+                    }
+
+                }
+
             }
         }
     }

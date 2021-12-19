@@ -78,8 +78,9 @@ namespace BlazorMeetup.Areas.Identity.Pages.Account.Manage
             await _signInManager.SignOutAsync();
 
             _logger.LogInformation("User with ID '{UserId}' deleted themselves.", userId);
-            _meetupService.DeleteLoginInfoByUserId(userId);
-            _meetupService.DeleteServerAttendeesByAttendeeId(userId);
+
+            _meetupService.DeleteUserByUserId(userId);
+
             return Redirect("~/");
         }
     }

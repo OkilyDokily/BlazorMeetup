@@ -44,6 +44,7 @@ namespace BlazorMeetup.Data
                 List<Server> servers = JsonConvert.DeserializeObject<List<Server>>(jsonString);
                 
                 meetupService.AddServers(servers, id);
+           
                 meetupService.AddServersToUser(servers, id);
             }
         }

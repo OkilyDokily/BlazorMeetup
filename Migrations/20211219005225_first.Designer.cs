@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazorMeetup.Migrations
 {
     [DbContext(typeof(BlazorMeetupContext))]
-    [Migration("20211217210955_first")]
+    [Migration("20211219005225_first")]
     partial class first
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
