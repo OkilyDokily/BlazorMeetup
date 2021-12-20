@@ -7,8 +7,9 @@ namespace BlazorMeetup.Data
     {
         public string Id { get; set; }
         public string EventId { get; set; }
-     
+
         public virtual Event Event { get; set; }
+        [Required]
         public string Name { get; set; }
 
         public virtual TeamAvatarSettings TeamAvatarSettings { get; set; }

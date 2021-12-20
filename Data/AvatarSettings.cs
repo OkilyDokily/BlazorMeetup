@@ -7,7 +7,7 @@ namespace BlazorMeetup.Data
         public string Id { get; set; }
         public string AvatarUrl { get; set; }
         public string AvatarIdentification { get; set; }
-    
+
         public virtual Attendee Attendee { get; set; }
         public string AttendeeId { get; set; }
         public int Size { get; set; } = 100;
