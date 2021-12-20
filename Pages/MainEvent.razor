@@ -1,7 +1,10 @@
 @using BlazorMeetup.Data
 @using System.Globalization
 @inject MeetupService MeetupService;
-
+<div>
+    <label class="font-semibold">Description</label>
+    @CurrentEvent.Description
+</div>
 <div>
     <label class="font-semibold">Length of Event:</label>
     @CurrentEvent.Hours &zwnj;<label>Hours</label> and @CurrentEvent.Minutes <label>Minutes</label>
@@ -87,6 +90,14 @@
         CurrentEvent = MeetupService.GetEventById(CurrentEvent.Id);
         StateHasChanged();
     }
+    protected override void OnAfterRender(bool firstRender)
+    {
+        CurrentEvent = MeetupService.GetEventById(CurrentEvent.Id);
+        StateHasChanged();
+        base.OnAfterRender(firstRender);
+    }
+
+
 
     void EditEvent()
     {
