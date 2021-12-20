@@ -88,6 +88,15 @@ tr{
     @apply w-48;
 }
 
+div.blueborder {
+    border: 1px solid rgb(67, 156, 204) !important;
+}
+
+div.bluebottom{
+        border-bottom: 1px solid rgb(67, 156, 204) !important;
+
+}
+
 .form-item label{
     @apply text-right w-28 mr-5;
 }
@@ -102,7 +111,6 @@ form{
         width: 100%;
     }
 #body{
-    /* background-image: url("../splash.jpg"); */
     width: 100%;
     height: 100%;
 }
