@@ -8,18 +8,27 @@
 @inject NavigationManager NavigationManager
 
 
-<div id="index" class="w-1/4 m-1 blueborder">
-    <AuthorizeView>
-        <NotAuthorized>
-            <div id="not-authorized">
-                <a href="Identity/Account/Login">Log in</a>
+
+<AuthorizeView>
+    <NotAuthorized>
+        <div id="index" class="w-full m-1 blueborder">
+            <div class="w-full align text-center">
+                <p class="font-bold">Blazor Meetup app is a great way to connect with friends and strangers on Discord.
+                </p>
+                <p class="font-bold">It's an event scheduling app which lets guests have a say in when an event is
+                    scheduled.</p>
+                <p class="font-bold">You'll need a discord account and be subscribed to at least on channel to use it.
+                </p>
             </div>
-            <p>
-                Blazor Meetup app is a great way to connect with friends and stranger in the discordverse.
-            </p>
-            <img src="/App.png">
-        </NotAuthorized>
-        <Authorized>
+            <div>
+                <p>Here is what the app looks like</p>
+                <img src="/App2.png">
+            </div>
+
+        </div>
+    </NotAuthorized>
+    <Authorized>
+        <div id="index" class="w-1/4 m-1 blueborder">
             <a href="#">@context.User.Identity.Name!</a>
 
             @if (asettings != null)
@@ -65,9 +74,11 @@
                     </TabControl>
                 </CascadingValue>
             }
-        </Authorized>
-    </AuthorizeView>
-</div>
+        </div>
+    </Authorized>
+
+</AuthorizeView>
+
 
 @code {
     ClaimsPrincipal User { get; set; }

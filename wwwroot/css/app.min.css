@@ -851,6 +851,10 @@ select {
   padding: 1.5rem;
 }
 
+.text-center {
+  text-align: center;
+}
+
 .align-middle {
   vertical-align: middle;
 }
@@ -871,6 +875,10 @@ select {
 
 .font-semibold {
   font-weight: 600;
+}
+
+.font-bold {
+  font-weight: 700;
 }
 
 .text-gray-400 {
@@ -1101,11 +1109,6 @@ div.blueright{
 }
 
 form{
-  width: 100%;
-}
-
-#not-authorized{
-  height: 100%;
   width: 100%;
 }
 
