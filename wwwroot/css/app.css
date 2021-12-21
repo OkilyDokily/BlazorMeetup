@@ -97,6 +97,11 @@ div.bluebottom{
 
 }
 
+div.blueright{
+        border-right: 1px solid rgb(67, 156, 204) !important;
+
+}
+
 .form-item label{
     @apply text-right w-28 mr-5;
 }

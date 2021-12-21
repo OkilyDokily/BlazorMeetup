@@ -1090,6 +1090,10 @@ div.bluebottom{
   border-bottom: 1px solid rgb(67, 156, 204) !important;
 }
 
+div.blueright{
+  border-right: 1px solid rgb(67, 156, 204) !important;
+}
+
 .form-item label{
   margin-right: 1.25rem;
   width: 7rem;
