@@ -4,6 +4,7 @@
 @inject MeetupService MeetupService
 @inject UserManager<Attendee> UserManager
 @inject NavigationManager NavigationManager
+@inject UpdateAllUsers UpdateAllUsers
 
 
 <CascadingValue Value="this">
@@ -37,7 +38,7 @@
 
     [CascadingParameter(Name = "DbUserId")]
     public string DbUserId { get; set; }
- 
+
     [Parameter]
     public string EventId { get; set; }
 
@@ -45,13 +46,30 @@
     [CascadingParameter(Name = "Parent")]
     private TabControl Parent { get; set; }
 
+    Func<Task> myDelegate { get; set; }
+
+
+    public void UpdateCurrentEvent()
+    {
+        CurrentEvent = MeetupService.GetEventById(EventId);
+    }
+
     protected override void OnParametersSet()
     {
         CurrentEvent = MeetupService.GetEventById(EventId);
     }
 
-    protected override void OnInitialized()
+    protected override async void OnInitialized()
     {
+        myDelegate = async () => await InvokeAsync(() =>
+        {
+            this.UpdateCurrentEvent();
+            this.StateHasChanged();
+        });
+        UpdateAllUsers.AddEvent(EventId, myDelegate);
+
+
+        base.OnInitialized();
         Parent.ActivatePageByText("Event");
     }
 

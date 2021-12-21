@@ -2,6 +2,7 @@
 @inject MeetupService MeetupService
 @inject IJSRuntime IJSRunTime
 @inject NavigationManager NavigationManager
+@inject UpdateAllUsers UpdateAllUsers
 
 @if (eventPage.CurrentEvent.RestrictDates == null || eventPage.CurrentEvent.RestrictDates.Count == 0)
 {
@@ -26,7 +27,7 @@
             }
 
             <select @bind="@timeMakeDictionary[@restrictDate.Id].Hours">
-              
+
                 @foreach (int num in
                @TimeMaker.GetHours(MeetupService.GetRestrictDateById(restrictDate.Id)?.TimesAlloweds?.ToList()))
                 {
@@ -116,11 +117,14 @@
 
     public void RemoveSuggestedDateFromAttendee(SuggestedDate sd)
     {
+        UpdateAllUsers.InvokeUpdate(eventPage.CurrentEvent.Id);
+
         MeetupService.RemoveSuggestedDateFromAttendees(sd, DbUserId);
     }
 
     public void AddSuggestedDateToAttendee(SuggestedDate sd)
     {
+        UpdateAllUsers.InvokeUpdate(eventPage.CurrentEvent.Id);
         MeetupService.AddSuggestedDateToAttendees(sd, DbUserId);
     }
 

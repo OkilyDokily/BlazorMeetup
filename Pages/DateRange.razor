@@ -1,5 +1,6 @@
 ﻿@using System.Globalization
 @inject MeetupService MeetupService
+@inject UpdateAllUsers UpdateAllUsers
 
 <EditForm Model="@rd" OnValidSubmit="@OnSubmit">
     <div class="form-item">
@@ -40,6 +41,8 @@
     {
         MeetupService.DeleteRestrictDateById(id);
         CreateEventAcc.UpdateCreated();
+        UpdateAllUsers.InvokeUpdate(ParentEvent.Id);
+
         StateHasChanged();
     }
 
@@ -59,6 +62,7 @@
         rd.Date = DateTime.Today;
         rd.EventId = ParentEvent.Id;
         CreateEventAcc.UpdateCreated();
+        UpdateAllUsers.InvokeUpdate(ParentEvent.Id);
         StateHasChanged();
     }
 

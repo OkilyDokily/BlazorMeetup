@@ -91,8 +91,10 @@ namespace BlazorMeetup
                 options.Password.RequiredUniqueChars = 1;
             });
 
-
+            services.AddSingleton<UpdateServers>();
             services.AddSingleton<TeamsUpdateService>();
+            services.AddSingleton<UpdateAllUsers>();
+
             services.AddHttpClient();
 
         }

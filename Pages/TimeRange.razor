@@ -1,5 +1,6 @@
 ﻿@using System.Globalization
 @inject MeetupService MeetupService
+@inject UpdateAllUsers UpdateAllUsers
 
 <EditForm Model="@ta" OnValidSubmit="@AddTimeAllowedToRestrictDate">
 
@@ -87,6 +88,8 @@
     {
         MeetupService.DeleteTimesAllowedById(id);
         rd = MeetupService.GetRestrictDateById(RestrictDateId);
+        UpdateAllUsers.InvokeUpdate(ParentEvent.Id);
+
         StateHasChanged();
     }
 
@@ -101,6 +104,8 @@
         MeetupService.AddTimeAllowedToRestrictDate(ta);
         CreateEventAcc.UpdateCreated();
         rd = MeetupService.GetRestrictDateById(RestrictDateId);
+        UpdateAllUsers.InvokeUpdate(ParentEvent.Id);
+
         StateHasChanged();
     }
 }

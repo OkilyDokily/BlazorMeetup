@@ -1,5 +1,6 @@
 ﻿@inject MeetupService MeetupService
 @inject NavigationManager NavigationManager
+@inject UpdateAllUsers UpdateAllUsers
 
 <CascadingValue Value="this">
     <TabControl>
@@ -63,6 +64,8 @@
 
         Teams = MeetupService.GetTeamsByEventId(EventId);
         team = new Team();
+        UpdateAllUsers.InvokeUpdate(EventId);
+
         StateHasChanged();
     }
 

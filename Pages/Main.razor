@@ -1,5 +1,6 @@
 ﻿@inject MeetupService MeetupService;
 @inject IJSRuntime IJSRunTime
+@inject UpdateServers UpdateServers
 
 
 <EditForm Model="@ParentEvent" class="w-full" OnValidSubmit="@HandleValidSubmit">
@@ -71,9 +72,6 @@
     }
 
 
-
-    
-
     private void HandleValidSubmit()
     {
         ParentEvent.AttendeeId = DbUserId;
@@ -95,6 +93,7 @@
 
         TabControlAcc.ActivatePageByText("Date Range >>");
         TabControlAcc.EnableClickByString("Date Range >>");
+        UpdateServers.InvokeUpdate();
         StateHasChanged();
     }
 }

@@ -2,6 +2,7 @@
 @inject NavigationManager NavigationManager
 @using BlazorMeetup.Data
 @using System.Linq
+@inject UpdateServers UpdateServers
 
 <table>
 
@@ -70,8 +71,39 @@
     List<string> serverIdsWithUserEvents = new();
     List<string> serverIdsWithEventsNoUser = new();
     List<string> serverIdsWithoutEvents = new();
+    Func<Task> myDelegate { get; set; }
 
 
+    protected override async void OnInitialized()
+    {
+        myDelegate = async () => await InvokeAsync(() =>
+        {
+            this.InitializeServerPage();
+            this.StateHasChanged();
+        });
+        UpdateServers.AddEvent(myDelegate);
+    }
+
+
+    public void InitializeServerPage()
+    {
+        if (DbUserId == null) return;
+        if (ServerAttendees != null) return;
+
+        ServerAttendees = MeetupService.GetServersByUserId(DbUserId);
+
+        InternalHelperClass.MeetupService = MeetupService;
+        InternalHelperClass.DbUserId = DbUserId;
+
+        foreach (var serverAttendee in ServerAttendees)
+        {
+            serverEventDictionary.Add(serverAttendee.Server.Id, new InternalHelperClass(serverAttendee.Server));
+            serverEventDictionary[serverAttendee.Server.Id].AddEvents();
+        }
+        GetOrderedServerIds();
+
+        StateHasChanged();
+    }
     protected override void OnParametersSet()
     {
         if (DbUserId == null) return;
