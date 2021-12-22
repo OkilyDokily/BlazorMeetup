@@ -61,8 +61,7 @@
 
 @code {
 
-    [Parameter]
-    public Event ParentEvent { get; set; }
+
 
     [Parameter]
     public string RestrictDateId { get; set; }
@@ -88,7 +87,7 @@
     {
         MeetupService.DeleteTimesAllowedById(id);
         rd = MeetupService.GetRestrictDateById(RestrictDateId);
-        UpdateAllUsers.InvokeUpdate(ParentEvent.Id);
+        UpdateAllUsers.InvokeUpdate(CreateEventAcc.EventId);
 
         StateHasChanged();
     }
@@ -104,7 +103,8 @@
         MeetupService.AddTimeAllowedToRestrictDate(ta);
         CreateEventAcc.UpdateCreated();
         rd = MeetupService.GetRestrictDateById(RestrictDateId);
-        UpdateAllUsers.InvokeUpdate(ParentEvent.Id);
+
+        UpdateAllUsers.InvokeUpdate(CreateEventAcc.EventId);
 
         StateHasChanged();
     }

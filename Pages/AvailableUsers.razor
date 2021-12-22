@@ -2,6 +2,7 @@
 @inject MeetupService MeetupService
 @inject NavigationManager NavigationManager
 @inject MeetupService MeetupService
+@inject UpdateAllUsers UpdateAllUsers
 @inject IJSRuntime IJSRunTime
 
 <h3>Available Users</h3>
@@ -24,7 +25,7 @@
 
     @if (DbUserId == sd.AttendeeId)
     {
-        <button @onclick="()=>DeleteSuggestedDate(sd.Id)">Delete Suggest Date</button>
+        <button @onclick="()=>DeleteSuggestedDate(sd.Id)">Delete Suggested Time</button>
     }
     <button @onclick="GoBack">Go Back</button>
     @if (DbUserId == EventObj.AttendeeId)
@@ -57,6 +58,7 @@
     public void DeleteSuggestedDate(string id)
     {
         MeetupService.DeleteSuggestedDateBySuggestedDateId(id);
+        UpdateAllUsers.InvokeUpdate(eventId);
         NavigationManager.NavigateTo("/");
     }
 
@@ -68,6 +70,8 @@
     public void AddOfficialTime(string id)
     {
         MeetupService.MakeSuggestedDateOfficial(id, EventObj.Id);
-        IJSRunTime.CreateMessage("You've successfully made an official date");
+        UpdateAllUsers.InvokeUpdate(eventId);
+
+        IJSRunTime.CreateMessage("You've successfully made an official time");
     }
 }
