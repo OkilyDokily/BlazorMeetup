@@ -1117,6 +1117,25 @@ form{
   height: 100%;
 }
 
+#index{
+  width: 338px;
+}
+
+@media (max-width: 1000px) {
+  #index{
+    width: 338px;
+  }
+
+  #body{
+    padding:0;
+  }
+
+  .form-item{
+    display: flex;
+    justify-content: flex-start;
+  }
+}
+
 @media (max-width: 640px) {
   #NavMenu-Div{
     display: none;
@@ -1152,4 +1171,6 @@ form{
 
 @media (min-width: 1536px) {
 }
+
+
 
