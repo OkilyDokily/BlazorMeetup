@@ -78,26 +78,20 @@
     {
         myDelegate = async () => await InvokeAsync(() =>
         {
-            this.InitializeServerPage();
+            this.ReInitializeServerPage();
             this.StateHasChanged();
         });
         UpdateServers.AddEvent(myDelegate);
     }
 
 
-    public void InitializeServerPage()
+    public void ReInitializeServerPage()
     {
-        if (DbUserId == null) return;
-        if (ServerAttendees != null) return;
-
         ServerAttendees = MeetupService.GetServersByUserId(DbUserId);
-
-        InternalHelperClass.MeetupService = MeetupService;
-        InternalHelperClass.DbUserId = DbUserId;
 
         foreach (var serverAttendee in ServerAttendees)
         {
-            serverEventDictionary.Add(serverAttendee.Server.Id, new InternalHelperClass(serverAttendee.Server));
+            serverEventDictionary[serverAttendee.Server.Id].Server.Events = serverAttendee.Server.Events;
             serverEventDictionary[serverAttendee.Server.Id].AddEvents();
         }
         GetOrderedServerIds();

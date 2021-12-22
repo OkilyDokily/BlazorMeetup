@@ -136,8 +136,9 @@
         suggested.DateTime = d;
         suggested.RestrictDateId = restrictDateId;
         MeetupService.SuggestDate(suggested);
-        IJSRunTime.CreateMessage("You've successfully suggested a new date.");
+        IJSRunTime.CreateMessage("You've successfully suggested a new time.");
         eventPage.CurrentEvent = MeetupService.GetEventById(eventPage.CurrentEvent.Id);
+        UpdateAllUsers.InvokeUpdate(eventPage.CurrentEvent.Id);
 
         StateHasChanged();
     }
