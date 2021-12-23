@@ -122,7 +122,7 @@ begin
 
 end
 https://intellipaat.com/community/8183/how-to-drop-all-tables-and-reset-an-azure-sql-database
-## SQL Schema
+## 📊 SQL Schema
 
 ![App](SQLSchema.png)
 
