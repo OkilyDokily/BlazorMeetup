@@ -68,15 +68,12 @@ This project uses the following technologies:
 
 |Name| Function | Implementation |
 | :------------- | :------------- | :------------- |
-|Date ranges | Dates let users know when an event occurs | automatically supply available dates when given a range of dates
- |
-| Attendee Limit | Some event have a maximum or minimum capacity of users |Dont let more attendees attend after maximum attendees reached or dont enable event unless minimum attendees has been reached
-|
+|Date ranges | Dates let users know when an event occurs | automatically supply available dates when given a range of dates|
+| Attendee Limit | Some event have a maximum or minimum capacity of users |Dont let more attendees attend after maximum attendees reached or dont enable event unless minimum attendees has been reached|
 | Styling | CSS Framework | Tailwind |
 | Avatars| Event creators can upload Team avatars  | ClamAV is used to detect viruses when a user uploads an image |
-| Server List   | Server lists help users find events related to a server they are a part of |Servers have an indicator that they can be searched such as a caret symbol that turns when clicked on.
-  |
-|  |  |  |
+| Server List   | Server lists help users find events related to a server they are a part of |Servers have an indicator that they can be searched such as a caret symbol that turns when clicked on.|
+
 -------------------
 
 ## 🔧 Setup & Requirements
@@ -107,8 +104,27 @@ For support or other issues contact me @ [email](mailto:ironbeach@gmail.com).
 ---------------------------
 
 
--------------------
+## SQL Script
+while(exists(select 1 from INFORMATION_SCHEMA.TABLE_CONSTRAINTS where CONSTRAINT_TYPE='FOREIGN KEY'))
 
+begin
+
+ declare @sql nvarchar(2000)
+
+ SELECT TOP 1 @sql=('ALTER TABLE ' + TABLE_SCHEMA + '.[' + TABLE_NAME
+
+ + '] DROP CONSTRAINT [' + CONSTRAINT_NAME + ']')
+
+ FROM information_schema.table_constraints
+
+ WHERE CONSTRAINT_TYPE = 'FOREIGN KEY'
+
+ exec (@sql)
+
+ PRINT @sql
+
+end
+https://intellipaat.com/community/8183/how-to-drop-all-tables-and-reset-an-azure-sql-database
 ## SQL Schema
 
 ![App](SQLSchema.png)
