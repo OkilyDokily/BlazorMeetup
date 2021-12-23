@@ -79,6 +79,7 @@ This project uses the following technologies:
 
 - **ASP .NET Core :** You can check if you have .NET Core by running `dotnet --version` in the command line. If you do not have .NET Core please find more information and download [here](https://dotnet.microsoft.com/download/dotnet-core)
 - **Tailwind :**  https://tailwindcss.com/
+- **NPM/NODE :** https://nodejs.org/en/
 - **Docker :**  https://docs.docker.com/get-docker/
 - **ClamAV Docker Container :** https://hub.docker.com/r/clamav/clamav
 #### To Download:
@@ -101,7 +102,7 @@ For support or other issues contact me @ [email](mailto:ironbeach@gmail.com).
 ---------------------------
 
 
-## SQL Script
+## 📜 SQL Script
 while(exists(select 1 from INFORMATION_SCHEMA.TABLE_CONSTRAINTS where CONSTRAINT_TYPE='FOREIGN KEY'))
 
 begin
@@ -125,10 +126,6 @@ https://intellipaat.com/community/8183/how-to-drop-all-tables-and-reset-an-azure
 ## 📊 SQL Schema
 
 ![App](SQLSchema.png)
-
-## 📘 License
-
-MIT License
 
 
 Copyright (c) 2021 Matthew LeDoux.
