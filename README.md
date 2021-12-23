@@ -57,7 +57,6 @@ This project uses the following technologies:
 | :------------- | :------------- | :------------- |
 |Tabs | Let's users navigate the app | Change Color of Tab to indicate it's disabled |
 | List of who is available for a certain date | Identity, Login and Avatars are from Discord  |Suggested dates list should use avatars that show names on hover.|
-| Styling | CSS Framework | Tailwind |
 |Team Avatars| Event creators can upload Team avatars  | ClamAV is used to detect viruses when a user uploads an image |
 | Avatar Tabs|tab are used to navigate the app  | add a tab specifically for avatar uploading |
 | Server Avatars | Avatars used by a Discord server  |  Show avatar of server in the servers list. |
@@ -70,8 +69,6 @@ This project uses the following technologies:
 | :------------- | :------------- | :------------- |
 |Date ranges | Dates let users know when an event occurs | automatically supply available dates when given a range of dates|
 | Attendee Limit | Some event have a maximum or minimum capacity of users |Dont let more attendees attend after maximum attendees reached or dont enable event unless minimum attendees has been reached|
-| Styling | CSS Framework | Tailwind |
-| Avatars| Event creators can upload Team avatars  | ClamAV is used to detect viruses when a user uploads an image |
 | Server List   | Server lists help users find events related to a server they are a part of |Servers have an indicator that they can be searched such as a caret symbol that turns when clicked on.|
 
 -------------------
