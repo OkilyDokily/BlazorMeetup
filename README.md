@@ -21,7 +21,7 @@ All users login via Discord and each event is associated with a Discord channel.
 Users may find created events by going to the Server tab and selecting a discord server. Most of the app exists in a single web route with an embedded heirarchy of tabs.
 
 --------------------
-![App](App.png)
+![App](App2.png)
 ## 🛠️ Technologies Used
 
 This project uses the following technologies:
@@ -72,7 +72,6 @@ This project uses the following technologies:
  |
 | Attendee Limit | Some event have a maximum or minimum capacity of users |Dont let more attendees attend after maximum attendees reached or dont enable event unless minimum attendees has been reached
 |
-
 | Styling | CSS Framework | Tailwind |
 | Avatars| Event creators can upload Team avatars  | ClamAV is used to detect viruses when a user uploads an image |
 | Server List   | Server lists help users find events related to a server they are a part of |Servers have an indicator that they can be searched such as a caret symbol that turns when clicked on.
@@ -107,18 +106,12 @@ For support or other issues contact me @ [email](mailto:ironbeach@gmail.com).
 
 ---------------------------
 
-## 🐛 Known Bugs
-<details>
-| Error | Handled | Solution |
-| :------------- | :------------- | :------------- |
-|  |  | 
-|  |  | 
-|  |  | 
-|  |  | 
-|  |  | 
 
 -------------------
-</details>
+
+## SQL Schema
+
+![App](SQLSchema.png)
 
 ## 📘 License
 
