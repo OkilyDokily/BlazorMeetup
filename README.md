@@ -35,7 +35,10 @@ This project uses the following technologies:
 - Docker
 - ClamAV Anti-Virus Scanner (As a docker container)
 - Tailwind (A CSS framework)
+- Node (For Tailwind)
 - HTML 5 Drag and Drop API
+- Azure for hosting and deployment
+- Microsoft SQL Server on Azure (MySql for local development)
 -------------------
 
 
@@ -82,11 +85,25 @@ This project uses the following technologies:
 - **NPM/NODE :** https://nodejs.org/en/
 - **Docker :**  https://docs.docker.com/get-docker/
 - **ClamAV Docker Container :** https://hub.docker.com/r/clamav/clamav
+- **MySQl Community Edition:** https://www.mysql.com/products/community/
+- **Or Microsoft SQL Server Express:**  https://www.microsoft.com/en-us/download/details.aspx?id=101064
 #### To Download:
 
 
+Warning about the Docker container: Hosting a docker container on Azure can be very expensive in my experience, so keep that in mind.
+
+You will need to have node installed to use tailwind.
+Once you have node installed, use a command line terminal to navigate to the folder described in step one and type `npm install`.
+
 Go to my GitHub repository here, [https://github.com/OkilyDokily/BlazorMeetup](https://github.com/OkilyDokily/BlazorMeetup), and click on the green 'Code' button to clone the repository, Open with GitHub Desktop OR Download the ZIP file
 Alternatively, If you have Git Bash installed type the command `git clone https://github.com/OkilyDokily/BlazorMeetup` to download.
+
+You will need to have MySql or another databaseinstalled with the correct connection string and then run migrations before starting the application. After you run migrations you need to update the database.
+
+1. in the application folder run `dotnet ef migrations add first`
+2. then run `dotnet ef database update`
+
+ In addition after you update the database, you will need to run a script on the database to remove all of the foreign key constraints (this makes the app run properly). The script is at the bottom of the README, and you may need to adjust the script according to which database you use. The script is specifically written for microsoft sql server. 
 
 #### Running/viewing application:
 
