@@ -98,7 +98,7 @@ Once you have node installed, use a command line terminal to navigate to the fol
 Go to my GitHub repository here, [https://github.com/OkilyDokily/BlazorMeetup](https://github.com/OkilyDokily/BlazorMeetup), and click on the green 'Code' button to clone the repository, Open with GitHub Desktop OR Download the ZIP file
 Alternatively, If you have Git Bash installed type the command `git clone https://github.com/OkilyDokily/BlazorMeetup` to download.
 
-You will need to have MySql or another databaseinstalled with the correct connection string and then run migrations before starting the application. After you run migrations you need to update the database.
+You will need to have MySql or another database installed with the correct connection string and then run migrations before starting the application. After you run migrations you need to update the database.
 
 1. in the application folder run `dotnet ef migrations add first`
 2. then run `dotnet ef database update`
