@@ -90,6 +90,8 @@ This project uses the following technologies:
 #### To Download:
 
 
+New: Go to the sql server branch to get the version setup for microsoft sql server. (git checkout sqlserver)
+
 Warning about the Docker container: Hosting a docker container on Azure can be very expensive in my experience, so keep that in mind.
 
 You will need to have node installed to use tailwind.
