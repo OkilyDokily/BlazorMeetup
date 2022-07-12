@@ -18,7 +18,7 @@ Matthew
 This is a multiuser event application. The application lets users create events with a date and time which users can then join. In addition the user who creates an event may specify days and hours that other users may suggest as the preferred date. Event creators can select an official date and time from the suggested dates and times. Events may also divide it's attendees into teams. The event creator can decide who goes on which team and attendees can watch in real time as users are selected to a team. Teams may also have there own avatar to represent them.
 
 All users login via Discord and each event is associated with a Discord channel. 
-Users may find created events by going to the Server tab and selecting a discord server. Most of the app exists in a single web route with an embedded heirarchy of tabs.
+Users may find created events by going to the Server tab and selecting a discord server. Most of the app exists in a single web route with an embedded hierarchy of tabs.
 
 --------------------
 ![App](App2.png)
